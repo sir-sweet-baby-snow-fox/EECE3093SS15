@@ -12,10 +12,6 @@ Pull Requests
 - Pull requests shall be approved by three members before being accepted.
 - Pull requests shall always go from the feature branch to master.
 
-RTM Spreadsheet
-================================================================================
-https://docs.google.com/spreadsheets/d/1H1BfLjQ6zAC-4DNnIUyVOKG5UNOKszlvPWqP7czQOhY/edit?usp=sharing
-
 Hipchat
 ================================================================================
 https://sir-sweet-baby-snow-fox.hipchat.com/invite/252973/e109ebbf6bef408c1447cee12fd3f0a5
