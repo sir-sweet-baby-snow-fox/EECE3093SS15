@@ -11,3 +11,7 @@ Pull Requests
 - Never commit directly to master, always do work in a local branch and create a pull request to master.
 - Pull requests shall be approved by three members before being accepted.
 - Pull requests shall always go from the feature branch to master.
+
+RTM Spreadsheet
+================================================================================
+https://docs.google.com/spreadsheets/d/1H1BfLjQ6zAC-4DNnIUyVOKG5UNOKszlvPWqP7czQOhY/edit?usp=sharing
