@@ -1,6 +1,8 @@
 package tracing.views;
 
 
+import indexer.Indexer;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -72,6 +74,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.add("Choose Use Case");
 		combo.add("UC0");
 		combo.add("UC1");
+		combo.add("IndexTest");
 		combo.select(0);
 		
 		//Set combo position
@@ -100,7 +103,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 					text.setText("Indexing time of X requirement(s) is: Y seconds.");
 				else if(combo.getSelectionIndex()==1)
 					text.setText("This is a sample.");
-				else if (combo.getSelectionIndex()==2)
+				else if (combo.getSelectionIndex()==2){
 					try {
 						StringBuilder s = new StringBuilder();
 						for (String line : Files.readAllLines(Paths.get("/resources/UC1.txt"))) {
@@ -111,6 +114,15 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 						// TODO Auto-generated catch block
 						text.setText(e1.getMessage());
 					}
+				}
+				else if (combo.getSelectionIndex() == 3) {
+					Indexer i = new Indexer();
+					String[] parts = i.IndexString("Thi:s ha's a _lot of' T!hi%$ngs$ w%^234Ng");
+					StringBuilder sb = new StringBuilder();
+					for (String part : parts)
+						sb.append(part + " ");
+					text.setText(sb.toString());
+				}
 				else
 					text.setText("");
 				
