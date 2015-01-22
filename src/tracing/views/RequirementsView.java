@@ -103,7 +103,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				else if (combo.getSelectionIndex()==2)
 					try {
 						StringBuilder s = new StringBuilder();
-						for (String line : Files.readAllLines(Paths.get("/resources/UC1.txt"))) {
+						for (String line : Files.readAllLines(Paths.get("C:/git/EECE3093SS15/src/resources"))) {
 						    s.append(line + "\n");
 						}
 						text.setText(s.toString());
