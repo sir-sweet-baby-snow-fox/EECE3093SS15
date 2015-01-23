@@ -95,9 +95,9 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.setLayoutData(formdata);
 		
 		//Set text position
-		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY);
+		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL|SWT.READ_ONLY);
 		formdata = new FormData();
-		formdata.top=new FormAttachment(combo,10);
+		formdata.top  =new FormAttachment(combo,10);
 		formdata.bottom = new FormAttachment(combo,600);
 		formdata.left = new FormAttachment(0,5);
 		formdata.right = new FormAttachment(0,355);
@@ -116,7 +116,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				if(combo.getSelectionIndex()==0)
 					text.setText("Indexing time of X requirement(s) is: Y seconds.");
 				else {
-					//User has selected a usecase associated with a file name.
+					//User has selected a use case associated with a file name.
 					try {
 						StringBuilder s = new StringBuilder();
 						String useCaseFileName = resourceDirectory + "/" + combo.getText();
