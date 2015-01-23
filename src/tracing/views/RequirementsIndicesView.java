@@ -1,5 +1,7 @@
 package tracing.views;
 
+import java.io.IOException;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -27,92 +29,64 @@ import org.eclipse.ui.part.ViewPart;
 public class RequirementsIndicesView extends ViewPart implements ISelectionProvider{
 
 	//private Display display = new Display();
+	private MessageDialog wDial;
+	private String[] buttonArr;
+	private Shell shell;
+	private Button cancelButton, browseButton;
+	private String fileFilterPath;
+	private Button[] buttons;
+	
+	public RequirementsIndicesView(){
+		shell = new Shell();
+		cancelButton = new Button(shell, SWT.PUSH);
+		browseButton = new Button(shell, SWT.PUSH);
+		buttons = new Button[2];
+		buttons[0] = browseButton;
+		buttons[1] = cancelButton;
+		fileFilterPath = "C:/";
+		/*buttonArr = new String[2];
+		buttonArr[0] = "browse";
+		buttonArr[1] = "cancel";*/
+		wDial = new MessageDialog(shell, "Welcome", null, "Message, fill in later", 0, null, 1 ) {
+			protected Button getButton(int index) {
+				return super.getButton(index);
+			}
+		};
+	}
 	
 	private void showMessage(){
-		/*MessageDialog.openInformation(new Shell(),
+		MessageDialog.openInformation(new Shell(),
 				"Welcome",
-				"Please make your selections.");*/
-		//Image image = new Image(null, "C:/git/EECE3093SS15/Resources/freeman.jpg");
-		String[] buttonArr = new String[2];
-		buttonArr[0] = "browse";
-		buttonArr[1] = "cancel";
-		MessageDialog wDial = new MessageDialog(new Shell(), "Welcome", null, "tolf", 0, buttonArr, 1 );
-		wDial.open();
-		
-		
-		
-		//Label label = new Label(new Shell(), SWT.BORDER | SWT.WRAP);
-		
-		
-		/*Label label = new Label(shell, SWT.BORDER | SWT.WRAP);
-		label.setBackground(disp.getSystemColor(SWT.COLOR_GREEN));
-		label.setText("Select a dir/file by clicking the buttons below.");
-		
-		buttonSelectDir = new Button(shell, SWT.PUSH);
-		buttonSelectDir.setText("Browse");
-		buttonSelectDir.addListener(SWT.Selection, new Listener() {
-		      public void handleEvent(Event event) {
-		        DirectoryDialog directoryDialog = new DirectoryDialog(shell);
-		        
-		        directoryDialog.setFilterPath(selectedDir);
-		        directoryDialog.setMessage("Please select a directory and click OK");
-		        
-		        String dir = directoryDialog.open();
-		        if(dir != null) {
-		          label.setText("Selected dir: " + dir);
-		          selectedDir = dir;
-		        }
-		      }
-		    });
-		    
-		    buttonSelectFile = new Button(shell, SWT.PUSH);
-		    buttonSelectFile.setText("Select a file/multiple files");
-		    buttonSelectFile.addListener(SWT.Selection, new Listener() {
-		      public void handleEvent(Event event) {
-		        FileDialog fileDialog = new FileDialog(shell, SWT.MULTI);
-
-		        fileDialog.setFilterPath(fileFilterPath);
-		        
-		        fileDialog.setFilterExtensions(new String[]{"*.rtf", "*.html", "*.*"});
-		        fileDialog.setFilterNames(new String[]{ "Rich Text Format", "HTML Document", "Any"});
-		        
-		        String firstFile = fileDialog.open();
-
-		        if(firstFile != null) {
-		          fileFilterPath = fileDialog.getFilterPath();
-		          String[] selectedFiles = fileDialog.getFileNames();
-		          StringBuffer sb = new StringBuffer("Selected files under dir " + fileDialog.getFilterPath() +  ": \n");
-		          for(int i=0; i<selectedFiles.length; i++) {
-		            sb.append(selectedFiles[i] + "\n");
-		          }
-		          label.setText(sb.toString());
-		        }
-		      }
-		    });
-		    
-		    label.setBounds(0, 0, 400, 60);
-		    buttonSelectDir.setBounds(0, 65, 200, 30);
-		    buttonSelectFile.setBounds(200, 65, 200, 30);
-
-		    shell.pack();
-		    shell.open();
-		    //textUser.forceFocus();
-
-		    // Set up the event loop.
-		    while (!shell.isDisposed()) {
-		      if (!disp.readAndDispatch()) {
-		        // If no more entries in event queue
-		        disp.sleep();
-		      }
-		    }
-
-		    disp.dispose();*/
-		}
+				"Please make your selections.");
+		/*try {*/
+			wDial.open();
+			/*browseButton.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event event) {
+					FileDialog fileDialog = new FileDialog(shell, SWT.MULTI);
+	
+			        fileDialog.setFilterPath(fileFilterPath);
+			          
+			        fileDialog.setFilterExtensions(new String[]{"*.rtf", "*.html", "*.*"});
+			        fileDialog.setFilterNames(new String[]{ "Rich Text Format", "HTML Document", "Any"});
+			          
+			        String firstFile = fileDialog.open();
+	
+			        if(firstFile != null) {
+			          fileFilterPath = fileDialog.getFilterPath();
+			          String[] selectedFiles = fileDialog.getFileNames();
+			          StringBuffer sb = new StringBuffer("Selected files under dir " + fileDialog.getFilterPath() +  ": \n");
+			          for(int i=0; i<selectedFiles.length; i++) {
+			            sb.append(selectedFiles[i] + "\n");
+			          }
+			        }
+				}
+			});*/
+	}
 	
 	@Override
 	public void addSelectionChangedListener(ISelectionChangedListener listener) {
 		// TODO Auto-generated method stub
-		
+		//MessageDialog.openInformation(new Shell(), "test", "test1111111");
 	}
 
 	@Override
@@ -138,6 +112,7 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 	public void createPartControl(Composite parent) {
 		
 		showMessage();
+		//MessageDialog.openInformation(new Shell(), "test", "test");
 		
 		//Set layout forum of parent composite
 		parent.setLayout(new FormLayout());
@@ -175,7 +150,7 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				showMessage();
-				
+				//MessageDialog.openInformation(new Shell(), "test", "test");
 			}
 
 			@Override
