@@ -2,6 +2,7 @@ package tracing.views;
 
 import java.io.IOException;
 
+import overriddenProtected.MDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -26,15 +27,17 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.ViewPart;
 
-public class RequirementsIndicesView extends ViewPart implements ISelectionProvider{
 
+public class RequirementsIndicesView extends ViewPart implements ISelectionProvider{
+	
 	//private Display display = new Display();
-	private MessageDialog wDial;
+	private MDialog wDial;
 	private String[] buttonArr;
 	private Shell shell;
 	private Button cancelButton, browseButton;
 	private String fileFilterPath;
 	private Button[] buttons;
+	private String[] buttonLabels;
 	
 	public RequirementsIndicesView(){
 		shell = new Shell();
@@ -44,23 +47,36 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 		buttons[0] = browseButton;
 		buttons[1] = cancelButton;
 		fileFilterPath = "C:/";
-		/*buttonArr = new String[2];
-		buttonArr[0] = "browse";
-		buttonArr[1] = "cancel";*/
-		wDial = new MessageDialog(shell, "Welcome", null, "Message, fill in later", 0, null, 1 ) {
-			protected Button getButton(int index) {
-				return super.getButton(index);
-			}
-		};
+		buttonLabels = new String[2];
+		buttonLabels[0] = "Browse";
+		buttonLabels[1] = "Cancel";
+		wDial = new MDialog(shell, "Welcome", null, "Message, fill in later", 0, buttonLabels, 1 );
+		//wDial.setButtons(buttons);
+		//wDial.setButtonLabels(buttonLabels);
 	}
 	
 	private void showMessage(){
-		MessageDialog.openInformation(new Shell(),
+		/*MessageDialog.openInformation(new Shell(),
 				"Welcome",
-				"Please make your selections.");
+				"Please make your selections.");*/
 		/*try {*/
 			wDial.open();
-			/*browseButton.addListener(SWT.Selection, new Listener() {
+			wDial.getButton(0).addSelectionListener(new SelectionListener(){
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					MessageDialog.openInformation(new Shell(),  "yolo",  "yoloo");
+					//MessageDialog.openInformation(new Shell(), "test", "test");
+				}
+
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+		/*	Button browseButton = wDial.getButton(0);
+			browseButton.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event event) {
 					FileDialog fileDialog = new FileDialog(shell, SWT.MULTI);
 	
@@ -68,7 +84,7 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 			          
 			        fileDialog.setFilterExtensions(new String[]{"*.rtf", "*.html", "*.*"});
 			        fileDialog.setFilterNames(new String[]{ "Rich Text Format", "HTML Document", "Any"});
-			          
+			        
 			        String firstFile = fileDialog.open();
 	
 			        if(firstFile != null) {
