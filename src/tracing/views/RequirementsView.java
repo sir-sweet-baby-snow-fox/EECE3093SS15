@@ -1,7 +1,7 @@
 package tracing.views;
 
 
-import indexer.Indexer;
+import indexer.Tokenizer;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -116,8 +116,8 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 					}
 				}
 				else if (combo.getSelectionIndex() == 3) {
-					Indexer i = new Indexer();
-					String[] parts = i.IndexString("Thi:s ha's a _lot of' T!hi%$ngs$ w%^234Ng");
+					Tokenizer i = new Tokenizer();
+					String[] parts = i.TokenizeString("Thi:s ha's a _lot of' T!hi%$ngs$ w%^234Ng");
 					StringBuilder sb = new StringBuilder();
 					for (String part : parts)
 						sb.append(part + " ");
