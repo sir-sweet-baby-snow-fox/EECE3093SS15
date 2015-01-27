@@ -6,6 +6,7 @@ import indexer.Tokenizer;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.io.File;
 
 import org.eclipse.swt.widgets.Combo;
@@ -89,6 +90,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		
 		// TODO: Remove this when we actually load the files...This is just for testing
 		combo.add("TokenizerTest");
+		combo.add("StopWordRemovalTest");
 		
 		combo.select(0); //Default choice is no file selected
 		
@@ -127,6 +129,16 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 					for (String part : parts)
 						sb.append(part + " ");
 					text.setText(sb.toString());
+				}
+				else if (combo.getSelectionIndex() == resourceFiles.length + 2) {
+					Tokenizer t = new Tokenizer();
+					String[] parts = t.TokenizeString("The boy had a cat and a dog");
+					try {
+						String[] cleanParts = t.RemoveStopWords(resourceDirectory + "/Stop_Word_List.txt", parts);
+						text.setText(Arrays.toString(cleanParts));
+					} catch (IOException e1) {
+						text.setText("");
+					}
 				}
 				else{
 					//User has selected a use case associated with a file name.
