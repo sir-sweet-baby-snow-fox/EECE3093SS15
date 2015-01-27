@@ -6,6 +6,12 @@ Branches should be named by [Lab #]-[Feature #]
 
 ex: 1-6 Would be the branch for Lab 1 Feature 6.
 
+Commits
+================================================================================
+- Prefix all commits with github issue number
+
+ex: "#1 Added stuff" would be a commit for issue 1.
+
 Pull Requests
 ================================================================================
 - Never commit directly to master, always do work in a local branch and create a pull request to master.
