@@ -4,6 +4,8 @@ package tracing.views;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Hashtable;
+import java.util.Map;
 import java.io.File;
 
 import org.eclipse.swt.widgets.Combo;
@@ -47,6 +49,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	
 	private ISelection selection;
 	private ComboViewer comboViewer;
+	private Hashtable<String, String> acronymHashTable;
 	
 	/**
 	 * The ID of the view as specified by the extension.
@@ -57,7 +60,43 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	 * The constructor.
 	 */
 	public RequirementsView() {
+		
 	}
+	
+	/**
+	 * Returns the restore acronym form of the inputAcronym, or the inputAcronym
+	 * restored value can be found in the list.
+	 * @param inputAcronym	Acronym to be restored
+	 * @param acronymMap 	The mapping to be used to restore the acronym
+	 * @return				The restored version of the acronym, or the input if no mapping is found.
+	 */
+	public String fromAcronym(Hashtable<String, String> acronymHashtable, String inputAcronym) {
+		if(acronymHashtable.containsKey(inputAcronym)) {
+			return acronymHashtable.get(inputAcronym);
+		} else {
+			return inputAcronym;
+		}
+	}
+	
+	private Hashtable<String, String> createAcronymMap(File acronymListFile) {
+		Hashtable<String, String> newHashtable = new Hashtable<String, String>();
+		System.out.println("hi");
+		//User has selected a use case associated with a file name.
+		try {
+			for (String line : Files.readAllLines(acronymListFile.toPath())) {
+				System.out.println(line);
+				String[] splitLine = line.split(":");
+				for(int i = 0; i < splitLine.length; i++) {
+					System.out.println(splitLine[i]);
+				}
+				System.out.println();
+			}
+		} catch (IOException e1) {
+			System.out.println(e1.getMessage());
+		}
+		return newHashtable;
+	}
+	
 
 	/**
 	 * This is a callback that will allow us
@@ -86,6 +125,11 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		}
 		
 		combo.select(0); //Default choice is no file selected
+		
+		//Setup acronym mapper
+		String acronymListFilePath = "C:\\Users\\Ricky\\workspace\\Lab 1\\src\\Acronym_List.txt";
+		File acronymListFile = new File(acronymListFilePath);
+		acronymHashTable = createAcronymMap(acronymListFile);
 		
 		//Set combo position
 		FormData formdata = new FormData();
