@@ -6,6 +6,7 @@ import indexer.Indexer;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.io.File;
 
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -23,6 +24,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.*;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.SWT;
+
 
 
 /**
@@ -72,10 +74,23 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		comboViewer = new ComboViewer(parent,SWT.NONE|SWT.DROP_DOWN);
 		Combo combo = comboViewer.getCombo();
 		combo.add("Choose Use Case");
-		combo.add("UC0");
-		combo.add("UC1");
-		combo.add("IndexTest");
-		combo.select(0);
+		
+		//Retrieve use case files from resource directory.
+		final String resourceDirectory = "/home/badams/projects/EECE3093SS15/src/resources";
+		File folder = new File(resourceDirectory);
+		File[] resourceFiles = folder.listFiles();
+
+		//Fill combo box with file names.
+		for (int i = 0; i < resourceFiles.length; i++) {
+			if (resourceFiles[i].isFile()) {
+				combo.add(resourceFiles[i].getName());
+			}
+		}
+		
+		// TODO: Remove this when we actually load the files...This is just for testing
+		combo.add("TokenizerTest");
+		
+		combo.select(0); //Default choice is no file selected
 		
 		//Set combo position
 		FormData formdata = new FormData();
@@ -99,32 +114,38 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				
+				//Fill text with the correct information.
+				//If no use case is selected, display indexing time.
+				//Otherwise, display the content of the selected file.
 				if(combo.getSelectionIndex()==0)
 					text.setText("Indexing time of X requirement(s) is: Y seconds.");
-				else if(combo.getSelectionIndex()==1)
-					text.setText("This is a sample.");
-				else if (combo.getSelectionIndex()==2){
+				else if (combo.getSelectionIndex() == resourceFiles.length + 1) {
+					Indexer i = new Indexer();
+					String[] parts = i.IndexString("Thi:s ha's a _lot of' T!hi%$n\ngs$ w%^234Ng");
+					StringBuilder sb = new StringBuilder();
+					for (String part : parts)
+						sb.append(part + " ");
+					text.setText(sb.toString());
+				}
+				else{
+					//User has selected a use case associated with a file name.
 					try {
 						StringBuilder s = new StringBuilder();
-						for (String line : Files.readAllLines(Paths.get("/resources/UC1.txt"))) {
-						    s.append(line + "\n");
+						String useCaseFileName = resourceDirectory + "/" + combo.getText();
+						for (String line : Files.readAllLines(Paths.get(useCaseFileName))) {
+							
+							//TODO: Do some processing on the current line of text
+							
+							s.append(line + "\n");
 						}
 						text.setText(s.toString());
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						text.setText(e1.getMessage());
 					}
+					
 				}
-				else if (combo.getSelectionIndex() == 3) {
-					Indexer i = new Indexer();
-					String[] parts = i.IndexString("Thi:s ha's a _lot of' T!hi%$ngs$ w%^234Ng");
-					StringBuilder sb = new StringBuilder();
-					for (String part : parts)
-						sb.append(part + " ");
-					text.setText(sb.toString());
-				}
-				else
-					text.setText("");
 				
 			}
 
