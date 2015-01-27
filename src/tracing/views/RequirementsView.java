@@ -81,6 +81,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	private Hashtable<String, String> createAcronymMap(File acronymListFile) {
 		Hashtable<String, String> newHashtable = new Hashtable<String, String>();
 		System.out.println("hi");
+		
 		//User has selected a use case associated with a file name.
 		try {
 			for (String line : Files.readAllLines(acronymListFile.toPath())) {
@@ -94,6 +95,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		} catch (IOException e1) {
 			System.out.println(e1.getMessage());
 		}
+		
 		return newHashtable;
 	}
 	
@@ -127,7 +129,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.select(0); //Default choice is no file selected
 		
 		//Setup acronym mapper
-		String acronymListFilePath = "C:\\Users\\Ricky\\workspace\\Lab 1\\src\\Acronym_List.txt";
+		String acronymListFilePath = "C:\\Users\\Ricky\\Desktop\\Acronym_List.txt";
 		File acronymListFile = new File(acronymListFilePath);
 		acronymHashTable = createAcronymMap(acronymListFile);
 		
