@@ -200,13 +200,11 @@ public class GreetingMsg extends Dialog {
 		btnOK.setBounds(20, 225, 75, 25);
 		btnOK.setText("OK");
 		
-		
-		
 	}
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		Shell shell = new Shell();
 		GreetingMsg msg = new GreetingMsg(shell, SWT.BORDER | SWT.WRAP);
 		msg.open();
-	}
+	}*/
 }
