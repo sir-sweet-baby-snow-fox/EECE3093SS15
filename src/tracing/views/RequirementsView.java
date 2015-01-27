@@ -1,7 +1,7 @@
 package tracing.views;
 
 
-import indexer.Indexer;
+import indexer.Tokenizer;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -121,8 +121,8 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				if(combo.getSelectionIndex()==0)
 					text.setText("Indexing time of X requirement(s) is: Y seconds.");
 				else if (combo.getSelectionIndex() == resourceFiles.length + 1) {
-					Indexer i = new Indexer();
-					String[] parts = i.IndexString("Thi:s ha's a _lot of' T!hi%$n\ngs$ w%^234Ng");
+					Tokenizer t = new Tokenizer();
+					String[] parts = t.TokenizeString("Thi:s ha's a _lot of' T!hi%$n\ngs$ w%^234Ng");
 					StringBuilder sb = new StringBuilder();
 					for (String part : parts)
 						sb.append(part + " ");
