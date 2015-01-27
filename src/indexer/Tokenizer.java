@@ -3,16 +3,15 @@ package indexer;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Tokenizer {
+	
 	public String[] TokenizeString(String s) {
 		String[] parts = s.split("[^a-zA-Z\\d]");
-		for(int i=0; i < parts.length; i++) {
-			  parts[i] = parts[i].toLowerCase();
-			}
 		return parts;
 	}
 	
@@ -22,17 +21,25 @@ public class Tokenizer {
 			// append to the StringBuilder
 			sb.append(line);
 		}
-		String[] stopWords = sb.toString().split(",");
+		String[] stopWordList = sb.toString().split(",");
 		
-		// convert both arrays to sets
-		Set<String> stopWordSet = new HashSet<String>(Arrays.asList(stopWords));
-		Set<String> tokenSet = new HashSet<String>(Arrays.asList(s));
+		// sort the array to prepare it for binary search
+		Arrays.sort(stopWordList);
 		
-		// subtract the stopWordSet from the tokenSet to find the elements that are only in tokenSet
-		tokenSet.removeAll(stopWordSet);
+		// initialize empty array list
+		ArrayList<String> cleanedParts = new ArrayList<String>();
 		
-		// convert back to string array and return
-		return tokenSet.toArray(new String[tokenSet.size()]);
+		// run a binary search for each token to see if it should be removed
+		for (String part : s){
+			int index = Arrays.binarySearch(stopWordList, part.toLowerCase());
+			index = index>=0 ? index : -1;
+			if (index == -1) {
+				cleanedParts.add(part);
+			}
+		}
+		
+		String[] retArray = new String[cleanedParts.size()];
+		return cleanedParts.toArray(retArray);
 	}
 	
 	

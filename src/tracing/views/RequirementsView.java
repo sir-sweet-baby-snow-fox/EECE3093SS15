@@ -132,7 +132,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				}
 				else if (combo.getSelectionIndex() == resourceFiles.length + 2) {
 					Tokenizer t = new Tokenizer();
-					String[] parts = t.TokenizeString("The boy had a cat and a dog");
+					String[] parts = t.TokenizeString("The BOY had a cat and a dog");
 					try {
 						String[] cleanParts = t.RemoveStopWords(resourceDirectory + "/Stop_Word_List.txt", parts);
 						text.setText(Arrays.toString(cleanParts));
