@@ -1,6 +1,8 @@
 package tracing.views;
 
 
+import indexer.Tokenizer;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -70,11 +72,11 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		
 		//Create a drop box
 		comboViewer = new ComboViewer(parent,SWT.NONE|SWT.DROP_DOWN);
-		final Combo combo = comboViewer.getCombo();
+		Combo combo = comboViewer.getCombo();
 		combo.add("Choose Use Case");
 		
 		//Retrieve use case files from resource directory.
-		final String resourceDirectory = "C:\\Users\\Ricky\\workspace\\Lab 1\\src\\Resource";
+		final String resourceDirectory = "/home/badams/projects/EECE3093SS15/src/resources";
 		File folder = new File(resourceDirectory);
 		File[] resourceFiles = folder.listFiles();
 
@@ -84,6 +86,9 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				combo.add(resourceFiles[i].getName());
 			}
 		}
+		
+		// TODO: Remove this when we actually load the files...This is just for testing
+		combo.add("TokenizerTest");
 		
 		combo.select(0); //Default choice is no file selected
 		
@@ -95,9 +100,9 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.setLayoutData(formdata);
 		
 		//Set text position
-		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL|SWT.READ_ONLY);
+		Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY);
 		formdata = new FormData();
-		formdata.top  =new FormAttachment(combo,10);
+		formdata.top=new FormAttachment(combo,10);
 		formdata.bottom = new FormAttachment(combo,600);
 		formdata.left = new FormAttachment(0,5);
 		formdata.right = new FormAttachment(0,355);
@@ -115,7 +120,15 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				//Otherwise, display the content of the selected file.
 				if(combo.getSelectionIndex()==0)
 					text.setText("Indexing time of X requirement(s) is: Y seconds.");
-				else {
+				else if (combo.getSelectionIndex() == resourceFiles.length + 1) {
+					Tokenizer t = new Tokenizer();
+					String[] parts = t.TokenizeString("Thi:s ha's a _lot of' T!hi%$n\ngs$ w%^234Ng");
+					StringBuilder sb = new StringBuilder();
+					for (String part : parts)
+						sb.append(part + " ");
+					text.setText(sb.toString());
+				}
+				else{
 					//User has selected a use case associated with a file name.
 					try {
 						StringBuilder s = new StringBuilder();
@@ -128,10 +141,12 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 						}
 						text.setText(s.toString());
 					} catch (IOException e1) {
+						// TODO Auto-generated catch block
 						text.setText(e1.getMessage());
 					}
 					
 				}
+				
 			}
 
 			@Override
