@@ -20,6 +20,10 @@ import org.eclipse.ui.part.ViewPart;
 
 public class RequirementsIndicesView extends ViewPart implements ISelectionProvider{
 	
+	Text indicesText;
+	
+	public static final String ID = "tracing.views.RequirementsIndicesView";
+	
 	private void showMessage(){
 		MessageDialog.openInformation(new Shell(),
 				"Testhello",
@@ -70,8 +74,7 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 		titleLabel.setLayoutData(formdata);
 		
 		//Create text area
-		Text indicesText = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY);
-		indicesText.setText("This is a sample result.");
+		indicesText = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY);
 		formdata = new FormData();
 		formdata.top = new FormAttachment(titleLabel,10);
 		formdata.bottom = new FormAttachment(titleLabel,230);
@@ -108,6 +111,10 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 	public void setFocus() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void setIndicesText(String text){
+		indicesText.setText(text);
 	}
 
 }
