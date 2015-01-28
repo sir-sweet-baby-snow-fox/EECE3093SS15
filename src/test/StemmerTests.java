@@ -2,10 +2,13 @@ package test;
 
 import static org.junit.Assert.*;
 import indexer.Stemmer;
+import indexer.Tokenizer;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.junit.Test;
 
@@ -19,63 +22,20 @@ public class StemmerTests {
 		 * forcing lower case must be done outside the Stemmer class.
 		 * Usage: Stemmer file-name file-name ...
 		 */
-		String[] args = {"running","sliding"};
-		char[] w = new char[501];
-		Stemmer s = new Stemmer();
-		for (int i = 0; i < args.length; i++)
-			try
-		{
-				FileInputStream in = new FileInputStream(args[i]);
-
-				try
-				{ while(true)
-
-				{  int ch = in.read();
-				if (Character.isLetter((char) ch))
-				{
-					int j = 0;
-					while(true)
-					{  ch = Character.toLowerCase((char) ch);
-					w[j] = (char) ch;
-					if (j < 500) j++;
-					ch = in.read();
-					if (!Character.isLetter((char) ch))
-					{
-						/* to test add(char ch) */
-						for (int c = 0; c < j; c++) s.add(w[c]);
-
-						/* or, to test add(char[] w, int j) */
-						/* s.add(w, j); */
-
-						s.stem();
-						{  String u;
-
-						/* and now, to test toString() : */
-						u = s.toString();
-
-						/* to test getResultBuffer(), getResultLength() : */
-						/* u = new String(s.getResultBuffer(), 0, s.getResultLength()); */
-
-						System.out.print(u);
-						}
-						break;
-					}
-					}
+		Stemmer stemmer = new Stemmer();
+		Tokenizer tokenizer = new Tokenizer();
+		//User has selected a use case associated with a file name.
+		try {
+			for (String line : Files.readAllLines(Paths.get("C:/Users/Ricky/Desktop/Acronym_List.txt"))) {
+				String[] tokens = tokenizer.TokenizeString(line);
+				for(int i = 0; i < tokens.length; i++) {
+					System.out.println(stemmer.stem(tokens[i]));
 				}
-				if (ch < 0) break;
-				System.out.print((char)ch);
-				}
-				}
-				catch (IOException e)
-				{  System.out.println("error reading " + args[i]);
-				break;
-				}
+				
+			}
+		} catch (IOException e1) {
+			System.out.println("Error parsing file: " + e1.getMessage());
 		}
-		catch (FileNotFoundException e)
-		{  System.out.println("file " + args[i] + " not found");
-		break;
-		}
-
 	}
 
 }
