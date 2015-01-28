@@ -51,7 +51,6 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	
 	private ISelection selection;
 	private ComboViewer comboViewer;
-	private Hashtable<String, String> acronymHashTable;
 	
 	/**
 	 * The ID of the view as specified by the extension.
@@ -95,28 +94,6 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.add("TokenizerTest");
 		
 		combo.select(0); //Default choice is no file selected
-		
-		//Setup acronym mapper
-		String acronymListFilePath = "C:/Users/Ricky/Desktop/Acronym_List.txt";
-		//File acronymListFile = new File(acronymListFilePath);
-		//acronymHashTable = createAcronymMap(acronymListFile);
-		
-		acronymHashTable = new Hashtable<String, String>();
-		System.out.println("hi");
-		
-		//User has selected a use case associated with a file name.
-		try {
-			for (String line : Files.readAllLines(Paths.get(acronymListFilePath))) {
-				System.out.println(line);
-				String[] splitLine = line.split(":");
-				for(int i = 0; i < splitLine.length; i++) {
-					System.out.println(splitLine[i]);
-				}
-				System.out.println();
-			}
-		} catch (IOException e1) {
-			System.out.println(e1.getMessage());
-		}
 		
 		//Set combo position
 		FormData formdata = new FormData();
