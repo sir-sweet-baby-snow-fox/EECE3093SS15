@@ -1,11 +1,8 @@
 package test;
 
 import static org.junit.Assert.*;
-
 import java.io.File;
-
 import indexer.AcronymConverter;
-
 import org.junit.Test;
 
 public class AcronymConverterTests {
@@ -16,6 +13,7 @@ public class AcronymConverterTests {
 		AcronymConverter acronymConverter = new AcronymConverter(acronymListFile);	
 	}
 	
+	@Test
 	public void testConverter() {
 		File acronymListFile = new File("C:/Users/Ricky/Desktop/Acronym_List.txt");
 		AcronymConverter acronymConverter = new AcronymConverter(acronymListFile);
