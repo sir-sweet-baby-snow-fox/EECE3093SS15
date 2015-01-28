@@ -64,43 +64,6 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	public RequirementsView() {
 		
 	}
-	
-	/**
-	 * Returns the restore acronym form of the inputAcronym, or the inputAcronym
-	 * restored value can be found in the list.
-	 * @param inputAcronym	Acronym to be restored
-	 * @param acronymMap 	The mapping to be used to restore the acronym
-	 * @return				The restored version of the acronym, or the input if no mapping is found.
-	 */
-	public String fromAcronym(Hashtable<String, String> acronymHashtable, String inputAcronym) {
-		if(acronymHashtable.containsKey(inputAcronym)) {
-			return acronymHashtable.get(inputAcronym);
-		} else {
-			return inputAcronym;
-		}
-	}
-	
-	private Hashtable<String, String> createAcronymMap(File acronymListFile) {
-		Hashtable<String, String> newHashtable = new Hashtable<String, String>();
-		System.out.println("hi");
-		
-		//User has selected a use case associated with a file name.
-		try {
-			for (String line : Files.readAllLines(acronymListFile.toPath())) {
-				System.out.println(line);
-				String[] splitLine = line.split(":");
-				for(int i = 0; i < splitLine.length; i++) {
-					System.out.println(splitLine[i]);
-				}
-				System.out.println();
-			}
-		} catch (IOException e1) {
-			System.out.println(e1.getMessage());
-		}
-		
-		return newHashtable;
-	}
-	
 
 	/**
 	 * This is a callback that will allow us
@@ -113,13 +76,13 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		
 		//Create a drop box
 		comboViewer = new ComboViewer(parent,SWT.NONE|SWT.DROP_DOWN);
-		Combo combo = comboViewer.getCombo();
+		final Combo combo = comboViewer.getCombo();
 		combo.add("Choose Use Case");
 		
 		//Retrieve use case files from resource directory.
-		final String resourceDirectory = "/home/badams/projects/EECE3093SS15/src/resources";
+		final String resourceDirectory = "C:/Users/Ricky/git/EECE3093SS15/src/resources";
 		File folder = new File(resourceDirectory);
-		File[] resourceFiles = folder.listFiles();
+		final File[] resourceFiles = folder.listFiles();
 
 		//Fill combo box with file names.
 		for (int i = 0; i < resourceFiles.length; i++) {
@@ -134,9 +97,26 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.select(0); //Default choice is no file selected
 		
 		//Setup acronym mapper
-		String acronymListFilePath = "C:\\Users\\Ricky\\Desktop\\Acronym_List.txt";
-		File acronymListFile = new File(acronymListFilePath);
-		acronymHashTable = createAcronymMap(acronymListFile);
+		String acronymListFilePath = "C:/Users/Ricky/Desktop/Acronym_List.txt";
+		//File acronymListFile = new File(acronymListFilePath);
+		//acronymHashTable = createAcronymMap(acronymListFile);
+		
+		acronymHashTable = new Hashtable<String, String>();
+		System.out.println("hi");
+		
+		//User has selected a use case associated with a file name.
+		try {
+			for (String line : Files.readAllLines(Paths.get(acronymListFilePath))) {
+				System.out.println(line);
+				String[] splitLine = line.split(":");
+				for(int i = 0; i < splitLine.length; i++) {
+					System.out.println(splitLine[i]);
+				}
+				System.out.println();
+			}
+		} catch (IOException e1) {
+			System.out.println(e1.getMessage());
+		}
 		
 		//Set combo position
 		FormData formdata = new FormData();
@@ -146,7 +126,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.setLayoutData(formdata);
 		
 		//Set text position
-		Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY);
+		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY);
 		formdata = new FormData();
 		formdata.top=new FormAttachment(combo,10);
 		formdata.bottom = new FormAttachment(combo,600);
