@@ -18,9 +18,36 @@ public class AcronymConverter {
 	 * OB/GYN: Obstetrics and Gynaecology.
 	 * 
 	 * 
-	 * @param acronymListFile	The file containing the list of acronyms and their meaniings.
+	 * @param acronymListFile	The file containing the list of acronyms and their meanings.
 	 */
 	public AcronymConverter(File acronymListFile) {
+		setupHashtable(acronymListFile);
+	}
+	
+	/**
+	 * Returns the restore acronym form of the inputAcronym, or the inputAcronym
+	 * restored value can be found in the list. If hash table was not set up correctly,
+	 * just returns the input.
+	 * 
+	 * @param inputAcronym	Acronym to be restored
+	 * @param acronymMap 	The mapping to be used to restore the acronym
+	 * @return				The restored version of the acronym, or the input if no mapping is found.
+	 */
+	public String fromAcronym(String inputAcronym) {
+		if(acronymHashtable != null && acronymHashtable.containsKey(inputAcronym)) {
+			return acronymHashtable.get(inputAcronym);
+		} else {
+			return inputAcronym;
+		}
+	}
+	
+	/**
+	 * Set up the hash table given an input file. See constructor details for
+	 * file scheme.
+	 * 
+	 * @param acronymListFile	The file containing the list of acronyms and their meanings.
+	 */
+	public void setupHashtable(File acronymListFile) {
 		acronymHashtable = new Hashtable<String, String>();
 		
 		//User has selected a use case associated with a file name.
@@ -38,25 +65,16 @@ public class AcronymConverter {
 					String acronym = splitLine[0].trim();
 					String expandedAcronym = splitLine[1].trim();
 					acronymHashtable.put(acronym, expandedAcronym);
+				} else {
+					//Make sure users can't use the fromAcronym() with incorrectly set up table
+					acronymHashtable = null; 
+					throw new Throwable("Badly formatted acronym list file");
 				}
 			}
 		} catch (IOException e1) {
 			System.out.println("Error parsing file: " + e1.getMessage());
-		}
-	}
-	
-	/**
-	 * Returns the restore acronym form of the inputAcronym, or the inputAcronym
-	 * restored value can be found in the list.
-	 * @param inputAcronym	Acronym to be restored
-	 * @param acronymMap 	The mapping to be used to restore the acronym
-	 * @return				The restored version of the acronym, or the input if no mapping is found.
-	 */
-	public String fromAcronym(String inputAcronym) {
-		if(acronymHashtable.containsKey(inputAcronym)) {
-			return acronymHashtable.get(inputAcronym);
-		} else {
-			return inputAcronym;
+		} catch (Throwable s) {
+			System.out.println(s.getMessage());
 		}
 	}
 	
