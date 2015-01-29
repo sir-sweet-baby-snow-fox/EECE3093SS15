@@ -16,18 +16,15 @@ public class StemmerTests {
 
 	@Test
 	public void test() {
-		/** Test program for demonstrating the Stemmer.  It reads text from a
-		 * a list of files, stems each word, and writes the result to standard
-		 * output. Note that the word stemmed is expected to be in lower case:
-		 * forcing lower case must be done outside the Stemmer class.
-		 * Usage: Stemmer file-name file-name ...
-		 */
 		Stemmer stemmer = new Stemmer();
 		Tokenizer tokenizer = new Tokenizer();
-		//User has selected a use case associated with a file name.
+		
 		try {
 			for (String line : Files.readAllLines(Paths.get("C:/Users/Ricky/Desktop/Acronym_List.txt"))) {
+				//Read in the line, get tokens
 				String[] tokens = tokenizer.TokenizeString(line);
+				
+				//Attempt to stem each token
 				for(int i = 0; i < tokens.length; i++) {
 					System.out.println(stemmer.stem(tokens[i]));
 				}
