@@ -1,9 +1,17 @@
 package tracing.views;
 
 
+import indexer.Tokenizer;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+<<<<<<< HEAD
+import java.util.Arrays;
+=======
+import java.util.Hashtable;
+import java.util.Map;
+>>>>>>> 9fbb8a8643035f10b9e6249e05e34ff862c8a80d
 import java.io.File;
 
 import org.eclipse.swt.widgets.Combo;
@@ -57,6 +65,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	 * The constructor.
 	 */
 	public RequirementsView() {
+		
 	}
 
 	/**
@@ -76,12 +85,16 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		//Retrieve use case files from resource directory.
 		final String resourceDirectory = "C:\\Users\\Jackson\\git\\EECE3093SS15\\src\\resources";
 		File folder = new File(resourceDirectory);
-		File[] resourceFiles = folder.listFiles();
+		final File[] resourceFiles = folder.listFiles();
 		for (int i = 0; i < resourceFiles.length; i++) {
 			if (resourceFiles[i].isFile()) {
 				combo.add(resourceFiles[i].getName());
 			}
 		}
+		
+		// TODO: Remove this when we actually load the files...This is just for testing
+		combo.add("TokenizerTest");
+		combo.add("StopWordRemovalTest");
 		
 		combo.select(0); //Default choice is no file selected
 		
@@ -93,9 +106,9 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.setLayoutData(formdata);
 		
 		//Set text position
-		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL|SWT.READ_ONLY);
+		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY);
 		formdata = new FormData();
-		formdata.top  =new FormAttachment(combo,10);
+		formdata.top=new FormAttachment(combo,10);
 		formdata.bottom = new FormAttachment(combo,600);
 		formdata.left = new FormAttachment(0,5);
 		formdata.right = new FormAttachment(0,355);
@@ -107,13 +120,35 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				RequirementsIndicesView riv = getRequirementsView("tracing.views.RequirementsIndicesView");
 				
 				//Fill text with the correct information.
 				//If no use case is selected, display indexing time.
 				//Otherwise, display the content of the selected file.
 				if(combo.getSelectionIndex()==0)
 					text.setText("Indexing time of X requirement(s) is: Y seconds.");
-				else {
+				else if (combo.getSelectionIndex() == resourceFiles.length + 1) {
+					// TODO: Remove this and run tokenizer/indexer on whatever file is selected but
+					// 		 this at least shows how to tokenize and how to set text on the other view
+					Tokenizer t = new Tokenizer();
+					String[] parts = t.TokenizeString("Thi:s ha's a _lot of' T!hi%$n\ngs$ w%^234Ng");
+					StringBuilder sb = new StringBuilder();
+					for (String part : parts)
+						sb.append(part + " ");
+					
+					riv.setIndicesText(sb.toString());
+				}
+				else if (combo.getSelectionIndex() == resourceFiles.length + 2) {
+					Tokenizer t = new Tokenizer();
+					String[] parts = t.TokenizeString("The BOY had a cat and a dog");
+					try {
+						String[] cleanParts = t.RemoveStopWords(resourceDirectory + "/Stop_Word_List.txt", parts);
+						text.setText(Arrays.toString(cleanParts));
+					} catch (IOException e1) {
+						text.setText("");
+					}
+				}
+				else{
 					//User has selected a use case associated with a file name.
 					try {
 						StringBuilder s = new StringBuilder();
@@ -126,10 +161,12 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 						}
 						text.setText(s.toString());
 					} catch (IOException e1) {
+						// TODO Auto-generated catch block
 						text.setText(e1.getMessage());
 					}
 					
 				}
+				
 			}
 
 			@Override
@@ -150,6 +187,11 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 			
 		});
 		
+	}
+	
+	private RequirementsIndicesView getRequirementsView(String id) {
+		RequirementsIndicesView riv = (RequirementsIndicesView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
+		return riv;
 	}
 	
 	@Override
