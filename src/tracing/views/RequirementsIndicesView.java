@@ -24,6 +24,9 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 	
 	Text indicesText;
 	
+	/**
+	 * The ID of the view as specified by the extension.
+	 */
 	public static final String ID = "tracing.views.RequirementsIndicesView";
 	
 	private void showMessage(){

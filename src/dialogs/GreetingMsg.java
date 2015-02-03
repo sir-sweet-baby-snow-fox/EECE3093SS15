@@ -18,6 +18,10 @@ import org.eclipse.swt.events.MouseEvent;
 /*import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;*/
+import org.eclipse.ui.PlatformUI;
+
+import tracing.views.RequirementsIndicesView;
+import tracing.views.RequirementsView;
 
 public class GreetingMsg extends Dialog {
 
@@ -32,6 +36,8 @@ public class GreetingMsg extends Dialog {
 	private String acronymStr;
 	private String stopStr;
 	private String[] optionList = new String[5];
+	private RequirementsView reqInstance;
+	private String reqViewId = "tracing.views.RequirementsView";
 	//private String dirFilterStr;
 	
 	/**
@@ -56,6 +62,9 @@ public class GreetingMsg extends Dialog {
 		shell.open();
 		shell.layout();
 		display = getParent().getDisplay();
+		try{
+			reqInstance = getRequirementsView(reqViewId);
+		} catch (Exception e) { System.out.println(e.toString()); }
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
@@ -218,6 +227,7 @@ public class GreetingMsg extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				//OK button listener
 				//display.sleep();
+				reqInstance.setResourcePath(directory);
 				shell.close();
 			}
 		});
@@ -226,9 +236,14 @@ public class GreetingMsg extends Dialog {
 		
 	}
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		Shell shell = new Shell();
 		GreetingMsg msg = new GreetingMsg(shell, SWT.BORDER | SWT.WRAP);
 		msg.open();
+	}*/
+	
+	private RequirementsView getRequirementsView(String id) {
+		RequirementsView riv = (RequirementsView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
+		return riv;
 	}
 }
