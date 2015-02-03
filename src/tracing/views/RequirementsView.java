@@ -117,6 +117,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				RequirementsIndicesView riv = getRequirementsView("tracing.views.RequirementsIndicesView");
 				
 				//Fill text with the correct information.
 				//If no use case is selected, display indexing time.
@@ -124,12 +125,15 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				if(combo.getSelectionIndex()==0)
 					text.setText("Indexing time of X requirement(s) is: Y seconds.");
 				else if (combo.getSelectionIndex() == resourceFiles.length + 1) {
+					// TODO: Remove this and run tokenizer/indexer on whatever file is selected but
+					// 		 this at least shows how to tokenize and how to set text on the other view
 					Tokenizer t = new Tokenizer();
 					String[] parts = t.TokenizeString("Thi:s ha's a _lot of' T!hi%$n\ngs$ w%^234Ng");
 					StringBuilder sb = new StringBuilder();
 					for (String part : parts)
 						sb.append(part + " ");
-					text.setText(sb.toString());
+					
+					riv.setIndicesText(sb.toString());
 				}
 				else{
 					//User has selected a use case associated with a file name.
@@ -170,6 +174,11 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 			
 		});
 		
+	}
+	
+	private RequirementsIndicesView getRequirementsView(String id) {
+		RequirementsIndicesView riv = (RequirementsIndicesView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
+		return riv;
 	}
 	
 	@Override
