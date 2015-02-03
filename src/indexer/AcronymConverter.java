@@ -3,6 +3,8 @@ package indexer;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 
 public class AcronymConverter {
@@ -39,6 +41,20 @@ public class AcronymConverter {
 		} else {
 			return inputAcronym;
 		}
+	}
+	
+	public String[] restoreAcronyms(String[] tokens) {
+		// initialize empty array list
+		ArrayList<String> cleanedParts = new ArrayList<String>();
+		
+		// run a binary search for each token to see if it should be removed
+		for (String token : tokens){
+			cleanedParts.add(fromAcronym(token));
+		}
+		
+		String[] retArray = new String[cleanedParts.size()];
+		return cleanedParts.toArray(retArray);
+		
 	}
 	
 	/**

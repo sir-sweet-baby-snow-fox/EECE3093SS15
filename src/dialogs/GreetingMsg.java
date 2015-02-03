@@ -70,8 +70,8 @@ public class GreetingMsg extends Dialog {
 		shell.setSize(450, 300);
 		shell.setText(getText());
 		
-		DirectoryDialog dirDialog = new DirectoryDialog(shell);
-		FileDialog fileDialog = new FileDialog(shell);
+		final DirectoryDialog dirDialog = new DirectoryDialog(shell);
+		final FileDialog fileDialog = new FileDialog(shell);
 		//String test = DirDialog.open();
 		
 		dirText = new Text(shell, SWT.BORDER | SWT.SEARCH);
@@ -88,7 +88,7 @@ public class GreetingMsg extends Dialog {
 		stopText.setText("(file name)");
 		stopText.setEnabled(false);
 		
-		Button btnGetAcFile = new Button(shell, SWT.PUSH);
+		final Button btnGetAcFile = new Button(shell, SWT.PUSH);
 		btnGetAcFile.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -104,7 +104,7 @@ public class GreetingMsg extends Dialog {
 		btnGetAcFile.setEnabled(false);
 		// listener corresponding to text_1
 		
-		Button btnGetStopFile = new Button(shell, SWT.PUSH);
+		final Button btnGetStopFile = new Button(shell, SWT.PUSH);
 		btnGetStopFile.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -138,7 +138,7 @@ public class GreetingMsg extends Dialog {
 		btnCheckTok.setBounds(20, 45, 139, 16);
 		btnCheckTok.setText("Tokenizing");
 		
-		Button btnCheckAc = new Button(shell, SWT.CHECK);
+		final Button btnCheckAc = new Button(shell, SWT.CHECK);
 		btnCheckAc.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -156,7 +156,7 @@ public class GreetingMsg extends Dialog {
 		btnCheckAc.setBounds(20, 67, 139, 16);
 		btnCheckAc.setText("Restoring Acronyms");
 		
-		Button btnCheckStop = new Button(shell, SWT.CHECK);
+		final Button btnCheckStop = new Button(shell, SWT.CHECK);
 		btnCheckStop.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -193,7 +193,13 @@ public class GreetingMsg extends Dialog {
 		btnOK.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				//OK button listener
+				//Indexer indexer = new Indexer(parameters);
+				//riv.indexer = indexer;
+				//rv.indexer = indexer;
+				
+				
+				
+				shell.close();
 				
 			}
 		});

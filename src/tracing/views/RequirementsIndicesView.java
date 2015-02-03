@@ -1,5 +1,6 @@
 package tracing.views;
 
+import indexer.Indexer;
 import dialogs.GreetingMsg;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -23,6 +24,7 @@ import org.eclipse.ui.part.ViewPart;
 public class RequirementsIndicesView extends ViewPart implements ISelectionProvider{
 	
 	Text indicesText;
+	private Indexer indexer;
 	
 	public static final String ID = "tracing.views.RequirementsIndicesView";
 	
