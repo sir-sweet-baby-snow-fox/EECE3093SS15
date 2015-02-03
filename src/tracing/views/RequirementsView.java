@@ -6,6 +6,8 @@ import indexer.Tokenizer;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Hashtable;
+import java.util.Map;
 import java.io.File;
 
 import org.eclipse.swt.widgets.Combo;
@@ -59,6 +61,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	 * The constructor.
 	 */
 	public RequirementsView() {
+		
 	}
 
 	/**
@@ -72,13 +75,13 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		
 		//Create a drop box
 		comboViewer = new ComboViewer(parent,SWT.NONE|SWT.DROP_DOWN);
-		Combo combo = comboViewer.getCombo();
+		final Combo combo = comboViewer.getCombo();
 		combo.add("Choose Use Case");
 		
 		//Retrieve use case files from resource directory.
-		final String resourceDirectory = "/home/badams/projects/EECE3093SS15/src/resources";
+		final String resourceDirectory = "C:/Users/Ricky/git/EECE3093SS15/src/resources";
 		File folder = new File(resourceDirectory);
-		File[] resourceFiles = folder.listFiles();
+		final File[] resourceFiles = folder.listFiles();
 
 		//Fill combo box with file names.
 		for (int i = 0; i < resourceFiles.length; i++) {
@@ -100,7 +103,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.setLayoutData(formdata);
 		
 		//Set text position
-		Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY);
+		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY);
 		formdata = new FormData();
 		formdata.top=new FormAttachment(combo,10);
 		formdata.bottom = new FormAttachment(combo,600);
