@@ -6,12 +6,9 @@ import indexer.Tokenizer;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-<<<<<<< HEAD
 import java.util.Arrays;
-=======
 import java.util.Hashtable;
 import java.util.Map;
->>>>>>> 9fbb8a8643035f10b9e6249e05e34ff862c8a80d
 import java.io.File;
 
 import org.eclipse.swt.widgets.Combo;
@@ -55,7 +52,8 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	
 	private ISelection selection;
 	private ComboViewer comboViewer;
-	File[] resourceFiles;
+	private String test = "this is a test string";
+	private String resourcePath;
 	
 	/**
 	 * The ID of the view as specified by the extension.
@@ -66,9 +64,14 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	 * The constructor.
 	 */
 	public RequirementsView() {
-	
+		resourcePath = "";
 	}
-
+	
+	public void setResourcePath(String input) {
+		//return acronymFilePath;
+		resourcePath = input;
+	}
+	
 	/**
 	 * This is a callback that will allow us
 	 * to create the viewer and initialize it.
@@ -84,19 +87,12 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.add("Choose Use Case");
 		
 		//Retrieve use case files from resource directory.
-		final String resourceDirectory = "C:/Users/Ricky/git/EECE3093SS15/src/resources";
-		File resourceFolder = new File(resourceDirectory);
-		resourceFiles = resourceFolder.listFiles();
-
-		//Fill combo box with file names.
+		final String resourceDirectory = "C:\\Users\\Jackson\\git\\EECE3093SS15\\src\\resources";
+		File folder = new File(resourceDirectory);
+		final File[] resourceFiles = folder.listFiles();
 		for (int i = 0; i < resourceFiles.length; i++) {
 			if (resourceFiles[i].isFile()) {
-				//Remove file extension from use case name
-				String fileName = resourceFiles[i].getName();
-				int lastPeriodIndex = fileName.lastIndexOf('.');
-				String useCaseName = fileName.substring(0, lastPeriodIndex);
-				
-				combo.add(useCaseName);
+				combo.add(resourceFiles[i].getName());
 			}
 		}
 		
@@ -114,7 +110,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.setLayoutData(formdata);
 		
 		//Set text position
-		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL|SWT.READ_ONLY);
+		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY);
 		formdata = new FormData();
 		formdata.top=new FormAttachment(combo,10);
 		formdata.bottom = new FormAttachment(combo,600);
@@ -160,9 +156,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 					//User has selected a use case associated with a file name.
 					try {
 						StringBuilder s = new StringBuilder();
-						int fileIndex = combo.getSelectionIndex() - 1; //First selection is not a file.
-						String useCaseFileName = resourceFiles[fileIndex].toString();
-						
+						String useCaseFileName = resourceDirectory + "/" + combo.getText();
 						for (String line : Files.readAllLines(Paths.get(useCaseFileName))) {
 							
 							//TODO: Do some processing on the current line of text
@@ -178,7 +172,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				}
 				
 			}
-
+			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
@@ -198,8 +192,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		});
 		
 	}
-	
-	private RequirementsIndicesView getRequirementsView(String id) {
+		private RequirementsIndicesView getRequirementsView(String id) {
 		RequirementsIndicesView riv = (RequirementsIndicesView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
 		return riv;
 	}
