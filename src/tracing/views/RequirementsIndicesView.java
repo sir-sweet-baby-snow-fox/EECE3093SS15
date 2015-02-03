@@ -27,6 +27,7 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 		
 		GreetingMsg msg = new GreetingMsg(new Shell(), SWT.BORDER | SWT.WRAP);
 		msg.open();
+		
 	}
 	
 	@Override

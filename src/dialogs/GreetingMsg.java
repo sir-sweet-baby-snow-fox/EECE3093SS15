@@ -1,5 +1,7 @@
 package dialogs;
 
+//import tracing.views.RequirementsIndicesView;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.DirectoryDialog;
@@ -21,6 +23,7 @@ public class GreetingMsg extends Dialog {
 
 	protected Object result;
 	protected Shell shell;
+	private String dependantStr;
 	private Text dirText;
 	private static Display display;
 	private String directory;
@@ -28,6 +31,7 @@ public class GreetingMsg extends Dialog {
 	private Text stopText;
 	private String acronymStr;
 	private String stopStr;
+	private String[] optionList = new String[5];
 	//private String dirFilterStr;
 	
 	/**
@@ -41,7 +45,6 @@ public class GreetingMsg extends Dialog {
 		directory = "";
 		acronymStr = "";
 		stopStr = "";
-		//dirFilterStr = "C:/Users/Jackson/git/EECE3093SS15/resources";
 	}
 	
 	/**
@@ -60,6 +63,23 @@ public class GreetingMsg extends Dialog {
 		}
 		//display.close();
 		return result;
+	}
+	
+	public String[] getOptions() {
+		return optionList;
+	}
+	
+	public String[] openDisplay() {
+		this.open();
+		/*
+		 * [0] -> path
+		 * [1] -> file 1
+		 * [2] -> file 2
+		 */
+		String[] returnArr = new String[3];
+		while (true) {
+			
+		}
 	}
 
 	/**
@@ -95,6 +115,7 @@ public class GreetingMsg extends Dialog {
 				acronymStr = fileDialog.open();
 				if(acronymStr != null) {
 					acText.setText(acronymStr);
+					
 				}
 				
 			}
@@ -128,6 +149,8 @@ public class GreetingMsg extends Dialog {
 				if (directory != null) {
 					//text.setText("");
 					dirText.setText(directory);
+					optionList[0] = directory;
+					System.out.println(directory);
 				}
 			}
 		});
@@ -194,7 +217,8 @@ public class GreetingMsg extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				//OK button listener
-				
+				//display.sleep();
+				shell.close();
 			}
 		});
 		btnOK.setBounds(20, 225, 75, 25);
@@ -202,9 +226,9 @@ public class GreetingMsg extends Dialog {
 		
 	}
 	
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		Shell shell = new Shell();
 		GreetingMsg msg = new GreetingMsg(shell, SWT.BORDER | SWT.WRAP);
 		msg.open();
-	}*/
+	}
 }

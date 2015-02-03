@@ -74,11 +74,9 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.add("Choose Use Case");
 		
 		//Retrieve use case files from resource directory.
-		final String resourceDirectory = "C:\\Users\\Ricky\\workspace\\Lab 1\\src\\Resource";
+		final String resourceDirectory = "C:\\Users\\Jackson\\git\\EECE3093SS15\\src\\resources";
 		File folder = new File(resourceDirectory);
 		File[] resourceFiles = folder.listFiles();
-
-		//Fill combo box with file names.
 		for (int i = 0; i < resourceFiles.length; i++) {
 			if (resourceFiles[i].isFile()) {
 				combo.add(resourceFiles[i].getName());
