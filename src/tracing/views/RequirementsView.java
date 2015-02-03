@@ -6,8 +6,12 @@ import indexer.Tokenizer;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+<<<<<<< HEAD
+import java.util.Arrays;
+=======
 import java.util.Hashtable;
 import java.util.Map;
+>>>>>>> 9fbb8a8643035f10b9e6249e05e34ff862c8a80d
 import java.io.File;
 
 import org.eclipse.swt.widgets.Combo;
@@ -98,6 +102,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		
 		// TODO: Remove this when we actually load the files...This is just for testing
 		combo.add("TokenizerTest");
+		combo.add("StopWordRemovalTest");
 		
 		combo.select(0); //Default choice is no file selected
 		
@@ -123,6 +128,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				RequirementsIndicesView riv = getRequirementsView("tracing.views.RequirementsIndicesView");
 				
 				//Fill text with the correct information.
 				//If no use case is selected, display indexing time.
@@ -130,12 +136,25 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				if(combo.getSelectionIndex()==0)
 					text.setText("Indexing time of X requirement(s) is: Y seconds.");
 				else if (combo.getSelectionIndex() == resourceFiles.length + 1) {
+					// TODO: Remove this and run tokenizer/indexer on whatever file is selected but
+					// 		 this at least shows how to tokenize and how to set text on the other view
 					Tokenizer t = new Tokenizer();
 					String[] parts = t.TokenizeString("Thi:s ha's a _lot of' T!hi%$n\ngs$ w%^234Ng");
 					StringBuilder sb = new StringBuilder();
 					for (String part : parts)
 						sb.append(part + " ");
-					text.setText(sb.toString());
+					
+					riv.setIndicesText(sb.toString());
+				}
+				else if (combo.getSelectionIndex() == resourceFiles.length + 2) {
+					Tokenizer t = new Tokenizer();
+					String[] parts = t.TokenizeString("The BOY had a cat and a dog");
+					try {
+						String[] cleanParts = t.RemoveStopWords(resourceDirectory + "/Stop_Word_List.txt", parts);
+						text.setText(Arrays.toString(cleanParts));
+					} catch (IOException e1) {
+						text.setText("");
+					}
 				}
 				else{
 					//User has selected a use case associated with a file name.
@@ -178,6 +197,11 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 			
 		});
 		
+	}
+	
+	private RequirementsIndicesView getRequirementsView(String id) {
+		RequirementsIndicesView riv = (RequirementsIndicesView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
+		return riv;
 	}
 	
 	@Override
