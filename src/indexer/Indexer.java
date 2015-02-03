@@ -82,8 +82,4 @@ public class Indexer {
 		//End timing
 	}
 
-	private RequirementsIndicesView getRequirementsIndiciesView(String id) {
-		RequirementsIndicesView riv = (RequirementsIndicesView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
-		return riv;
-	}
 }

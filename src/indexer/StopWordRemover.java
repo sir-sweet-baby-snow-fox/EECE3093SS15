@@ -10,6 +10,11 @@ public class StopWordRemover {
 	
 	String[] stopWordList;
 	
+	/**
+	 * Path to a text file that will set up the list of stop words.
+	 * File should have a list of comma delimited stop words.
+	 * @param stopWordFilePath
+	 */
 	public StopWordRemover(String stopWordFilePath) {
 		StringBuilder sb = new StringBuilder();
 		try {
@@ -28,6 +33,11 @@ public class StopWordRemover {
 		Arrays.sort(stopWordList);
 	}
 	
+	/**
+	 * Remove the stop words that exist in the stop words list from the strings in s.
+	 * @param s
+	 * @return
+	 */
 	public String[] RemoveStopWords(String[] s){
 		
 		// initialize empty array list
