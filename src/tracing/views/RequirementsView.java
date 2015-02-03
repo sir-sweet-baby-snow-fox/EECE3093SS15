@@ -6,7 +6,12 @@ import indexer.Tokenizer;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+<<<<<<< HEAD
 import java.util.Arrays;
+=======
+import java.util.Hashtable;
+import java.util.Map;
+>>>>>>> 9fbb8a8643035f10b9e6249e05e34ff862c8a80d
 import java.io.File;
 
 import org.eclipse.swt.widgets.Combo;
@@ -60,6 +65,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	 * The constructor.
 	 */
 	public RequirementsView() {
+		
 	}
 
 	/**
@@ -73,13 +79,13 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		
 		//Create a drop box
 		comboViewer = new ComboViewer(parent,SWT.NONE|SWT.DROP_DOWN);
-		Combo combo = comboViewer.getCombo();
+		final Combo combo = comboViewer.getCombo();
 		combo.add("Choose Use Case");
 		
 		//Retrieve use case files from resource directory.
-		final String resourceDirectory = "/home/badams/projects/EECE3093SS15/src/resources";
+		final String resourceDirectory = "C:/Users/Ricky/git/EECE3093SS15/src/resources";
 		File folder = new File(resourceDirectory);
-		File[] resourceFiles = folder.listFiles();
+		final File[] resourceFiles = folder.listFiles();
 
 		//Fill combo box with file names.
 		for (int i = 0; i < resourceFiles.length; i++) {
@@ -102,7 +108,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.setLayoutData(formdata);
 		
 		//Set text position
-		Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY);
+		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY);
 		formdata = new FormData();
 		formdata.top=new FormAttachment(combo,10);
 		formdata.bottom = new FormAttachment(combo,600);
@@ -116,6 +122,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				RequirementsIndicesView riv = getRequirementsView("tracing.views.RequirementsIndicesView");
 				
 				//Fill text with the correct information.
 				//If no use case is selected, display indexing time.
@@ -123,12 +130,15 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				if(combo.getSelectionIndex()==0)
 					text.setText("Indexing time of X requirement(s) is: Y seconds.");
 				else if (combo.getSelectionIndex() == resourceFiles.length + 1) {
+					// TODO: Remove this and run tokenizer/indexer on whatever file is selected but
+					// 		 this at least shows how to tokenize and how to set text on the other view
 					Tokenizer t = new Tokenizer();
 					String[] parts = t.TokenizeString("Thi:s ha's a _lot of' T!hi%$n\ngs$ w%^234Ng");
 					StringBuilder sb = new StringBuilder();
 					for (String part : parts)
 						sb.append(part + " ");
-					text.setText(sb.toString());
+					
+					riv.setIndicesText(sb.toString());
 				}
 				else if (combo.getSelectionIndex() == resourceFiles.length + 2) {
 					Tokenizer t = new Tokenizer();
@@ -179,6 +189,11 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 			
 		});
 		
+	}
+	
+	private RequirementsIndicesView getRequirementsView(String id) {
+		RequirementsIndicesView riv = (RequirementsIndicesView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
+		return riv;
 	}
 	
 	@Override
