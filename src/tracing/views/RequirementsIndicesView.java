@@ -1,5 +1,7 @@
 package tracing.views;
 
+import dialogs.GreetingMsg;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -25,9 +27,10 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 	public static final String ID = "tracing.views.RequirementsIndicesView";
 	
 	private void showMessage(){
-		MessageDialog.openInformation(new Shell(),
-				"Testhello",
-				"Hello, Eclipse world");
+		//MessageDialog.openInformation(new Shell(), "Testhello", "Hello, Eclipse world");
+		
+		GreetingMsg msg = new GreetingMsg(new Shell(), SWT.BORDER | SWT.WRAP);
+		msg.open();
 	}
 	
 	@Override
