@@ -159,7 +159,6 @@ public class GreetingMsg extends Dialog {
 					//text.setText("");
 					dirText.setText(directory);
 					optionList[0] = directory;
-					System.out.println(directory);
 				}
 			}
 		});
