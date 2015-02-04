@@ -148,14 +148,17 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 			public void widgetSelected(SelectionEvent e) {
 				RequirementsIndicesView riv = getRequirementsView("tracing.views.RequirementsIndicesView");
 				
+				final Combo combo = comboViewer.getCombo();
+				
 				//Fill text with the correct information.
 				//If no use case is selected, display indexing time.
 				//Otherwise, display the content of the selected file.
 				if(combo.getSelectionIndex()==0)
 					text.setText("Indexing time of X requirement(s) is: Y seconds.");
-				else if (combo.getText() == "TokenizerTest") {
+				else if (combo.getText().equals("TokenizerTest")) {
 					// TODO: Remove this and run tokenizer/indexer on whatever file is selected but
 					// 		 this at least shows how to tokenize and how to set text on the other view
+					System.out.println("TokenizerTest");
 					Tokenizer t = new Tokenizer();
 					String[] parts = t.TokenizeString("Thi:s ha's a _lot of' T!hi%$n\ngs$ w%^234Ng");
 					StringBuilder sb = new StringBuilder();
@@ -164,7 +167,8 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 					
 					riv.setIndicesText(sb.toString());
 				}
-				else if (combo.getText() == "StopWordRemovalTest") {
+				else if (combo.getText().equals("StopWordRemovalTest")) {
+					System.out.println("StopWordRemovalTest");
 //					Tokenizer t = new Tokenizer();
 //					String[] parts = t.TokenizeString("The BOY had a cat and a dog");
 //					try {
@@ -175,19 +179,23 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 //					}
 				}
 				else{
+					System.out.println(combo.getText());
+					
 					//User has selected a use case associated with a file name.
 					try {
+						//Display original file contents
 						StringBuilder s = new StringBuilder();
 						int fileIndex = combo.getSelectionIndex() - 1; //First selection is not a file.
 						String useCaseFileName = resourceFiles[fileIndex].toString();
 						
 						for (String line : Files.readAllLines(Paths.get(useCaseFileName))) {
-							
-							//TODO: Do some processing on the current line of text
-							
 							s.append(line + "\n");
 						}
 						text.setText(s.toString());
+						
+						//Display proess content
+						String indexContent = indexer.getIndexFile(fileIndex);
+						riv.setIndicesText(indexContent.toString());
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						text.setText(e1.getMessage());
