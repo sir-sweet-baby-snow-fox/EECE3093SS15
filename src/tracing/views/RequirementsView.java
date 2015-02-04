@@ -178,8 +178,13 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 					//User has selected a use case associated with a file name.
 					try {
 						StringBuilder s = new StringBuilder();
-						String useCaseFileName = resourcePath + "/" + combo.getText();
+						int fileIndex = combo.getSelectionIndex() - 1; //First selection is not a file.
+						String useCaseFileName = resourceFiles[fileIndex].toString();
+						
 						for (String line : Files.readAllLines(Paths.get(useCaseFileName))) {
+							
+							//TODO: Do some processing on the current line of text
+							
 							s.append(line + "\n");
 						}
 						text.setText(s.toString());
