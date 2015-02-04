@@ -54,6 +54,8 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	private ISelection selection;
 	private ComboViewer comboViewer;
 	private Indexer indexer;
+	private String test = "this is a test string";
+	private String resourcePath;
 	File[] resourceFiles;
 	
 	/**
@@ -65,7 +67,12 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	 * The constructor.
 	 */
 	public RequirementsView() {
+		resourcePath = "";
+	}
 	
+	public void setResourcePath(String input) {
+		//return acronymFilePath;
+		resourcePath = input;
 	}
 
 	/**
@@ -83,11 +90,9 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.add("Choose Use Case");
 		
 		//Retrieve use case files from resource directory.
-		final String resourceDirectory = "C:/Users/Ricky/git/EECE3093SS15/src/resources";
-		File resourceFolder = new File(resourceDirectory);
-		resourceFiles = resourceFolder.listFiles();
-
-		//Fill combo box with file names.
+		final String resourceDirectory = "C:\\Users\\Jackson\\git\\EECE3093SS15\\src\\resources";
+		File folder = new File(resourceDirectory);
+		final File[] resourceFiles = folder.listFiles();
 		for (int i = 0; i < resourceFiles.length; i++) {
 			if (resourceFiles[i].isFile()) {
 				//Remove file extension from use case name
@@ -113,7 +118,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.setLayoutData(formdata);
 		
 		//Set text position
-		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL|SWT.READ_ONLY);
+		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY);
 		formdata = new FormData();
 		formdata.top=new FormAttachment(combo,10);
 		formdata.bottom = new FormAttachment(combo,600);
@@ -159,9 +164,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 					//User has selected a use case associated with a file name.
 					try {
 						StringBuilder s = new StringBuilder();
-						int fileIndex = combo.getSelectionIndex() - 1; //First selection is not a file.
-						String useCaseFileName = resourceFiles[fileIndex].toString();
-						
+						String useCaseFileName = resourceDirectory + "/" + combo.getText();
 						for (String line : Files.readAllLines(Paths.get(useCaseFileName))) {
 							
 							//TODO: Do some processing on the current line of text
@@ -197,7 +200,6 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		});
 		
 	}
-	
 	private RequirementsIndicesView getRequirementsView(String id) {
 		RequirementsIndicesView riv = (RequirementsIndicesView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
 		return riv;

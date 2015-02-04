@@ -26,6 +26,9 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 	Text indicesText;
 	private Indexer indexer;
 	
+	/**
+	 * The ID of the view as specified by the extension.
+	 */
 	public static final String ID = "tracing.views.RequirementsIndicesView";
 	
 	private void showMessage(){
@@ -33,6 +36,7 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 		
 		GreetingMsg msg = new GreetingMsg(new Shell(), SWT.BORDER | SWT.WRAP);
 		msg.open();
+		
 	}
 	
 	@Override
