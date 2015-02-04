@@ -379,8 +379,7 @@ public class Stemmer {
 	}
 	
 	/**
-	 * Stems the string passed into the function, and returns the
-	 * result.
+	 * Stems the string passed into the function, and returns the result.
 	 * @param s
 	 * @return
 	 */
