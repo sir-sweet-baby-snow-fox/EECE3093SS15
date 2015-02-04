@@ -1,5 +1,7 @@
 package dialogs;
 
+import indexer.Indexer;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.DirectoryDialog;
@@ -107,12 +109,12 @@ public class GreetingMsg extends Dialog {
 		
 		acText = new Text(shell, SWT.BORDER);
 		acText.setBounds(186, 65, 161, 21);
-		acText.setText("(file name)");
+		acText.setText("");
 		acText.setEnabled(false);
 		
 		stopText = new Text(shell, SWT.BORDER);
 		stopText.setBounds(186, 109, 161, 21);
-		stopText.setText("(file name)");
+		stopText.setText("");
 		stopText.setEnabled(false);
 		
 		final Button btnGetAcFile = new Button(shell, SWT.PUSH);
@@ -222,21 +224,22 @@ public class GreetingMsg extends Dialog {
 		btnOK.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-<<<<<<< HEAD
-				//Indexer indexer = new Indexer(parameters);
-				//riv.indexer = indexer;
-				//rv.indexer = indexer;
 				
+				//Maybe check for valid resource directory path
 				
-				
-				shell.close();
-				
-=======
-				//OK button listener
-				//display.sleep();
+				//Update reqInstance variables
 				reqInstance.setResourcePath(directory);
+				reqInstance.updateComboBox();
+				
+				//Perform the indexing
+				Indexer indexer = new Indexer(directory, btnCheckTok.getSelection() , btnCheckStem.getSelection()
+						, acText.getText(), stopText.getText());
+				
+				//Let reqInstance have access to index objects
+				reqInstance.setIndexer(indexer);
+				
+				//Continue onto eclipse
 				shell.close();
->>>>>>> master
 			}
 		});
 		btnOK.setBounds(20, 225, 75, 25);

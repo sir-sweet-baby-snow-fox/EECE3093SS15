@@ -27,7 +27,7 @@ public class Indexer {
 	 * @param stopWordsFilePath
 	 * @throws IOException 
 	 */
-	Indexer(String resourceDirectoryPath, boolean doTokenize, boolean doStem, String acronymFilePath, String stopWordsFilePath)  {
+	public Indexer(String resourceDirectoryPath, boolean doTokenize, boolean doStem, String acronymFilePath, String stopWordsFilePath)  {
 		//Start timing
 		
 		indices = new ArrayList<Index>();

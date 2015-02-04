@@ -53,7 +53,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	
 	private ISelection selection;
 	private ComboViewer comboViewer;
-	private Indexer indexer;
+	private Indexer indexer = null;
 	private String test = "this is a test string";
 	private String resourcePath;
 	File[] resourceFiles;
@@ -74,6 +74,38 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		//return acronymFilePath;
 		resourcePath = input;
 	}
+	
+	public void setIndexer(Indexer newIndexer) {
+		indexer = newIndexer;
+	}
+	
+	
+	public void updateComboBox() {
+		final Combo combo = comboViewer.getCombo();
+		combo.removeAll();
+		combo.add("Choose Use Case");
+		
+		//Retrieve use case files from resource directory.
+		if(!resourcePath.isEmpty()) {
+			File folder = new File(resourcePath);
+			resourceFiles = folder.listFiles();
+			for (int i = 0; i < resourceFiles.length; i++) {
+				if (resourceFiles[i].isFile()) {
+					//Remove file extension from use case name
+					String fileName = resourceFiles[i].getName();
+					int lastPeriodIndex = fileName.lastIndexOf('.');
+					String useCaseName = fileName.substring(0, lastPeriodIndex);
+					combo.add(useCaseName);
+				}
+			}
+		}
+		
+		// TODO: Remove this when we actually load the files...This is just for testing
+		combo.add("TokenizerTest");
+		combo.add("StopWordRemovalTest");
+		
+		combo.select(0); //Default choice is no file selected
+	}
 
 	/**
 	 * This is a callback that will allow us
@@ -87,28 +119,9 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		//Create a drop box
 		comboViewer = new ComboViewer(parent,SWT.NONE|SWT.DROP_DOWN);
 		final Combo combo = comboViewer.getCombo();
-		combo.add("Choose Use Case");
 		
-		//Retrieve use case files from resource directory.
-		final String resourceDirectory = "C:\\Users\\Jackson\\git\\EECE3093SS15\\src\\resources";
-		File folder = new File(resourceDirectory);
-		final File[] resourceFiles = folder.listFiles();
-		for (int i = 0; i < resourceFiles.length; i++) {
-			if (resourceFiles[i].isFile()) {
-				//Remove file extension from use case name
-				String fileName = resourceFiles[i].getName();
-				int lastPeriodIndex = fileName.lastIndexOf('.');
-				String useCaseName = fileName.substring(0, lastPeriodIndex);
-				
-				combo.add(useCaseName);
-			}
-		}
-		
-		// TODO: Remove this when we actually load the files...This is just for testing
-		combo.add("TokenizerTest");
-		combo.add("StopWordRemovalTest");
-		
-		combo.select(0); //Default choice is no file selected
+		//Fill the combo box with the correct file data.
+		updateComboBox();
 		
 		//Set combo position
 		FormData formdata = new FormData();
@@ -118,13 +131,14 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.setLayoutData(formdata);
 		
 		//Set text position
-		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY);
+		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL| SWT.H_SCROLL | SWT.READ_ONLY);
 		formdata = new FormData();
 		formdata.top=new FormAttachment(combo,10);
 		formdata.bottom = new FormAttachment(combo,600);
 		formdata.left = new FormAttachment(0,5);
 		formdata.right = new FormAttachment(0,355);
 		text.setLayoutData(formdata);
+		
 		//set text content
 		text.setText("Indexing time of X requirement(s) is: Y seconds.");
 		
@@ -139,7 +153,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				//Otherwise, display the content of the selected file.
 				if(combo.getSelectionIndex()==0)
 					text.setText("Indexing time of X requirement(s) is: Y seconds.");
-				else if (combo.getSelectionIndex() == resourceFiles.length + 1) {
+				else if (combo.getText() == "TokenizerTest") {
 					// TODO: Remove this and run tokenizer/indexer on whatever file is selected but
 					// 		 this at least shows how to tokenize and how to set text on the other view
 					Tokenizer t = new Tokenizer();
@@ -150,7 +164,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 					
 					riv.setIndicesText(sb.toString());
 				}
-				else if (combo.getSelectionIndex() == resourceFiles.length + 2) {
+				else if (combo.getText() == "StopWordRemovalTest") {
 //					Tokenizer t = new Tokenizer();
 //					String[] parts = t.TokenizeString("The BOY had a cat and a dog");
 //					try {
@@ -164,11 +178,8 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 					//User has selected a use case associated with a file name.
 					try {
 						StringBuilder s = new StringBuilder();
-						String useCaseFileName = resourceDirectory + "/" + combo.getText();
+						String useCaseFileName = resourcePath + "/" + combo.getText();
 						for (String line : Files.readAllLines(Paths.get(useCaseFileName))) {
-							
-							//TODO: Do some processing on the current line of text
-							
 							s.append(line + "\n");
 						}
 						text.setText(s.toString());
