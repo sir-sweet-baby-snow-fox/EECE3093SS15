@@ -227,12 +227,12 @@ public class GreetingMsg extends Dialog {
 				
 				//Maybe check for valid resource directory path
 				
-				//Update reqInstance variables
-				reqInstance.setResourcePath(directory);
+				//Update reqInstance variables 
+				reqInstance.setResourcePath(dirText.getText().toString());
 				reqInstance.updateComboBox();
 				
 				//Perform the indexing
-				Indexer indexer = new Indexer(directory, btnCheckTok.getSelection() , btnCheckStem.getSelection()
+				Indexer indexer = new Indexer(dirText.getText().toString(), btnCheckTok.getSelection() , btnCheckStem.getSelection()
 						, acText.getText(), stopText.getText());
 				
 				//Let reqInstance have access to index objects
