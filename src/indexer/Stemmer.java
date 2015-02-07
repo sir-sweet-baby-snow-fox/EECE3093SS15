@@ -1,6 +1,7 @@
 package indexer;
 
 import java.io.*;
+import java.util.ArrayList;
 
 
 /*
@@ -378,8 +379,7 @@ public class Stemmer {
 	}
 	
 	/**
-	 * Stems the string passed into the function, and returns the
-	 * result.
+	 * Stems the string passed into the function, and returns the result.
 	 * @param s
 	 * @return
 	 */
@@ -387,5 +387,18 @@ public class Stemmer {
 		add(s.toLowerCase());
 		stem();
 		return toString();
+	}
+	
+	public String[] stem(String[] tokens) {
+		// initialize empty array list
+		ArrayList<String> cleanedParts = new ArrayList<String>();
+		
+		// run a binary search for each token to see if it should be removed
+		for (String token : tokens){
+			cleanedParts.add(stem(token));
+		}
+		
+		String[] retArray = new String[cleanedParts.size()];
+		return cleanedParts.toArray(retArray);
 	}
 }

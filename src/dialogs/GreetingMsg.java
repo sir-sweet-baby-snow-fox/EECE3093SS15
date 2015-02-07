@@ -1,6 +1,6 @@
 package dialogs;
 
-//import tracing.views.RequirementsIndicesView;
+import indexer.Indexer;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Dialog;
@@ -99,8 +99,8 @@ public class GreetingMsg extends Dialog {
 		shell.setSize(450, 300);
 		shell.setText(getText());
 		
-		DirectoryDialog dirDialog = new DirectoryDialog(shell);
-		FileDialog fileDialog = new FileDialog(shell);
+		final DirectoryDialog dirDialog = new DirectoryDialog(shell);
+		final FileDialog fileDialog = new FileDialog(shell);
 		//String test = DirDialog.open();
 		
 		dirText = new Text(shell, SWT.BORDER | SWT.SEARCH);
@@ -109,15 +109,15 @@ public class GreetingMsg extends Dialog {
 		
 		acText = new Text(shell, SWT.BORDER);
 		acText.setBounds(186, 65, 161, 21);
-		acText.setText("(file name)");
+		acText.setText("");
 		acText.setEnabled(false);
 		
 		stopText = new Text(shell, SWT.BORDER);
 		stopText.setBounds(186, 109, 161, 21);
-		stopText.setText("(file name)");
+		stopText.setText("");
 		stopText.setEnabled(false);
 		
-		Button btnGetAcFile = new Button(shell, SWT.PUSH);
+		final Button btnGetAcFile = new Button(shell, SWT.PUSH);
 		btnGetAcFile.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -134,7 +134,7 @@ public class GreetingMsg extends Dialog {
 		btnGetAcFile.setEnabled(false);
 		// listener corresponding to text_1
 		
-		Button btnGetStopFile = new Button(shell, SWT.PUSH);
+		final Button btnGetStopFile = new Button(shell, SWT.PUSH);
 		btnGetStopFile.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -169,7 +169,7 @@ public class GreetingMsg extends Dialog {
 		btnCheckTok.setBounds(20, 45, 139, 16);
 		btnCheckTok.setText("Tokenizing");
 		
-		Button btnCheckAc = new Button(shell, SWT.CHECK);
+		final Button btnCheckAc = new Button(shell, SWT.CHECK);
 		btnCheckAc.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -187,7 +187,7 @@ public class GreetingMsg extends Dialog {
 		btnCheckAc.setBounds(20, 67, 139, 16);
 		btnCheckAc.setText("Restoring Acronyms");
 		
-		Button btnCheckStop = new Button(shell, SWT.CHECK);
+		final Button btnCheckStop = new Button(shell, SWT.CHECK);
 		btnCheckStop.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -224,9 +224,21 @@ public class GreetingMsg extends Dialog {
 		btnOK.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				//OK button listener
-				//display.sleep();
+				
+				//Maybe check for valid resource directory path
+				
+				//Update reqInstance variables
 				reqInstance.setResourcePath(directory);
+				reqInstance.updateComboBox();
+				
+				//Perform the indexing
+				Indexer indexer = new Indexer(directory, btnCheckTok.getSelection() , btnCheckStem.getSelection()
+						, acText.getText(), stopText.getText());
+				
+				//Let reqInstance have access to index objects
+				reqInstance.setIndexer(indexer);
+				
+				//Continue onto eclipse
 				shell.close();
 			}
 		});

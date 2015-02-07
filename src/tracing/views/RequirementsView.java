@@ -1,6 +1,7 @@
 package tracing.views;
 
 
+import indexer.Indexer;
 import indexer.Tokenizer;
 
 import java.io.IOException;
@@ -52,8 +53,10 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	
 	private ISelection selection;
 	private ComboViewer comboViewer;
+	private Indexer indexer = null;
 	private String test = "this is a test string";
 	private String resourcePath;
+	File[] resourceFiles;
 	
 	/**
 	 * The ID of the view as specified by the extension.
@@ -72,6 +75,38 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		resourcePath = input;
 	}
 	
+	public void setIndexer(Indexer newIndexer) {
+		indexer = newIndexer;
+	}
+	
+	
+	public void updateComboBox() {
+		final Combo combo = comboViewer.getCombo();
+		combo.removeAll();
+		combo.add("Choose Use Case");
+		
+		//Retrieve use case files from resource directory.
+		if(!resourcePath.isEmpty()) {
+			File folder = new File(resourcePath);
+			resourceFiles = folder.listFiles();
+			for (int i = 0; i < resourceFiles.length; i++) {
+				if (resourceFiles[i].isFile()) {
+					//Remove file extension from use case name
+					String fileName = resourceFiles[i].getName();
+					int lastPeriodIndex = fileName.lastIndexOf('.');
+					String useCaseName = fileName.substring(0, lastPeriodIndex);
+					combo.add(useCaseName);
+				}
+			}
+		}
+		
+		// TODO: Remove this when we actually load the files...This is just for testing
+		combo.add("TokenizerTest");
+		combo.add("StopWordRemovalTest");
+		
+		combo.select(0); //Default choice is no file selected
+	}
+
 	/**
 	 * This is a callback that will allow us
 	 * to create the viewer and initialize it.
@@ -84,23 +119,9 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		//Create a drop box
 		comboViewer = new ComboViewer(parent,SWT.NONE|SWT.DROP_DOWN);
 		final Combo combo = comboViewer.getCombo();
-		combo.add("Choose Use Case");
 		
-		//Retrieve use case files from resource directory.
-		final String resourceDirectory = "C:\\Users\\Jackson\\git\\EECE3093SS15\\src\\resources";
-		File folder = new File(resourceDirectory);
-		final File[] resourceFiles = folder.listFiles();
-		for (int i = 0; i < resourceFiles.length; i++) {
-			if (resourceFiles[i].isFile()) {
-				combo.add(resourceFiles[i].getName());
-			}
-		}
-		
-		// TODO: Remove this when we actually load the files...This is just for testing
-		combo.add("TokenizerTest");
-		combo.add("StopWordRemovalTest");
-		
-		combo.select(0); //Default choice is no file selected
+		//Fill the combo box with the correct file data.
+		updateComboBox();
 		
 		//Set combo position
 		FormData formdata = new FormData();
@@ -110,13 +131,14 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.setLayoutData(formdata);
 		
 		//Set text position
-		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY);
+		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL| SWT.H_SCROLL | SWT.READ_ONLY);
 		formdata = new FormData();
 		formdata.top=new FormAttachment(combo,10);
 		formdata.bottom = new FormAttachment(combo,600);
 		formdata.left = new FormAttachment(0,5);
 		formdata.right = new FormAttachment(0,355);
 		text.setLayoutData(formdata);
+		
 		//set text content
 		text.setText("Indexing time of X requirement(s) is: Y seconds.");
 		
@@ -126,14 +148,17 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 			public void widgetSelected(SelectionEvent e) {
 				RequirementsIndicesView riv = getRequirementsView("tracing.views.RequirementsIndicesView");
 				
+				final Combo combo = comboViewer.getCombo();
+				
 				//Fill text with the correct information.
 				//If no use case is selected, display indexing time.
 				//Otherwise, display the content of the selected file.
 				if(combo.getSelectionIndex()==0)
 					text.setText("Indexing time of X requirement(s) is: Y seconds.");
-				else if (combo.getSelectionIndex() == resourceFiles.length + 1) {
+				else if (combo.getText().equals("TokenizerTest")) {
 					// TODO: Remove this and run tokenizer/indexer on whatever file is selected but
 					// 		 this at least shows how to tokenize and how to set text on the other view
+					System.out.println("TokenizerTest");
 					Tokenizer t = new Tokenizer();
 					String[] parts = t.TokenizeString("Thi:s ha's a _lot of' T!hi%$n\ngs$ w%^234Ng");
 					StringBuilder sb = new StringBuilder();
@@ -142,28 +167,35 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 					
 					riv.setIndicesText(sb.toString());
 				}
-				else if (combo.getSelectionIndex() == resourceFiles.length + 2) {
-					Tokenizer t = new Tokenizer();
-					String[] parts = t.TokenizeString("The BOY had a cat and a dog");
-					try {
-						String[] cleanParts = t.RemoveStopWords(resourceDirectory + "/Stop_Word_List.txt", parts);
-						text.setText(Arrays.toString(cleanParts));
-					} catch (IOException e1) {
-						text.setText("");
-					}
+				else if (combo.getText().equals("StopWordRemovalTest")) {
+					System.out.println("StopWordRemovalTest");
+//					Tokenizer t = new Tokenizer();
+//					String[] parts = t.TokenizeString("The BOY had a cat and a dog");
+//					try {
+//						String[] cleanParts = t.RemoveStopWords(resourceDirectory + "/Stop_Word_List.txt", parts);
+//						text.setText(Arrays.toString(cleanParts));
+//					} catch (IOException e1) {
+//						text.setText("");
+//					}
 				}
 				else{
+					System.out.println(combo.getText());
+					
 					//User has selected a use case associated with a file name.
 					try {
+						//Display original file contents
 						StringBuilder s = new StringBuilder();
-						String useCaseFileName = resourceDirectory + "/" + combo.getText();
+						int fileIndex = combo.getSelectionIndex() - 1; //First selection is not a file.
+						String useCaseFileName = resourceFiles[fileIndex].toString();
+						
 						for (String line : Files.readAllLines(Paths.get(useCaseFileName))) {
-							
-							//TODO: Do some processing on the current line of text
-							
 							s.append(line + "\n");
 						}
 						text.setText(s.toString());
+						
+						//Display proess content
+						String indexContent = indexer.getIndexFile(fileIndex);
+						riv.setIndicesText(indexContent.toString());
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						text.setText(e1.getMessage());
@@ -172,7 +204,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				}
 				
 			}
-			
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
@@ -192,7 +224,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		});
 		
 	}
-		private RequirementsIndicesView getRequirementsView(String id) {
+	private RequirementsIndicesView getRequirementsView(String id) {
 		RequirementsIndicesView riv = (RequirementsIndicesView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
 		return riv;
 	}
