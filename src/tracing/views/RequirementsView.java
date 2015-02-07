@@ -57,6 +57,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	private String test = "this is a test string";
 	private String resourcePath;
 	File[] resourceFiles;
+	private long durationTime = 0;
 	
 	/**
 	 * The ID of the view as specified by the extension.
@@ -77,6 +78,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	
 	public void setIndexer(Indexer newIndexer) {
 		indexer = newIndexer;
+		durationTime = indexer.GetIndexTime();
 	}
 	
 	
@@ -101,8 +103,8 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		}
 		
 		// TODO: Remove this when we actually load the files...This is just for testing
-		combo.add("TokenizerTest");
-		combo.add("StopWordRemovalTest");
+		//combo.add("TokenizerTest");
+		//combo.add("StopWordRemovalTest");
 		
 		combo.select(0); //Default choice is no file selected
 	}
@@ -140,7 +142,8 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		text.setLayoutData(formdata);
 		
 		//set text content
-		text.setText("Indexing time of X requirement(s) is: Y seconds.");
+		//text.setText("Indexing time of X requirement(s) is: Y seconds.");
+		text.setText("Indexing time of " + combo.getItemCount() + " requirement(s) is: " + durationTime + " seconds.");
 		
 		combo.addSelectionListener(new SelectionListener(){
 
@@ -154,7 +157,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				//If no use case is selected, display indexing time.
 				//Otherwise, display the content of the selected file.
 				if(combo.getSelectionIndex()==0)
-					text.setText("Indexing time of X requirement(s) is: Y seconds.");
+					text.setText("Indexing time of " + (combo.getItemCount()-1) + " requirement(s) is: " + durationTime + " seconds.");
 				else if (combo.getText().equals("TokenizerTest")) {
 					// TODO: Remove this and run tokenizer/indexer on whatever file is selected but
 					// 		 this at least shows how to tokenize and how to set text on the other view
