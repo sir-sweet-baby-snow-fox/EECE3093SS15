@@ -1,5 +1,9 @@
 package dialogs;
 
+import java.io.File;
+
+import javax.swing.JOptionPane;
+
 import indexer.Indexer;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -225,15 +229,50 @@ public class GreetingMsg extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				
-				//Maybe check for valid resource directory path
+				//Check for valid resource directory path
+				directory = dirText.getText();
+				File directoryFile = new File(directory);
+				if(!directoryFile.exists() || !directoryFile.isDirectory() ) {
+					//If it doesnt exist, or it isnt a directory, display message,
+					JOptionPane.showMessageDialog(null,"Resource Directory is invalid.","Error",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
 				
+				//Check for valid acronym text file, if it is used
+				if(btnCheckAc.getSelection()) {
+					acronymStr = acText.getText();
+					File acronymFile = new File(acronymStr);
+					if(!acronymFile.exists() || !acronymFile.isFile() || !acronymFile.toString().endsWith(".txt")) {
+						//If it doesnt exist, or it isnt a directory, display message,
+						JOptionPane.showMessageDialog(null,"Acronym text file is invalid.","Error",JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+				} else {
+					//User doesnt want to use acronym converter. File path should be empty
+					acronymStr = "";
+				}
+				
+				//Check for valid stop text files, if it is used
+				if(btnCheckAc.getSelection()) {
+					stopStr = stopText.getText();
+					File stopWordFile = new File(stopStr);
+					if(!stopWordFile.exists() || !stopWordFile.isFile() | !stopWordFile.toString().endsWith(".txt")) {
+						//If it doesnt exist, or it isnt a directory, display message,
+						JOptionPane.showMessageDialog(null,"Stop word text file is invalid.","Error",JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+				} else {
+					//Use doesnt want to use stop word remover. File path should be empty.
+					stopStr = "";
+				}
+
 				//Update reqInstance variables
 				reqInstance.setResourcePath(directory);
 				reqInstance.updateComboBox();
 				
 				//Perform the indexing
 				Indexer indexer = new Indexer(directory, btnCheckTok.getSelection() , btnCheckStem.getSelection()
-						, acText.getText(), stopText.getText());
+						, acronymStr, stopStr);
 				
 				//Let reqInstance have access to index objects
 				reqInstance.setIndexer(indexer);

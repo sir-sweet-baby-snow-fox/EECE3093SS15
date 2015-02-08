@@ -83,7 +83,7 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 		titleLabel.setLayoutData(formdata);
 		
 		//Create text area
-		indicesText = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY);
+		indicesText = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY | SWT.WRAP);
 		formdata = new FormData();
 		formdata.top = new FormAttachment(titleLabel,10);
 		formdata.bottom = new FormAttachment(titleLabel,230);
