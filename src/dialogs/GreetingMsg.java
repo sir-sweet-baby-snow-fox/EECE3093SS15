@@ -65,6 +65,7 @@ public class GreetingMsg extends Dialog {
 		createContents();
 		shell.open();
 		shell.layout();
+		shell.forceActive();
 		display = getParent().getDisplay();
 		try{
 			reqInstance = getRequirementsView(reqViewId);
@@ -253,7 +254,7 @@ public class GreetingMsg extends Dialog {
 				}
 				
 				//Check for valid stop text files, if it is used
-				if(btnCheckAc.getSelection()) {
+				if(btnCheckStop.getSelection()) {
 					stopStr = stopText.getText();
 					File stopWordFile = new File(stopStr);
 					if(!stopWordFile.exists() || !stopWordFile.isFile() | !stopWordFile.toString().endsWith(".txt")) {
