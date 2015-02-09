@@ -243,9 +243,16 @@ public class GreetingMsg extends Dialog {
 				if(btnCheckAc.getSelection()) {
 					acronymStr = acText.getText();
 					File acronymFile = new File(acronymStr);
-					if(!acronymFile.exists() || !acronymFile.isFile() || !acronymFile.toString().endsWith(".txt")) {
-						//If it doesnt exist, or it isnt a directory, display message,
-						JOptionPane.showMessageDialog(null,"Acronym text file is invalid.","Error",JOptionPane.WARNING_MESSAGE);
+					
+					//Check for errors
+					if(!acronymFile.exists()) {
+						JOptionPane.showMessageDialog(null,"Acronym text file not found.","Error",JOptionPane.WARNING_MESSAGE);
+						return;
+					} else if (!acronymFile.isFile()) {
+						JOptionPane.showMessageDialog(null,"Acronym text file is not a file.","Error",JOptionPane.WARNING_MESSAGE);
+						return;
+					} else if (!acronymFile.toString().endsWith(".txt")) {
+						JOptionPane.showMessageDialog(null,"Acronym text file is not a text file.","Error",JOptionPane.WARNING_MESSAGE);
 						return;
 					}
 				} else {
@@ -257,9 +264,16 @@ public class GreetingMsg extends Dialog {
 				if(btnCheckStop.getSelection()) {
 					stopStr = stopText.getText();
 					File stopWordFile = new File(stopStr);
-					if(!stopWordFile.exists() || !stopWordFile.isFile() | !stopWordFile.toString().endsWith(".txt")) {
-						//If it doesnt exist, or it isnt a directory, display message,
-						JOptionPane.showMessageDialog(null,"Stop word text file is invalid.","Error",JOptionPane.WARNING_MESSAGE);
+					
+					//Check for errors
+					if(!stopWordFile.exists()) {
+						JOptionPane.showMessageDialog(null,"Stop word file was not found.","Error",JOptionPane.WARNING_MESSAGE);
+						return;
+					}else if(!stopWordFile.isFile()) {
+						JOptionPane.showMessageDialog(null,"Stop word file is not a file.","Error",JOptionPane.WARNING_MESSAGE);
+						return;
+					}else if(!stopWordFile.toString().endsWith(".txt")) {
+						JOptionPane.showMessageDialog(null,"Stop word file is not a text file.","Error",JOptionPane.WARNING_MESSAGE);
 						return;
 					}
 				} else {
