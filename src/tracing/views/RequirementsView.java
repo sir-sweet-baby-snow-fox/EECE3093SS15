@@ -157,14 +157,12 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				//If no use case is selected, display indexing time.
 				//Otherwise, display the content of the selected file.
 				if(combo.getSelectionIndex()==0) {
-				{
+				
 					// Force durationTime to display only to two decimal places
 					DecimalFormat df = new DecimalFormat("##.##");
 					text.setText("Indexing time of " + (combo.getItemCount()-1) + " requirement(s) is: " + df.format(durationTime) + " seconds.");
 					riv.setIndicesText("");
-				}
-					
-				} else {
+				}  else {
 					//User has selected a use case associated with a file name.
 					try {
 						//Display original file contents

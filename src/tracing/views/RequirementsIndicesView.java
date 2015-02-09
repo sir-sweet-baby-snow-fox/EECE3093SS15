@@ -123,7 +123,9 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 	}
 	
 	public void setIndicesText(String text){
-		indicesText.setText(text);
+		if(indicesText != null) {
+			indicesText.setText(text);
+		}
 	}
 
 }
