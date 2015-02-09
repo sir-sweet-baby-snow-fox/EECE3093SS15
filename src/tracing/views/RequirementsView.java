@@ -150,9 +150,10 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				//Fill text with the correct information.
 				//If no use case is selected, display indexing time.
 				//Otherwise, display the content of the selected file.
-				if(combo.getSelectionIndex()==0)
+				if(combo.getSelectionIndex()==0) {
 					text.setText("Indexing time of X requirement(s) is: Y seconds.");
-				else {
+					riv.setIndicesText("");
+				} else {
 					//User has selected a use case associated with a file name.
 					try {
 						//Display original file contents

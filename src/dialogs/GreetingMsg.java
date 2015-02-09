@@ -110,7 +110,7 @@ public class GreetingMsg extends Dialog {
 		
 		dirText = new Text(shell, SWT.BORDER | SWT.SEARCH);
 		dirText.setBounds(20, 10, 288, 21);
-		dirText.setText("(path name)");
+		dirText.setText("(Resource Directory)");
 		
 		acText = new Text(shell, SWT.BORDER);
 		acText.setBounds(186, 65, 161, 21);
