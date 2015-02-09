@@ -7,6 +7,7 @@ import indexer.Tokenizer;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Map;
@@ -14,15 +15,20 @@ import java.io.File;
 
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.*;
 import org.eclipse.jface.viewers.*;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.*;
@@ -57,6 +63,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	private String test = "this is a test string";
 	private String resourcePath;
 	File[] resourceFiles;
+	private double durationTime = 0;
 	
 	/**
 	 * The ID of the view as specified by the extension.
@@ -77,6 +84,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	
 	public void setIndexer(Indexer newIndexer) {
 		indexer = newIndexer;
+		durationTime = indexer.GetIndexTime();
 	}
 	
 	
@@ -101,10 +109,11 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		}
 		
 		// TODO: Remove this when we actually load the files...This is just for testing
-		combo.add("TokenizerTest");
-		combo.add("StopWordRemovalTest");
+		//combo.add("TokenizerTest");
+		//combo.add("StopWordRemovalTest");
 		
 		combo.select(0); //Default choice is no file selected
+		
 	}
 
 	/**
@@ -139,9 +148,6 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		formdata.right = new FormAttachment(0,355);
 		text.setLayoutData(formdata);
 		
-		//set text content
-		text.setText("Indexing time of X requirement(s) is: Y seconds.");
-		
 		combo.addSelectionListener(new SelectionListener(){
 
 			@Override
@@ -154,7 +160,11 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				//If no use case is selected, display indexing time.
 				//Otherwise, display the content of the selected file.
 				if(combo.getSelectionIndex()==0)
-					text.setText("Indexing time of X requirement(s) is: Y seconds.");
+				{
+					// Force durationTime to display only to two decimal places
+					DecimalFormat df = new DecimalFormat("##.##");
+					text.setText("Indexing time of " + (combo.getItemCount()-1) + " requirement(s) is: " + df.format(durationTime) + " seconds.");
+				}
 				else if (combo.getText().equals("TokenizerTest")) {
 					// TODO: Remove this and run tokenizer/indexer on whatever file is selected but
 					// 		 this at least shows how to tokenize and how to set text on the other view
@@ -193,7 +203,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 						}
 						text.setText(s.toString());
 						
-						//Display proess content
+						//Display process content
 						String indexContent = indexer.getIndexFile(fileIndex);
 						riv.setIndicesText(indexContent.toString());
 					} catch (IOException e1) {
@@ -240,6 +250,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	 */
 	@Override
 	public void setFocus() {
+		
 	}
 
 	@Override
@@ -260,4 +271,14 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public void setDefaultText()
+	{
+		// This is a bit of a kludge (to me, at least), but sends selection event
+		// when called. Ideally, this method will ONLY ever be used in GreetingMsg
+		// in order to force the default text box to update in order to display the
+		// indexing time.
+		comboViewer.getCombo().notifyListeners(SWT.Selection, new Event());
+	}
+	
 }

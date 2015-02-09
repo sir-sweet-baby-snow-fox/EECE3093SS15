@@ -17,6 +17,7 @@ public class Indexer {
 	private StopWordRemover stopWordRemover = null;
 	private Stemmer stemmer = null;
 	private ArrayList<Index> indices = null;
+	private double IndexDurationTime = 0;
 	
 	private String requirementsIndiciesViewID = "tracing.views.RequirementsIndicesView";
 
@@ -30,7 +31,7 @@ public class Indexer {
 	 * @throws IOException 
 	 */
 	public Indexer(String resourceDirectoryPath, boolean doTokenize, boolean doStem, String acronymFilePath, String stopWordsFilePath)  {
-		//Start timing
+		double indexStartTime = System.nanoTime();
 		
 		indices = new ArrayList<Index>();
 		
@@ -97,6 +98,7 @@ public class Indexer {
 		}
 				
 		//End timing
+		IndexDurationTime = (System.nanoTime() - indexStartTime) / 1000000000.0;
 	}
 	
 	/**
@@ -111,6 +113,11 @@ public class Indexer {
 		} else {
 			return new String("");
 		}
+	}
+	
+	public double GetIndexTime()
+	{
+		return IndexDurationTime;
 	}
 
 }

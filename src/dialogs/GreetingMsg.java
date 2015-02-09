@@ -227,16 +227,19 @@ public class GreetingMsg extends Dialog {
 				
 				//Maybe check for valid resource directory path
 				
-				//Update reqInstance variables
-				reqInstance.setResourcePath(directory);
+				//Update reqInstance variables 
+				reqInstance.setResourcePath(dirText.getText().toString());
 				reqInstance.updateComboBox();
 				
 				//Perform the indexing
-				Indexer indexer = new Indexer(directory, btnCheckTok.getSelection() , btnCheckStem.getSelection()
+				Indexer indexer = new Indexer(dirText.getText().toString(), btnCheckTok.getSelection() , btnCheckStem.getSelection()
 						, acText.getText(), stopText.getText());
 				
 				//Let reqInstance have access to index objects
 				reqInstance.setIndexer(indexer);
+				// Force the default text in the RequirementsView widget to update now that it has
+				// access to the indexer, and thus the number of use cases and indexing time.
+				reqInstance.setDefaultText();
 				
 				//Continue onto eclipse
 				shell.close();
