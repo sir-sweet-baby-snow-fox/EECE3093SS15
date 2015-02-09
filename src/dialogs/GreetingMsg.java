@@ -65,7 +65,6 @@ public class GreetingMsg extends Dialog {
 		createContents();
 		shell.open();
 		shell.layout();
-		shell.forceActive();
 		display = getParent().getDisplay();
 		try{
 			reqInstance = getRequirementsView(reqViewId);
@@ -291,6 +290,9 @@ public class GreetingMsg extends Dialog {
 				
 				//Let reqInstance have access to index objects
 				reqInstance.setIndexer(indexer);
+				// Force the default text in the RequirementsView widget to update now that it has
+				// access to the indexer, and thus the number of use cases and indexing time.
+				reqInstance.setDefaultText();
 				
 				//Continue onto eclipse
 				shell.close();
