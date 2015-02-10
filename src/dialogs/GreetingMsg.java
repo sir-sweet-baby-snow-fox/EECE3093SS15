@@ -341,7 +341,7 @@ public class GreetingMsg extends Dialog {
 				
 				//Perform the indexing
 				Indexer indexer = new Indexer(directory, btnCheckTok.getSelection() , btnCheckStem.getSelection()
-						, acronymStr, stopStr);
+						, acronymStr, stopStr, storeStr);
 				
 				//Let reqInstance have access to index objects
 				reqInstance.setIndexer(indexer);
