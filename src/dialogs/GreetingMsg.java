@@ -319,6 +319,21 @@ public class GreetingMsg extends Dialog {
 					//User doesn't want to use stop word remover. File path should be empty.
 					stopStr = "";
 				}
+				
+				//Check for valid storing indices dir, if it is used
+				if (btnStoreIndices.getSelection()) {
+					storeStr = storeText.getText();
+					
+					File storeDirFile = new File(storeStr);
+					if(!storeDirFile.exists() || !storeDirFile.isDirectory() ) {
+						//If it doesnt exist, or it isnt a directory, display message,
+						JOptionPane.showMessageDialog(null,"Storing Indices directory is invalid.","Error",JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+				} else {
+					// User doesn't want to store indices, file path should be empty.
+					storeStr = "";
+				}
 
 				//Update reqInstance variables
 				reqInstance.setResourcePath(directory);
@@ -342,12 +357,6 @@ public class GreetingMsg extends Dialog {
 		btnOK.setText("OK");
 		
 	}
-	
-	/*public static void main(String[] args) {
-		Shell shell = new Shell();
-		GreetingMsg msg = new GreetingMsg(shell, SWT.BORDER | SWT.WRAP);
-		msg.open();
-	}*/
 	
 	private RequirementsView getRequirementsView(String id) {
 		RequirementsView riv = (RequirementsView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
