@@ -37,8 +37,10 @@ public class GreetingMsg extends Dialog {
 	private String directory;
 	private Text acText;
 	private Text stopText;
+	private Text storeText;
 	private String acronymStr;
 	private String stopStr;
+	private String storeStr;
 	private String[] optionList = new String[5];
 	private RequirementsView reqInstance;
 	private String reqViewId = "tracing.views.RequirementsView";
@@ -55,6 +57,7 @@ public class GreetingMsg extends Dialog {
 		directory = "";
 		acronymStr = "";
 		stopStr = "";
+		storeStr = "";
 	}
 	
 	/**
@@ -105,7 +108,6 @@ public class GreetingMsg extends Dialog {
 		
 		final DirectoryDialog dirDialog = new DirectoryDialog(shell);
 		final FileDialog fileDialog = new FileDialog(shell);
-		//String test = DirDialog.open();
 		
 		dirText = new Text(shell, SWT.BORDER | SWT.SEARCH);
 		dirText.setBounds(20, 10, 288, 21);
@@ -120,6 +122,11 @@ public class GreetingMsg extends Dialog {
 		stopText.setBounds(186, 109, 161, 21);
 		stopText.setText("");
 		stopText.setEnabled(false);
+		
+		storeText = new Text(shell, SWT.BORDER);
+		storeText.setBounds(186, 153, 161, 21);
+		storeText.setText("");
+		storeText.setEnabled(false);
 		
 		final Button btnGetAcFile = new Button(shell, SWT.PUSH);
 		btnGetAcFile.addSelectionListener(new SelectionAdapter() {
@@ -154,6 +161,22 @@ public class GreetingMsg extends Dialog {
 		btnGetStopFile.setEnabled(false);
 		//listener corresponding to text_2
 		
+		final Button btnStoreIndicesDir = new Button(shell, SWT.PUSH);
+		btnStoreIndicesDir.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				storeStr = dirDialog.open();
+				if(storeStr != null) {
+					storeText.setText(storeStr);
+				}
+			}
+			
+		});
+		btnStoreIndicesDir.setBounds(353, 153, 75, 21);
+		btnStoreIndicesDir.setText("Browse...");
+		btnStoreIndicesDir.setEnabled(false);
+		//listener corresponding to text_3
+		
 		Button btnGetDir = new Button(shell, SWT.PUSH);
 		btnGetDir.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -169,7 +192,7 @@ public class GreetingMsg extends Dialog {
 		btnGetDir.setBounds(321, 10, 107, 21);
 		btnGetDir.setText("Browse...");
 		
-		Button btnCheckTok = new Button(shell, SWT.CHECK);
+		final Button btnCheckTok = new Button(shell, SWT.CHECK);
 		btnCheckTok.setBounds(20, 45, 139, 16);
 		btnCheckTok.setText("Tokenizing");
 		
@@ -209,6 +232,23 @@ public class GreetingMsg extends Dialog {
 		btnCheckStop.setBounds(20, 111, 139, 16);
 		btnCheckStop.setText("Removing Stop Words");
 		
+		final Button btnStoreIndices = new Button(shell, SWT.CHECK);
+		btnStoreIndices.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (btnStoreIndices.getSelection()) {
+					// enable text fields
+					btnStoreIndicesDir.setEnabled(true);
+					storeText.setEnabled(true);
+				} else {
+					btnStoreIndicesDir.setEnabled(false);
+					storeText.setEnabled(false);
+				}
+			}
+		});
+		btnStoreIndices.setBounds(20, 153, 139, 16);
+		btnStoreIndices.setText("Storing Indices");
+		
 		Button btnCancel = new Button(shell, SWT.PUSH);		
 			btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -220,8 +260,8 @@ public class GreetingMsg extends Dialog {
 		btnCancel.setBounds(353, 225, 75, 25);
 		btnCancel.setText("Quit");
 		
-		Button btnCheckStem = new Button(shell, SWT.CHECK);
-		btnCheckStem.setBounds(20, 144, 139, 16);
+		final Button btnCheckStem = new Button(shell, SWT.CHECK);
+		btnCheckStem.setBounds(20, 188, 139, 16);
 		btnCheckStem.setText("Stemming");
 		
 		Button btnOK = new Button(shell, SWT.PUSH);
@@ -255,7 +295,7 @@ public class GreetingMsg extends Dialog {
 						return;
 					}
 				} else {
-					//User doesnt want to use acronym converter. File path should be empty
+					//User doesn't want to use acronym converter. File path should be empty
 					acronymStr = "";
 				}
 				
@@ -276,7 +316,7 @@ public class GreetingMsg extends Dialog {
 						return;
 					}
 				} else {
-					//Use doesnt want to use stop word remover. File path should be empty.
+					//User doesn't want to use stop word remover. File path should be empty.
 					stopStr = "";
 				}
 
