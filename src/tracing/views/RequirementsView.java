@@ -167,8 +167,8 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				//Otherwise, display the content of the selected file.
 				if(combo.getSelectionIndex()==0) {
 				
-					// Force durationTime to display only to two decimal places
-					DecimalFormat df = new DecimalFormat("##.##");
+					// Force durationTime to display only to four decimal places
+					DecimalFormat df = new DecimalFormat("##.####");
 					text.setText("Indexing time of " + (combo.getItemCount()-1) + " requirement(s) is: " + df.format(durationTime) + " seconds.");
 					riv.setIndicesText("");
 				}  else {
