@@ -1,5 +1,9 @@
 package dialogs;
 
+import java.io.File;
+
+import javax.swing.JOptionPane;
+
 import indexer.Indexer;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -105,7 +109,7 @@ public class GreetingMsg extends Dialog {
 		
 		dirText = new Text(shell, SWT.BORDER | SWT.SEARCH);
 		dirText.setBounds(20, 10, 288, 21);
-		dirText.setText("(path name)");
+		dirText.setText("(Resource Directory)");
 		
 		acText = new Text(shell, SWT.BORDER);
 		acText.setBounds(186, 65, 161, 21);
@@ -225,15 +229,64 @@ public class GreetingMsg extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				
-				//Maybe check for valid resource directory path
+				//Check for valid resource directory path
+				directory = dirText.getText();
+				File directoryFile = new File(directory);
+				if(!directoryFile.exists() || !directoryFile.isDirectory() ) {
+					//If it doesnt exist, or it isnt a directory, display message,
+					JOptionPane.showMessageDialog(null,"Resource Directory is invalid.","Error",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
 				
-				//Update reqInstance variables 
-				reqInstance.setResourcePath(dirText.getText().toString());
+				//Check for valid acronym text file, if it is used
+				if(btnCheckAc.getSelection()) {
+					acronymStr = acText.getText();
+					File acronymFile = new File(acronymStr);
+					
+					//Check for errors
+					if(!acronymFile.exists()) {
+						JOptionPane.showMessageDialog(null,"Acronym text file not found.","Error",JOptionPane.WARNING_MESSAGE);
+						return;
+					} else if (!acronymFile.isFile()) {
+						JOptionPane.showMessageDialog(null,"Acronym text file is not a file.","Error",JOptionPane.WARNING_MESSAGE);
+						return;
+					} else if (!acronymFile.toString().endsWith(".txt")) {
+						JOptionPane.showMessageDialog(null,"Acronym text file is not a text file.","Error",JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+				} else {
+					//User doesnt want to use acronym converter. File path should be empty
+					acronymStr = "";
+				}
+				
+				//Check for valid stop text files, if it is used
+				if(btnCheckStop.getSelection()) {
+					stopStr = stopText.getText();
+					File stopWordFile = new File(stopStr);
+					
+					//Check for errors
+					if(!stopWordFile.exists()) {
+						JOptionPane.showMessageDialog(null,"Stop word file was not found.","Error",JOptionPane.WARNING_MESSAGE);
+						return;
+					}else if(!stopWordFile.isFile()) {
+						JOptionPane.showMessageDialog(null,"Stop word file is not a file.","Error",JOptionPane.WARNING_MESSAGE);
+						return;
+					}else if(!stopWordFile.toString().endsWith(".txt")) {
+						JOptionPane.showMessageDialog(null,"Stop word file is not a text file.","Error",JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+				} else {
+					//Use doesnt want to use stop word remover. File path should be empty.
+					stopStr = "";
+				}
+
+				//Update reqInstance variables
+				reqInstance.setResourcePath(directory);
 				reqInstance.updateComboBox();
 				
 				//Perform the indexing
-				Indexer indexer = new Indexer(dirText.getText().toString(), btnCheckTok.getSelection() , btnCheckStem.getSelection()
-						, acText.getText(), stopText.getText());
+				Indexer indexer = new Indexer(directory, btnCheckTok.getSelection() , btnCheckStem.getSelection()
+						, acronymStr, stopStr);
 				
 				//Let reqInstance have access to index objects
 				reqInstance.setIndexer(indexer);

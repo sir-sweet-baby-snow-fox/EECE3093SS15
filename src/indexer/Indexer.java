@@ -49,53 +49,56 @@ public class Indexer {
 		//Set up stemmer and tokenizer
 		tokenizer = new Tokenizer();
 		stemmer = new Stemmer();
-		
-		//Check if users want to process use case files
-		if(doTokenize || doStem || !acronymFilePath.isEmpty() || !stopWordsFilePath.isEmpty()) {
-			//Index each file
-			File resourceFolder = new File(resourceDirectoryPath);
-			File[] resourceFiles = resourceFolder.listFiles();
+	
+		//Index each file
+		File resourceFolder = new File(resourceDirectoryPath);
+		File[] resourceFiles = resourceFolder.listFiles();
 
-			for (int i = 0; i < resourceFiles.length; i++) {
-				if (resourceFiles[i].isFile()) {				
-					//Collect the file contents into a string for tokenizing.
-					StringBuilder s = new StringBuilder();
-					String useCaseFileName = resourceFiles[i].toString();
-					
-					try {
-						for (String line : Files.readAllLines(Paths.get(useCaseFileName))) {
-							s.append(line + "\n");
-						}
-					} catch(IOException io) {
-						System.out.println(io.getMessage());
+		for (int i = 0; i < resourceFiles.length; i++) {
+			if (resourceFiles[i].isFile()) {	
+				
+				//Collect the file contents into a string for tokenizing.
+				StringBuilder s = new StringBuilder();
+				String useCaseFileName = resourceFiles[i].toString();
+
+				try {
+					for (String line : Files.readAllLines(Paths.get(useCaseFileName))) {
+						s.append(line + "\n");
 					}
-					
-					
-					//Tokenize for other features
-					String[] tokens = tokenizer.TokenizeString(s.toString());
+				} catch(IOException io) {
+					System.out.println(io.getMessage());
+				}
+				
+				//Tokenize for other features
+				String[] tokens = tokenizer.TokenizeString(s.toString());
 			
+				//Check if users want to process use case files
+				if(doTokenize || doStem || !acronymFilePath.isEmpty() || !stopWordsFilePath.isEmpty()) {
+
 					//Remove stop words (if requested)
 					if(stopWordRemover != null) { 
 						tokens = stopWordRemover.RemoveStopWords(tokens);
 					}
-					
+
 					//Convert acronyms (if requested)
 					if(acronymConverter != null) {
 						tokens = acronymConverter.restoreAcronyms(tokens);
 					}
-					
+
 					//Stem (if requetsed)
 					if(doStem) {
 						tokens = stemmer.stem(tokens);
 					}
-					
-					//Create an index. Add to list
-					Index index = new Index(tokens);
-					indices.add(index);
-					
+
+
 				}
+
+				//Create an index. Add to list
+				Index index = new Index(tokens);
+				indices.add(index);
 			}
 		}
+	
 				
 		//End timing
 		IndexDurationTime = (System.nanoTime() - indexStartTime) / 1000000000.0;

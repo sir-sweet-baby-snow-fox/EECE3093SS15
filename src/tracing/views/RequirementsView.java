@@ -103,16 +103,13 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 					String fileName = resourceFiles[i].getName();
 					int lastPeriodIndex = fileName.lastIndexOf('.');
 					String useCaseName = fileName.substring(0, lastPeriodIndex);
+					
 					combo.add(useCaseName);
 				}
 			}
 		}
 		
-		// TODO: Remove this when we actually load the files...This is just for testing
-		//combo.add("TokenizerTest");
-		//combo.add("StopWordRemovalTest");
-		
-		combo.select(0); //Default choice is no file selected
+				combo.select(0); //Default choice is no file selected
 		
 	}
 
@@ -140,7 +137,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		combo.setLayoutData(formdata);
 		
 		//Set text position
-		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL| SWT.H_SCROLL | SWT.READ_ONLY);
+		final Text text = new Text(parent,SWT.MULTI|SWT.V_SCROLL| SWT.READ_ONLY | SWT.WRAP);
 		formdata = new FormData();
 		formdata.top=new FormAttachment(combo,10);
 		formdata.bottom = new FormAttachment(combo,600);
@@ -159,38 +156,13 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				//Fill text with the correct information.
 				//If no use case is selected, display indexing time.
 				//Otherwise, display the content of the selected file.
-				if(combo.getSelectionIndex()==0)
-				{
+				if(combo.getSelectionIndex()==0) {
+				
 					// Force durationTime to display only to two decimal places
 					DecimalFormat df = new DecimalFormat("##.##");
 					text.setText("Indexing time of " + (combo.getItemCount()-1) + " requirement(s) is: " + df.format(durationTime) + " seconds.");
-				}
-				else if (combo.getText().equals("TokenizerTest")) {
-					// TODO: Remove this and run tokenizer/indexer on whatever file is selected but
-					// 		 this at least shows how to tokenize and how to set text on the other view
-					System.out.println("TokenizerTest");
-					Tokenizer t = new Tokenizer();
-					String[] parts = t.TokenizeString("Thi:s ha's a _lot of' T!hi%$n\ngs$ w%^234Ng");
-					StringBuilder sb = new StringBuilder();
-					for (String part : parts)
-						sb.append(part + " ");
-					
-					riv.setIndicesText(sb.toString());
-				}
-				else if (combo.getText().equals("StopWordRemovalTest")) {
-					System.out.println("StopWordRemovalTest");
-//					Tokenizer t = new Tokenizer();
-//					String[] parts = t.TokenizeString("The BOY had a cat and a dog");
-//					try {
-//						String[] cleanParts = t.RemoveStopWords(resourceDirectory + "/Stop_Word_List.txt", parts);
-//						text.setText(Arrays.toString(cleanParts));
-//					} catch (IOException e1) {
-//						text.setText("");
-//					}
-				}
-				else{
-					System.out.println(combo.getText());
-					
+					riv.setIndicesText("");
+				}  else {
 					//User has selected a use case associated with a file name.
 					try {
 						//Display original file contents
@@ -279,6 +251,6 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		// in order to force the default text box to update in order to display the
 		// indexing time.
 		comboViewer.getCombo().notifyListeners(SWT.Selection, new Event());
-	}
+}
 	
 }

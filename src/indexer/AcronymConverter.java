@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 
+import javax.swing.JOptionPane;
+
 public class AcronymConverter {
 	
 	private Hashtable<String, String> acronymHashtable;
@@ -88,9 +90,9 @@ public class AcronymConverter {
 				}
 			}
 		} catch (IOException e1) {
-			System.out.println("Error parsing file: " + e1.getMessage());
+			JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.WARNING_MESSAGE);
 		} catch (Throwable s) {
-			System.out.println(s.getMessage());
+			JOptionPane.showMessageDialog(null,s.getMessage(),"Error",JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	
