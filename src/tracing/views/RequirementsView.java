@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Map;
@@ -63,6 +64,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	private String test = "this is a test string";
 	private String resourcePath;
 	File[] resourceFiles;
+	ArrayList<File> validFiles = new ArrayList<File>();
 	private double durationTime = 0;
 	
 	/**
@@ -101,10 +103,17 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				if (resourceFiles[i].isFile()) {
 					//Remove file extension from use case name
 					String fileName = resourceFiles[i].getName();
+					
+					//Make sure the file is a .txt
+					if (!fileName.endsWith(".txt"))
+						continue; // go to the next file
+					
 					int lastPeriodIndex = fileName.lastIndexOf('.');
 					String useCaseName = fileName.substring(0, lastPeriodIndex);
 					
 					combo.add(useCaseName);
+					
+					validFiles.add(resourceFiles[i]);
 				}
 			}
 		}
@@ -168,7 +177,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 						//Display original file contents
 						StringBuilder s = new StringBuilder();
 						int fileIndex = combo.getSelectionIndex() - 1; //First selection is not a file.
-						String useCaseFileName = resourceFiles[fileIndex].toString();
+						String useCaseFileName = validFiles.get(fileIndex).toString();
 						
 						for (String line : Files.readAllLines(Paths.get(useCaseFileName))) {
 							s.append(line + "\n");

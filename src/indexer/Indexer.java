@@ -1,7 +1,10 @@
 package indexer;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -30,7 +33,7 @@ public class Indexer {
 	 * @param stopWordsFilePath
 	 * @throws IOException 
 	 */
-	public Indexer(String resourceDirectoryPath, boolean doTokenize, boolean doStem, String acronymFilePath, String stopWordsFilePath)  {
+	public Indexer(String resourceDirectoryPath, boolean doTokenize, boolean doStem, String acronymFilePath, String stopWordsFilePath, String storeIndicesDir)  {
 		double indexStartTime = System.nanoTime();
 		
 		indices = new ArrayList<Index>();
@@ -56,6 +59,11 @@ public class Indexer {
 
 		for (int i = 0; i < resourceFiles.length; i++) {
 			if (resourceFiles[i].isFile()) {	
+				
+				// Make sure the file is a .txt in order to index
+				String filename = resourceFiles[i].getName();
+				if (!filename.toString().endsWith(".txt"))
+					continue; // go to the next file
 				
 				//Collect the file contents into a string for tokenizing.
 				StringBuilder s = new StringBuilder();
@@ -96,6 +104,23 @@ public class Indexer {
 				//Create an index. Add to list
 				Index index = new Index(tokens);
 				indices.add(index);
+				
+				//If the user wants to store the indices, write to file
+				if (storeIndicesDir != "") {
+					// remove the extension
+					filename = filename.replaceFirst("[.][^.]+$", "");
+					try {
+						PrintWriter w = new PrintWriter(Paths.get(storeIndicesDir, filename +"_indices.txt").toString(), "UTF-8");
+						w.println(index.getTokensAsString());
+						w.close();
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 	
