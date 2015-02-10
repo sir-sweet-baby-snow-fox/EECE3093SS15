@@ -60,6 +60,11 @@ public class Indexer {
 		for (int i = 0; i < resourceFiles.length; i++) {
 			if (resourceFiles[i].isFile()) {	
 				
+				// Make sure the file is a .txt in order to index
+				String filename = resourceFiles[i].getName();
+				if (!filename.toString().endsWith(".txt"))
+					continue; // go to the next file
+				
 				//Collect the file contents into a string for tokenizing.
 				StringBuilder s = new StringBuilder();
 				String useCaseFileName = resourceFiles[i].toString();
@@ -102,7 +107,6 @@ public class Indexer {
 				
 				//If the user wants to store the indices, write to file
 				if (storeIndicesDir != "") {
-					String filename = resourceFiles[i].getName();
 					// remove the extension
 					filename = filename.replaceFirst("[.][^.]+$", "");
 					try {
