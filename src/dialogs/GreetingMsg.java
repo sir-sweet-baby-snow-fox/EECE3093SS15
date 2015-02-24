@@ -1,30 +1,35 @@
 package dialogs;
 
+import indexer.Indexer;
+
 import java.io.File;
 
 import javax.swing.JOptionPane;
 
-import indexer.Indexer;
-
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Dialog;
-import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Button;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Dialog;
+import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.events.MouseTrackAdapter;
-import org.eclipse.swt.events.MouseEvent;
 /*import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;*/
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.dialogs.IOverwriteQuery;
+import org.eclipse.ui.wizards.datatransfer.FileSystemStructureProvider;
+import org.eclipse.ui.wizards.datatransfer.ImportOperation;
+import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 
-import tracing.views.RequirementsIndicesView;
 import tracing.views.RequirementsView;
 
 public class GreetingMsg extends Dialog {
@@ -348,6 +353,26 @@ public class GreetingMsg extends Dialog {
 				// Force the default text in the RequirementsView widget to update now that it has
 				// access to the indexer, and thus the number of use cases and indexing time.
 				reqInstance.setDefaultText();
+				
+				IProjectDescription description;
+				try {
+					description = ResourcesPlugin.getWorkspace().loadProjectDescription(  new Path("C:\\iTrust\\.project"));
+					IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(description.getName());
+					project.create(description, null);
+					IOverwriteQuery overwriteQuery = new IOverwriteQuery() {
+				        public String queryOverwrite(String file) { return ALL; }
+					};
+					String baseDir = "C:\\iTrust\\"; // location of files to import
+					ImportOperation importOperation = new ImportOperation(project.getFullPath(),
+							new File(baseDir), FileSystemStructureProvider.INSTANCE, overwriteQuery);
+					importOperation.setCreateContainerStructure(false);
+					importOperation.run(new NullProgressMonitor());
+				}
+				catch (Exception e2) { e2.printStackTrace(); }
+				
+				
+
+				
 				
 				//Continue onto eclipse
 				shell.close();
