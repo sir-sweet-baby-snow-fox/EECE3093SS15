@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PartInitException;
 /*import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;*/
@@ -356,7 +357,7 @@ public class GreetingMsg extends Dialog {
 				
 				IProjectDescription description;
 				try {
-					description = ResourcesPlugin.getWorkspace().loadProjectDescription(  new Path("C:\\iTrust\\.project"));
+					description = ResourcesPlugin.getWorkspace().loadProjectDescription(new Path("C:\\iTrust\\.project"));
 					IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(description.getName());
 					project.create(description, null);
 					IOverwriteQuery overwriteQuery = new IOverwriteQuery() {
@@ -370,9 +371,13 @@ public class GreetingMsg extends Dialog {
 				}
 				catch (Exception e2) { e2.printStackTrace(); }
 				
-				
-
-				
+				//Open methodIndicesView
+				try {
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("tracing.views.MethodIndicesView");
+				} catch (PartInitException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
 				//Continue onto eclipse
 				shell.close();

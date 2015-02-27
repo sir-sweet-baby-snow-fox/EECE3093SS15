@@ -40,7 +40,18 @@
                relative="org.eclipse.ui.views.ProblemView">
          </view>
       </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+      </perspectiveExtension>
    </extension>
+   <extension point="org.eclipse.ui.views">
+        <view
+       		id="tracing.views.MethodIndicesView"
+          	name="Method Indicies View"
+          	class="tracing.views.MethodIndicesView"
+          	icon="icons/sample.gif"
+        />
+	</extension>
    <extension
          point="org.eclipse.help.contexts">
       <contexts
