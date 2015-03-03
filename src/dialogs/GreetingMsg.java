@@ -32,6 +32,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import tracing.views.RequirementsView;
+import tracing.views.MethodIndicesView;
 
 public class GreetingMsg extends Dialog {
 
@@ -50,6 +51,7 @@ public class GreetingMsg extends Dialog {
 	private String[] optionList = new String[5];
 	private RequirementsView reqInstance;
 	private String reqViewId = "tracing.views.RequirementsView";
+	private String methodsViewId = "tracing.views.MethodIndicesView";
 	//private String dirFilterStr;
 	
 	/**
@@ -359,17 +361,23 @@ public class GreetingMsg extends Dialog {
 				try {
 					description = ResourcesPlugin.getWorkspace().loadProjectDescription(new Path("C:\\iTrust\\.project"));
 					IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(description.getName());
-					project.create(description, null);
-					IOverwriteQuery overwriteQuery = new IOverwriteQuery() {
-				        public String queryOverwrite(String file) { return ALL; }
-					};
-					String baseDir = "C:\\iTrust\\"; // location of files to import
-					ImportOperation importOperation = new ImportOperation(project.getFullPath(),
-							new File(baseDir), FileSystemStructureProvider.INSTANCE, overwriteQuery);
-					importOperation.setCreateContainerStructure(false);
-					importOperation.run(new NullProgressMonitor());
+					if(!project.exists()){
+						project.create(description, null);
+						IOverwriteQuery overwriteQuery = new IOverwriteQuery() {
+							public String queryOverwrite(String file) { return ALL; }
+						};
+						String baseDir = "C:\\iTrust\\"; // location of files to import
+						ImportOperation importOperation = new ImportOperation(project.getFullPath(),
+								new File(baseDir), FileSystemStructureProvider.INSTANCE, overwriteQuery);
+						importOperation.setCreateContainerStructure(false);
+						importOperation.run(new NullProgressMonitor());
+					}
 				}
 				catch (Exception e2) { e2.printStackTrace(); }
+				
+				MethodIndicesView methodIndicesView = (MethodIndicesView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(methodsViewId);
+				String viewText = "Method count" + methodIndicesView.getMethodCount();
+				methodIndicesView.setIndicesText(viewText);
 				
 				//Continue onto eclipse
 				shell.close();
