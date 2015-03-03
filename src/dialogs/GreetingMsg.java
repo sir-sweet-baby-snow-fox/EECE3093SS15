@@ -371,14 +371,6 @@ public class GreetingMsg extends Dialog {
 				}
 				catch (Exception e2) { e2.printStackTrace(); }
 				
-				//Open methodIndicesView
-				try {
-					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("tracing.views.MethodIndicesView");
-				} catch (PartInitException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
 				//Continue onto eclipse
 				shell.close();
 			}
