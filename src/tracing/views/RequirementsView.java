@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.*;
 import org.eclipse.jface.viewers.*;
@@ -35,6 +36,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.*;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.SWT;
+
+import dialogs.GreetingMsg;
 
 
 
@@ -66,6 +69,14 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	File[] resourceFiles;
 	ArrayList<File> validFiles = new ArrayList<File>();
 	private double durationTime = 0;
+	
+	private void showMessage(){
+		//MessageDialog.openInformation(new Shell(), "Testhello", "Hello, Eclipse world");
+		
+		GreetingMsg msg = new GreetingMsg(new Shell(), SWT.BORDER | SWT.WRAP);
+		msg.open();
+		
+	}
 	
 	/**
 	 * The ID of the view as specified by the extension.
@@ -130,6 +141,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	public void createPartControl(Composite parent) {
 		//Set layout forum of parent composite
 		parent.setLayout(new FormLayout());
+		
 		
 		//Create a drop box
 		comboViewer = new ComboViewer(parent,SWT.NONE|SWT.DROP_DOWN);

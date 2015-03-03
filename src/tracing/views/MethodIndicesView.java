@@ -22,6 +22,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.jdt.core.*;
 
@@ -35,9 +37,9 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 	 */
 	public static final String ID = "tracing.views.MethodIndicesView";
 
-	private void showMessage(){
-
-	}
+//	private void showMessage(){
+//
+//	}
 
 	public int getMethodCount() {
 
@@ -122,6 +124,8 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 	@Override
 	public void createPartControl(Composite parent) {
 
+		//showMessage();
+		
 		//Set layout forum of parent composite
 		parent.setLayout(new FormLayout());
 
@@ -144,6 +148,12 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 		formdata.right = new FormAttachment(0,800);
 		indicesText.setLayoutData(formdata);
 
+		try {
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("tracing.views.RequirementsIndicesView");
+		} catch (PartInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
