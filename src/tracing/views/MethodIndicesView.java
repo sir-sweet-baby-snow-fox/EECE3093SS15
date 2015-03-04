@@ -29,24 +29,29 @@ import org.eclipse.jdt.core.*;
 
 public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 
-	Text indicesText;
-	int totalMethods = 0;
+	private Text indicesText;
+	private int methodCount = 0;
+	private double indexDurationTime = 0;
 
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "tracing.views.MethodIndicesView";
-
-//	private void showMessage(){
-//
-//	}
-
+	
 	public int getMethodCount() {
+		return methodCount;
+	}
+
+	public void indexMethods() {
+		
+		double indexStartTime = System.nanoTime();
 
 		IProjectDescription description;
 		try{
+			//Assume path is at "C:\\iTrust\\.project"
 			description = ResourcesPlugin.getWorkspace().loadProjectDescription(new Path("C:\\iTrust\\.project"));
 
+			//Get the iTrust project, if it isn't open, open it.
 			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(description.getName());
 			if(!project.isOpen()) {
 				project.open(null);
@@ -67,25 +72,19 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 					// only process the JAR files
 					if (aPackage.getKind() == IPackageFragmentRoot.K_SOURCE) {
 
-						for (ICompilationUnit unit : aPackage
-								.getCompilationUnits()) {
+						for (ICompilationUnit unit : aPackage.getCompilationUnits()) {
 
-							System.out.println("--class name: "
-									+ unit.getElementName());
+							System.out.println("--class name: "+ unit.getElementName());
 
 							IType[] allTypes = unit.getAllTypes();
 							for (IType type : allTypes) {
 
-								IMethod[] methods = type.getMethods();
+								IMethod[] methods = type.getMethods(); //Retrieve methods
 
 								for (IMethod method : methods) {
-									totalMethods++;
+									methodCount++;
+									//methodIndexer.indexMethod(method);
 									System.out.println("--Method name: "+ method.getElementName());
-									System.out.println("Signature: "+ method.getSignature());
-									System.out.println("Return Type: "+ method.getReturnType());
-									System.out.println("source: "+ method.getSource());
-									System.out.println("to string: "+ method.toString());
-									System.out.println("new: "+ method.getPath().toString());
 								}
 							}
 						}
@@ -93,7 +92,10 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 				}
 			}
 		}catch (Exception e2) { e2.printStackTrace(); }
-		return totalMethods;
+		
+		indexDurationTime = (System.nanoTime() - indexStartTime) / 1000000000.0;
+		String indicesText = "Indexing time of " + methodCount + " methods is: " + String.format("%.2f", indexDurationTime) + " seconds.";
+		setIndicesText(indicesText);
 	}
 
 	@Override
@@ -154,6 +156,7 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 
 	@Override

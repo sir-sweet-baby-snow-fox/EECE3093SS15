@@ -376,8 +376,7 @@ public class GreetingMsg extends Dialog {
 				catch (Exception e2) { e2.printStackTrace(); }
 				
 				MethodIndicesView methodIndicesView = (MethodIndicesView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(methodsViewId);
-				String viewText = "Method count" + methodIndicesView.getMethodCount();
-				methodIndicesView.setIndicesText(viewText);
+				methodIndicesView.indexMethods();
 				
 				//Continue onto eclipse
 				shell.close();
