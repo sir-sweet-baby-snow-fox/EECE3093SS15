@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -125,8 +126,6 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 
 	@Override
 	public void createPartControl(Composite parent) {
-
-		//showMessage();
 		
 		//Set layout forum of parent composite
 		parent.setLayout(new FormLayout());
@@ -149,14 +148,28 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 		formdata.left = new FormAttachment(0,10);
 		formdata.right = new FormAttachment(0,800);
 		indicesText.setLayoutData(formdata);
-
-		try {
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("tracing.views.RequirementsIndicesView");
-		} catch (PartInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
+		//Attempt to open other views, if they arent already displayed
+		RequirementsIndicesView riv = (RequirementsIndicesView) getView(RequirementsIndicesView.ID);
+		if(riv == null) {
+			try {
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(RequirementsIndicesView.ID);
+			} catch (PartInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
+		
+		RequirementsView rv = (RequirementsView) getView(RequirementsView.ID);
+		if(rv == null) {
+			try {
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(RequirementsView.ID);
+			} catch (PartInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
@@ -169,6 +182,11 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 		if(indicesText != null) {
 			indicesText.setText(text);
 		}
+	}
+	
+	private IViewPart getView(String id) {
+		IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
+		return view;
 	}
 
 }
