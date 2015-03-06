@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PartInitException;
 /*import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.MouseAdapter;
@@ -50,8 +51,6 @@ public class GreetingMsg extends Dialog {
 	private String storeStr;
 	private String[] optionList = new String[5];
 	private RequirementsView reqInstance;
-	private String reqViewId = "tracing.views.RequirementsView";
-	private String methodsViewId = "tracing.views.MethodIndicesView";
 	//private String dirFilterStr;
 	
 	/**
@@ -77,9 +76,11 @@ public class GreetingMsg extends Dialog {
 		shell.open();
 		shell.layout();
 		display = getParent().getDisplay();
+		
 		try{
-			reqInstance = getRequirementsView(reqViewId);
+			reqInstance = getRequirementsView(RequirementsView.ID);
 		} catch (Exception e) { System.out.println(e.toString()); }
+		
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
@@ -375,7 +376,7 @@ public class GreetingMsg extends Dialog {
 				}
 				catch (Exception e2) { e2.printStackTrace(); }
 				
-				MethodIndicesView methodIndicesView = (MethodIndicesView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(methodsViewId);
+				MethodIndicesView methodIndicesView = (MethodIndicesView) getView(MethodIndicesView.ID);
 				methodIndicesView.indexMethods();
 				
 				//Continue onto eclipse
@@ -390,5 +391,10 @@ public class GreetingMsg extends Dialog {
 	private RequirementsView getRequirementsView(String id) {
 		RequirementsView riv = (RequirementsView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
 		return riv;
+	}
+	
+	private IViewPart getView(String id) {
+		IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
+		return view;
 	}
 }
