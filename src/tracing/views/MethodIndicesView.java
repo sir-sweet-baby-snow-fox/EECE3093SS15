@@ -7,9 +7,13 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -18,15 +22,22 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.jdt.core.*;
+import org.eclipse.jdt.ui.IPackagesViewPart;
+import org.eclipse.jdt.ui.JavaUI;
+//import org.eclipse.jdt.*;
+
 
 public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 
@@ -149,7 +160,7 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 		formdata.right = new FormAttachment(0,800);
 		indicesText.setLayoutData(formdata);
 		
-		//Attempt to open other views, if they arent already displayed
+		//Attempt to open other views, if they aren't already displayed
 		RequirementsIndicesView riv = (RequirementsIndicesView) getView(RequirementsIndicesView.ID);
 		if(riv == null) {
 			try {
@@ -170,6 +181,25 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 				e.printStackTrace();
 			}
 		}
+		
+		// Add a new double click listener to the package explorer tree
+		IWorkbenchPage activePage = getSite().getWorkbenchWindow().getActivePage();
+		IPackagesViewPart packExpl = (IPackagesViewPart)activePage.findView(JavaUI.ID_PACKAGES);
+		if (packExpl != null)
+		{
+			TreeViewer treeView = packExpl.getTreeViewer();
+		
+			// May want to change to selection listener?
+			treeView.addDoubleClickListener(new IDoubleClickListener(){
+				@Override
+			    public void doubleClick(DoubleClickEvent event) {
+			        // Update method indices view text. Probably doesn't need to be it's own method.
+					updateText();
+				}
+				
+			});
+		}
+				
 	}
 
 	@Override
@@ -187,6 +217,14 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 	private IViewPart getView(String id) {
 		IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
 		return view;
+	}
+	
+	public void updateText()
+	{
+		if (indicesText != null)
+		{
+			indicesText.setText("Double Click");
+		}
 	}
 
 }

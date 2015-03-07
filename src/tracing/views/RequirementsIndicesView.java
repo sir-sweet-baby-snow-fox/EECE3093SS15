@@ -116,7 +116,7 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 			
 		});
 		
-		//Display views if they arent displayed.
+		//Display views if they aren't displayed.
 		RequirementsView rv = (RequirementsView) getView(RequirementsView.ID);
 		if(rv == null) {
 			try {
