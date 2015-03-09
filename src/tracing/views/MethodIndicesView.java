@@ -2,6 +2,7 @@ package tracing.views;
 
 import dialogs.GreetingMsg;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -62,6 +63,8 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 		try{
 			//Assume path is at "C:\\iTrust\\.project"
 			description = ResourcesPlugin.getWorkspace().loadProjectDescription(new Path("C:\\iTrust\\.project"));
+			// Temporarily change path to H drive due to lab constraints
+			//description = ResourcesPlugin.getWorkspace().loadProjectDescription(new Path("H:\\iTrust\\.project"));
 
 			//Get the iTrust project, if it isn't open, open it.
 			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(description.getName());
@@ -194,7 +197,16 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 				@Override
 			    public void doubleClick(DoubleClickEvent event) {
 			        // Update method indices view text. Probably doesn't need to be it's own method.
-					updateText();
+					//updateText();
+					ISelection selectedMethod = treeView.getSelection();
+					String displayString = selectedMethod.toString();
+
+					// Right now, the selection is the path; that is, gives the path taken from the
+					// top of the tree to the bottom, so we'll need to do some sort of parsing to
+					// get just the method name to search the list storing all of the indexed methods
+					
+					// And no, we can't just cast to IMethod. Sorry.
+					updateText(displayString);
 				}
 				
 			});
@@ -219,11 +231,11 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 		return view;
 	}
 	
-	public void updateText()
+	public void updateText(String displayString)
 	{
 		if (indicesText != null)
 		{
-			indicesText.setText("Double Click");
+			indicesText.setText(displayString);
 		}
 	}
 
