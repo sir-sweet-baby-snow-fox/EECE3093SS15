@@ -51,15 +51,44 @@ public class CodeTokenizer {
 			return "";
 		}
 		
+		ArrayList <CodeToken> finalList = new ArrayList<CodeToken>();
+		
+		for(CodeToken c : tokens) {
+			if(c.getType() == TokenType.CODE){
+				finalList.add(indexCode(c));
+			}
+			else {
+				finalList.add(c);
+			}
+		}
 		
 		String listString = "";
 
-		for (CodeToken t : tokens)
+		for (CodeToken t : finalList)
 		{
 		    listString += t.getValue() + " ";
 		}
 
 		return listString;
+	}
+	
+	private CodeToken indexCode(CodeToken ct) {
+		String[] newVal = ct.getValue().split("(?=[A-Z][a-z])+|[^A-Za-z\\d]+");
+		
+		CodeToken retCt = new CodeToken(ct.getType(), convertArrayToString(newVal));
+		return retCt;
+	}
+	
+	private String convertArrayToString(String[] val) {
+		StringBuilder sb = new StringBuilder();
+		for (int i=0; i < val.length; i++) {
+			String postfix = " ";
+			if (i == val.length -1)
+				postfix = "";
+			sb.append(val[i] + postfix);
+		}
+		
+		return sb.toString();
 	}
 	
 	private ArrayList<CodeToken> tokenizeLine(String line) {

@@ -14,7 +14,7 @@ public class CodeTokenizerTests {
 		
 		String retVal = ct.tokenizeCode(code, "Test");
 		
-		assertEquals(retVal, "String test = \"A string\";  // This is a test comment \n ");
+		assertEquals(retVal, "String test A string // This is a test comment \n ");
 	}
 	
 	@Test
