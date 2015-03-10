@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class CodeTokenizer {
 	private ArrayList<String> tokens;
+	private boolean inComment = false;
 	
 	public CodeTokenizer() { tokens = new ArrayList<String>(); }
 	
@@ -18,7 +19,7 @@ public class CodeTokenizer {
 		try {
 			while ( (line=br.readLine()) != null) {
 				// tokenize the line
-				tokenizeLine(line);
+				tokens.addAll(tokenizeLine(line));
 				
 			}
 		} catch (IOException e) {
@@ -38,7 +39,9 @@ public class CodeTokenizer {
 		return listString;
 	}
 	
-	private void tokenizeLine(String line) {
+	private ArrayList<String> tokenizeLine(String line) {
+		ArrayList<String> newTokens = new ArrayList<String>();
+		
 		// check to see if there are any end of line comments
 		int eolCommentIndex = line.indexOf("//");
 		int slashStarCommentIndex = line.indexOf("/*");
@@ -46,21 +49,70 @@ public class CodeTokenizer {
 		String commentEntity = null;
 		
 		// get the final line value
-		if (eolCommentIndex > -1 && slashStarCommentIndex > -1) { // both comments found
+		if (inComment) {
+			newTokens.addAll(handleMultiLineComment(line));
+		}
+		else if (eolCommentIndex > -1 && slashStarCommentIndex > -1) { // both comments found
 			int minIndex = Math.min(eolCommentIndex, slashStarCommentIndex);
 			commentEntity = line.substring(minIndex);
 			line = line.substring(0,  minIndex);
+			
+			newTokens.add(line);
+			newTokens.add(commentEntity);
 		} else if (eolCommentIndex > -1) {
 			commentEntity = line.substring(eolCommentIndex);
 			line = line.substring(0, eolCommentIndex);
+			
+			newTokens.add(line);
+			newTokens.add(commentEntity);
 		} else if (slashStarCommentIndex > -1) {
-			commentEntity = line.substring(slashStarCommentIndex);
-			line = line.substring(0, slashStarCommentIndex);
+			newTokens.addAll(handleMultiLineComment(line));
+		} else {
+			// no comments found
+			newTokens.add(line);
 		}
 		
-		tokens.add(line);
+		return newTokens;
+	}
+	
+	private ArrayList<String> handleMultiLineComment(String line) {
+		ArrayList<String> newTokens = new ArrayList<String>();
 		
-		if (commentEntity != null) 
-			tokens.add(commentEntity);
+		int slashStarCommentIndex = line.indexOf("/*");
+		
+		
+		if (slashStarCommentIndex == -1) {
+			inComment = false;
+			if (line.trim().length() > 0)
+				newTokens.add(line);
+			return newTokens;
+		}
+		
+		inComment = true;
+		
+		// save the code before the comment as a separate string 
+		// save the rest as a new string to be sent recursively
+		String newLine = line.substring(slashStarCommentIndex);
+		line = line.substring(0, slashStarCommentIndex);
+		
+		if (line != "")
+			newTokens.add(line);
+		
+		int starSlashEnd = newLine.indexOf("*/");
+		if (starSlashEnd > -1) { /* End of slash star comment was found on this line so any tokens after it
+									need to be added */
+			inComment = false;
+			String newComment = newLine.substring(0, starSlashEnd+2);
+			newLine = newLine.substring(starSlashEnd+2);
+			newTokens.add(newComment);
+		} else {
+			newTokens.add(newLine);
+		}
+		
+		if (newLine != "")
+			newTokens.addAll(handleMultiLineComment(newLine));
+		
+		return newTokens;
+		
 	}
 }

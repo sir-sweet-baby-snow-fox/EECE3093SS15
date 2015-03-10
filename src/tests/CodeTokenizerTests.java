@@ -39,6 +39,26 @@ public class CodeTokenizerTests {
 	}
 	
 	@Test
+	public void testTokenizeSlashStartCommentSingleLine() {
+		String code = "int a = 0; /* Test Comment */";
+		
+		CodeTokenizer ct = new CodeTokenizer();
+		String retVal = ct.tokenizeCode(code, "Test");
+		
+		assertEquals(retVal, "int a = 0;  /* Test Comment */ ");
+	}
+	
+	@Test
+	public void testTokenizeSlashStartCommentSingleLineCodeAfter() {
+		String code = "int a = 0; /* Test Comment */ int b = 0;";
+		
+		CodeTokenizer ct = new CodeTokenizer();
+		String retVal = ct.tokenizeCode(code, "Test");
+		
+		assertEquals(retVal, "int a = 0;  /* Test Comment */  int b = 0; ");
+	}
+	
+	@Test
 	public void testTokenizeMultiComment() {
 		String code = "int a = 0; /*\n This is\n a test\n*/";
 		
