@@ -1,8 +1,12 @@
 package tracing;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
+import dialogs.GreetingMsg;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -19,6 +23,15 @@ public class Activator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
+		
+	}
+	
+	private void showMessage(){
+		//MessageDialog.openInformation(new Shell(), "Testhello", "Hello, Eclipse world");
+		
+		GreetingMsg msg = new GreetingMsg(new Shell(), SWT.BORDER | SWT.WRAP);
+		msg.open();
+		
 	}
 
 	/*

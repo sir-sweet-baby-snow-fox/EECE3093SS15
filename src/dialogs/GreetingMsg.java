@@ -19,6 +19,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 /*import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;*/
@@ -29,8 +32,14 @@ import org.eclipse.ui.wizards.datatransfer.ImportOperation;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jdt.ui.IPackagesViewPart;
+import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.TreeViewer;
 
 import tracing.views.RequirementsView;
+import tracing.views.MethodIndicesView;
 
 public class GreetingMsg extends Dialog {
 
@@ -74,9 +83,11 @@ public class GreetingMsg extends Dialog {
 		shell.open();
 		shell.layout();
 		display = getParent().getDisplay();
+		
 		try{
-			reqInstance = getRequirementsView(reqViewId);
+			reqInstance = getRequirementsView(RequirementsView.ID);
 		} catch (Exception e) { System.out.println(e.toString()); }
+		
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
@@ -356,23 +367,24 @@ public class GreetingMsg extends Dialog {
 				
 				IProjectDescription description;
 				try {
-					description = ResourcesPlugin.getWorkspace().loadProjectDescription(  new Path("/iTrust/.project"));
+					description = ResourcesPlugin.getWorkspace().loadProjectDescription(new Path("C:\\iTrust\\.project"));
 					IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(description.getName());
-					project.create(description, null);
-					IOverwriteQuery overwriteQuery = new IOverwriteQuery() {
-				        public String queryOverwrite(String file) { return ALL; }
-					};
-					String baseDir = "/iTrust/"; // location of files to import
-					ImportOperation importOperation = new ImportOperation(project.getFullPath(),
-							new File(baseDir), FileSystemStructureProvider.INSTANCE, overwriteQuery);
-					importOperation.setCreateContainerStructure(false);
-					importOperation.run(new NullProgressMonitor());
+					if(!project.exists()){
+						project.create(description, null);
+						IOverwriteQuery overwriteQuery = new IOverwriteQuery() {
+							public String queryOverwrite(String file) { return ALL; }
+						};
+						String baseDir = "C:\\iTrust\\"; // location of files to import
+						ImportOperation importOperation = new ImportOperation(project.getFullPath(),
+								new File(baseDir), FileSystemStructureProvider.INSTANCE, overwriteQuery);
+						importOperation.setCreateContainerStructure(false);
+						importOperation.run(new NullProgressMonitor());
+					}
 				}
 				catch (Exception e2) { e2.printStackTrace(); }
 				
-				
-
-				
+				MethodIndicesView methodIndicesView = (MethodIndicesView) getView(MethodIndicesView.ID);
+				methodIndicesView.indexMethods();
 				
 				//Continue onto eclipse
 				shell.close();
@@ -386,5 +398,10 @@ public class GreetingMsg extends Dialog {
 	private RequirementsView getRequirementsView(String id) {
 		RequirementsView riv = (RequirementsView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
 		return riv;
+	}
+	
+	private IViewPart getView(String id) {
+		IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
+		return view;
 	}
 }
