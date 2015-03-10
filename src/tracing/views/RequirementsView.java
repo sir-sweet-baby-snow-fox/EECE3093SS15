@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.*;
 import org.eclipse.jface.viewers.*;
@@ -35,6 +36,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.*;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.SWT;
+
+import dialogs.GreetingMsg;
 
 
 
@@ -71,6 +74,14 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "tracing.views.RequirementsView";
+	
+	private void showMessage(){
+		//MessageDialog.openInformation(new Shell(), "Testhello", "Hello, Eclipse world");
+		
+		GreetingMsg msg = new GreetingMsg(new Shell(), SWT.BORDER | SWT.WRAP);
+		msg.open();
+		
+	}
 	
 	/**
 	 * The constructor.
@@ -128,6 +139,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	 */
 	@Override
 	public void createPartControl(Composite parent) {
+		
 		//Set layout forum of parent composite
 		parent.setLayout(new FormLayout());
 		
@@ -195,6 +207,8 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				}
 				
 			}
+			
+			
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -214,10 +228,38 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 			
 		});
 		
+		//Attempt to open other views, if they arent already displayed
+		RequirementsIndicesView riv = (RequirementsIndicesView) getView(RequirementsIndicesView.ID);
+		if(riv == null) {
+			try {
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(RequirementsIndicesView.ID);
+			} catch (PartInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		MethodIndicesView miv = (MethodIndicesView) getView(MethodIndicesView.ID);
+		if(miv == null) {
+			try {
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(MethodIndicesView.ID);
+			} catch (PartInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 	}
+	
 	private RequirementsIndicesView getRequirementsView(String id) {
 		RequirementsIndicesView riv = (RequirementsIndicesView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
 		return riv;
+	}
+	
+	private IViewPart getView(String id) {
+		IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
+		return view;
 	}
 	
 	@Override
@@ -260,6 +302,6 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		// in order to force the default text box to update in order to display the
 		// indexing time.
 		comboViewer.getCombo().notifyListeners(SWT.Selection, new Event());
-}
+	}
 	
 }
