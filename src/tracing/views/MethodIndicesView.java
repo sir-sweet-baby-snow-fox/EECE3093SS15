@@ -1,5 +1,7 @@
 package tracing.views;
 
+import indexer.CodeTokenizer;
+
 import java.util.HashMap;
 import java.util.Hashtable;
 
@@ -82,6 +84,8 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 
 				IJavaProject javaProject = JavaCore.create(project);
 				IPackageFragment[] packages = javaProject.getPackageFragments();
+				
+				CodeTokenizer ct = new CodeTokenizer();
 
 				// process each package
 				for (IPackageFragment aPackage : packages) {
@@ -102,9 +106,9 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 									
 									methodCount++;
 									
-									//String methodIndex = methodIndexer.tokenizeCode(method.getSource());
-									//methodHash.put(method.getKey(), methodIndex);
-
+									// add method to indices list
+									String methodIndex = ct.tokenizeCode(method.getSource());
+									methodHash.put(method.getKey(), methodIndex);
 								}
 							}
 						}
