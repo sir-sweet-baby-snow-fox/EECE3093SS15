@@ -18,12 +18,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 public class RequirementsIndicesView extends ViewPart implements ISelectionProvider{
 	
-	Text indicesText;
+	private Text indicesText;
 	private Indexer indexer;
 	
 	/**
@@ -66,8 +69,6 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 
 	@Override
 	public void createPartControl(Composite parent) {
-		
-		showMessage();
 		
 		//Set layout forum of parent composite
 		parent.setLayout(new FormLayout());
@@ -114,6 +115,31 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 			}
 			
 		});
+		
+		//Display views if they aren't displayed.
+		RequirementsView rv = (RequirementsView) getView(RequirementsView.ID);
+		if(rv == null) {
+			try {
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(RequirementsView.ID);
+				System.out.println("RV opened");
+			} catch (PartInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		MethodIndicesView miv = (MethodIndicesView) getView(MethodIndicesView.ID);
+		if(miv == null) {
+			try {
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(MethodIndicesView.ID);
+			} catch (PartInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		showMessage();
 	}
 
 	@Override
@@ -126,6 +152,11 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 		if(indicesText != null) {
 			indicesText.setText(text);
 		}
+	}
+	
+	private IViewPart getView(String id) {
+		IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
+		return view;
 	}
 
 }
