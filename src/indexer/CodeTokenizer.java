@@ -20,6 +20,7 @@ public class CodeTokenizer {
 			while ( (line=br.readLine()) != null) {
 				// tokenize the line
 				tokens.addAll(tokenizeLine(line));
+				tokens.add("\n");
 				
 			}
 		} catch (IOException e) {
@@ -107,6 +108,7 @@ public class CodeTokenizer {
 			newTokens.add(newComment);
 		} else {
 			newTokens.add(newLine);
+			newLine = "";
 		}
 		
 		if (newLine != "")
