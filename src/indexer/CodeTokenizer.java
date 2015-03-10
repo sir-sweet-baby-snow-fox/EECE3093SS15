@@ -5,11 +5,33 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 
+enum TokenType {
+	CODE, COMMENT
+}
+
+class CodeToken {
+	private TokenType type;
+	private String value;
+	
+	public CodeToken(TokenType t, String v) {
+		this.type = t;
+		this.value = v;
+	}
+	
+	public String getValue() {
+		return this.value;
+	}
+	
+	public TokenType getType() {
+		return this.type;
+	}
+}
+
 public class CodeTokenizer {
-	private ArrayList<String> tokens;
+	private ArrayList<CodeToken> tokens;
 	private boolean inComment = false;
 	
-	public CodeTokenizer() { tokens = new ArrayList<String>(); }
+	public CodeTokenizer() { tokens = new ArrayList<CodeToken>(); }
 	
 	public String tokenizeCode(String code, String methodName){
 		// get code and method name for tokenizing
@@ -20,7 +42,7 @@ public class CodeTokenizer {
 			while ( (line=br.readLine()) != null) {
 				// tokenize the line
 				tokens.addAll(tokenizeLine(line));
-				tokens.add("\n");
+				tokens.add(new CodeToken(TokenType.COMMENT, "\n"));
 				
 			}
 		} catch (IOException e) {
@@ -32,16 +54,16 @@ public class CodeTokenizer {
 		
 		String listString = "";
 
-		for (String s : tokens)
+		for (CodeToken t : tokens)
 		{
-		    listString += s + " ";
+		    listString += t.getValue() + " ";
 		}
 
 		return listString;
 	}
 	
-	private ArrayList<String> tokenizeLine(String line) {
-		ArrayList<String> newTokens = new ArrayList<String>();
+	private ArrayList<CodeToken> tokenizeLine(String line) {
+		ArrayList<CodeToken> newTokens = new ArrayList<CodeToken>();
 		
 		// check to see if there are any end of line comments
 		int eolCommentIndex = line.indexOf("//");
@@ -58,37 +80,35 @@ public class CodeTokenizer {
 			commentEntity = line.substring(minIndex);
 			line = line.substring(0,  minIndex);
 			
-			newTokens.add(line);
-			newTokens.add(commentEntity);
+			newTokens.add(new CodeToken(TokenType.CODE, line));
+			newTokens.add(new CodeToken(TokenType.COMMENT, commentEntity));
 		} else if (eolCommentIndex > -1) {
 			commentEntity = line.substring(eolCommentIndex);
 			line = line.substring(0, eolCommentIndex);
 			
-			newTokens.add(line);
-			newTokens.add(commentEntity);
+			newTokens.add(new CodeToken(TokenType.CODE, line));
+			newTokens.add(new CodeToken(TokenType.COMMENT, commentEntity));
 		} else if (slashStarCommentIndex > -1) {
 			newTokens.addAll(handleMultiLineComment(line));
 		} else {
 			// no comments found
-			newTokens.add(line);
+			newTokens.add(new CodeToken(TokenType.CODE, line));
 		}
 		
 		return newTokens;
 	}
 	
-	private ArrayList<String> handleMultiLineComment(String line) {
-		ArrayList<String> newTokens = new ArrayList<String>();
+	private ArrayList<CodeToken> handleMultiLineComment(String line) {
+		ArrayList<CodeToken> newTokens = new ArrayList<CodeToken>();
 		
 		int slashStarCommentIndex = line.indexOf("/*");
 		
 		
 		if (slashStarCommentIndex == -1 &&  !inComment) {
 			if (line.trim().length() > 0)
-				newTokens.add(line);
+				newTokens.add(new CodeToken(TokenType.CODE, line));
 			return newTokens;
 		}
-		
-		inComment = true;
 		
 		// save the code before the comment as a separate string 
 		// save the rest as a new string to be sent recursively
@@ -102,7 +122,12 @@ public class CodeTokenizer {
 		}
 		
 		if (line != "")
-			newTokens.add(line);
+			if (inComment)
+				newTokens.add(new CodeToken(TokenType.COMMENT, line));
+			else
+				newTokens.add(new CodeToken(TokenType.CODE, line));
+		
+		inComment = true;
 		
 		int starSlashEnd = newLine.indexOf("*/");
 		if (starSlashEnd > -1) { /* End of slash star comment was found on this line so any tokens after it
@@ -110,9 +135,9 @@ public class CodeTokenizer {
 			inComment = false;
 			String newComment = newLine.substring(0, starSlashEnd+2);
 			newLine = newLine.substring(starSlashEnd+2);
-			newTokens.add(newComment);
+			newTokens.add(new CodeToken(TokenType.COMMENT, newComment));
 		} else {
-			newTokens.add(newLine);
+			newTokens.add(new CodeToken(TokenType.COMMENT, newLine));
 			newLine = "";
 		}
 		

@@ -356,13 +356,13 @@ public class GreetingMsg extends Dialog {
 				
 				IProjectDescription description;
 				try {
-					description = ResourcesPlugin.getWorkspace().loadProjectDescription(  new Path("C:\\iTrust\\.project"));
+					description = ResourcesPlugin.getWorkspace().loadProjectDescription(  new Path("/iTrust/.project"));
 					IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(description.getName());
 					project.create(description, null);
 					IOverwriteQuery overwriteQuery = new IOverwriteQuery() {
 				        public String queryOverwrite(String file) { return ALL; }
 					};
-					String baseDir = "C:\\iTrust\\"; // location of files to import
+					String baseDir = "/iTrust/"; // location of files to import
 					ImportOperation importOperation = new ImportOperation(project.getFullPath(),
 							new File(baseDir), FileSystemStructureProvider.INSTANCE, overwriteQuery);
 					importOperation.setCreateContainerStructure(false);
