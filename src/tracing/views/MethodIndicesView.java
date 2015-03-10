@@ -1,5 +1,8 @@
 package tracing.views;
 
+import java.util.HashMap;
+import java.util.Hashtable;
+
 import dialogs.GreetingMsg;
 
 import org.eclipse.core.resources.IFile;
@@ -45,11 +48,16 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 	private Text indicesText;
 	private int methodCount = 0;
 	private double indexDurationTime = 0;
+	private HashMap<String, String> methodHash;
 
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "tracing.views.MethodIndicesView";
+	
+	public MethodIndicesView() {
+		methodHash = new HashMap<String, String>();
+	}
 	
 	public int getMethodCount() {
 		return methodCount;
@@ -63,16 +71,12 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 		try{
 			//Assume path is at "C:\\iTrust\\.project"
 			description = ResourcesPlugin.getWorkspace().loadProjectDescription(new Path("C:\\iTrust\\.project"));
-			// Temporarily change path to H drive due to lab constraints
-			//description = ResourcesPlugin.getWorkspace().loadProjectDescription(new Path("H:\\iTrust\\.project"));
 
 			//Get the iTrust project, if it isn't open, open it.
 			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(description.getName());
 			if(!project.isOpen()) {
 				project.open(null);
 			}
-			
-			//System.out.println("project name: " + project.getName());
 
 			if (project.isNatureEnabled("org.eclipse.jdt.core.javanature")) {
 
@@ -88,18 +92,19 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 					if (aPackage.getKind() == IPackageFragmentRoot.K_SOURCE) {
 
 						for (ICompilationUnit unit : aPackage.getCompilationUnits()) {
-
-							//System.out.println("--class name: "+ unit.getElementName());
-
+							
 							IType[] allTypes = unit.getAllTypes();
 							for (IType type : allTypes) {
 
 								IMethod[] methods = type.getMethods(); //Retrieve methods
 
 								for (IMethod method : methods) {
+									
 									methodCount++;
-									//methodIndexer.indexMethod(method);
-									//System.out.println("--Method name: "+ method.getElementName());
+									
+									//String methodIndex = methodIndexer.tokenizeCode(method.getSource());
+									//methodHash.put(method.getKey(), methodIndex);
+
 								}
 							}
 						}
@@ -151,13 +156,13 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 
 		//Create title label
 		Label titleLabel = new Label(parent,SWT.SINGLE);
-		titleLabel.setText("Method Indices:");
+		titleLabel.setText("Method Index:");
 		titleLabel.setLayoutData(formdata);
 
 		//Create text area
 		indicesText = new Text(parent,SWT.MULTI|SWT.V_SCROLL|SWT.READ_ONLY | SWT.WRAP);
 		formdata = new FormData();
-		formdata.top = new FormAttachment(titleLabel,10);
+		formdata.top = new FormAttachment(titleLabel,5);
 		formdata.bottom = new FormAttachment(titleLabel,230);
 		formdata.left = new FormAttachment(0,10);
 		formdata.right = new FormAttachment(0,800);
@@ -197,9 +202,6 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 			treeView.addDoubleClickListener(new IDoubleClickListener(){
 				@Override
 			    public void doubleClick(DoubleClickEvent event) {
-			        // Update method indices view text. Probably doesn't need to be it's own method.
-					//updateText();
-					StringBuilder sb = new StringBuilder();
 					
 					IStructuredSelection selected = (IStructuredSelection) treeView.getSelection();
 					if (!selected.isEmpty())
@@ -209,18 +211,9 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 						if (element instanceof IMethod)
 						{
 							IMethod selectedMethod = ((IMethod) element);
-							sb.append(selectedMethod.getDeclaringType().getFullyQualifiedName());
-							sb.append('.');
-							sb.append(selectedMethod.getElementName());
-							
-							try {
-								sb.append(selectedMethod.getSignature());
-							} catch (JavaModelException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							
-							setIndicesText(sb.toString());
+
+							setIndicesText(selectedMethod.getKey());
+							//setIndicesText(methodHash.get(selectedMethod.getKey()));
 						}
 					}
 				}
