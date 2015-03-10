@@ -57,6 +57,7 @@ public class GreetingMsg extends Dialog {
 	private String storeStr;
 	private String[] optionList = new String[5];
 	private RequirementsView reqInstance;
+	private String reqViewId = "tracing.views.RequirementsView";
 	//private String dirFilterStr;
 	
 	/**
