@@ -33,7 +33,7 @@ public class CodeTokenizer {
 	
 	public CodeTokenizer() { tokens = new ArrayList<CodeToken>(); }
 	
-	public String tokenizeCode(String code, String methodName){
+	public String tokenizeCode(String code){
 		// get code and method name for tokenizing
 		// index each line one at a time
 		BufferedReader br = new BufferedReader(new StringReader(code));
@@ -71,7 +71,8 @@ public class CodeTokenizer {
 			else 
 				listString += t.getValue();
 		}
-
+		
+		// return the string
 		return listString;
 	}
 	
