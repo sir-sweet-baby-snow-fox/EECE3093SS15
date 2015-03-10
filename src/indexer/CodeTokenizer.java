@@ -82,8 +82,7 @@ public class CodeTokenizer {
 		int slashStarCommentIndex = line.indexOf("/*");
 		
 		
-		if (slashStarCommentIndex == -1) {
-			inComment = false;
+		if (slashStarCommentIndex == -1 &&  !inComment) {
 			if (line.trim().length() > 0)
 				newTokens.add(line);
 			return newTokens;
@@ -93,8 +92,14 @@ public class CodeTokenizer {
 		
 		// save the code before the comment as a separate string 
 		// save the rest as a new string to be sent recursively
-		String newLine = line.substring(slashStarCommentIndex);
-		line = line.substring(0, slashStarCommentIndex);
+		String newLine = "";
+		if (slashStarCommentIndex > -1) {
+			newLine = line.substring(slashStarCommentIndex);
+			line = line.substring(0, slashStarCommentIndex);
+		} else {
+			newLine = line;
+			line = "";
+		}
 		
 		if (line != "")
 			newTokens.add(line);
