@@ -72,7 +72,7 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 				project.open(null);
 			}
 			
-			System.out.println("project name: " + project.getName());
+			//System.out.println("project name: " + project.getName());
 
 			if (project.isNatureEnabled("org.eclipse.jdt.core.javanature")) {
 
@@ -89,7 +89,7 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 
 						for (ICompilationUnit unit : aPackage.getCompilationUnits()) {
 
-							System.out.println("--class name: "+ unit.getElementName());
+							//System.out.println("--class name: "+ unit.getElementName());
 
 							IType[] allTypes = unit.getAllTypes();
 							for (IType type : allTypes) {
@@ -99,7 +99,7 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 								for (IMethod method : methods) {
 									methodCount++;
 									//methodIndexer.indexMethod(method);
-									System.out.println("--Method name: "+ method.getElementName());
+									//System.out.println("--Method name: "+ method.getElementName());
 								}
 							}
 						}
@@ -198,15 +198,30 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 			    public void doubleClick(DoubleClickEvent event) {
 			        // Update method indices view text. Probably doesn't need to be it's own method.
 					//updateText();
-					ISelection selectedMethod = treeView.getSelection();
-					String displayString = selectedMethod.toString();
+					StringBuilder sb = new StringBuilder();
+					
+					IStructuredSelection selected = (IStructuredSelection) treeView.getSelection();
+					if (!selected.isEmpty())
+					{
+						Object element = selected.getFirstElement();
+						
+						if (element instanceof IMethod)
+						{
+							IMethod selectedMethod = ((IMethod) element);
+							sb.append(selectedMethod.getDeclaringType().getFullyQualifiedName());
+							sb.append('.');
+							sb.append(selectedMethod.getElementName());
+							
+							updateText(sb.toString());
+						}
+					}
 
 					// Right now, the selection is the path; that is, gives the path taken from the
 					// top of the tree to the bottom, so we'll need to do some sort of parsing to
 					// get just the method name to search the list storing all of the indexed methods
 					
 					// And no, we can't just cast to IMethod. Sorry.
-					updateText(displayString);
+					//updateText(displayString);
 				}
 				
 			});
