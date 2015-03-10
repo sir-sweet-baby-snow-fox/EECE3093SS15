@@ -6,7 +6,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 
 enum TokenType {
-	CODE, COMMENT
+	CODE, COMMENT, NEWLINE
 }
 
 class CodeToken {
@@ -33,7 +33,7 @@ public class CodeTokenizer {
 	
 	public CodeTokenizer() { tokens = new ArrayList<CodeToken>(); }
 	
-	public String tokenizeCode(String code, String methodName){
+	public String tokenizeCode(String code){
 		// get code and method name for tokenizing
 		// index each line one at a time
 		BufferedReader br = new BufferedReader(new StringReader(code));
@@ -42,7 +42,7 @@ public class CodeTokenizer {
 			while ( (line=br.readLine()) != null) {
 				// tokenize the line
 				tokens.addAll(tokenizeLine(line));
-				tokens.add(new CodeToken(TokenType.COMMENT, "\n"));
+				tokens.add(new CodeToken(TokenType.NEWLINE, "\n"));
 				
 			}
 		} catch (IOException e) {
@@ -66,9 +66,13 @@ public class CodeTokenizer {
 
 		for (CodeToken t : finalList)
 		{
-		    listString += t.getValue() + " ";
+			if (t.getType() != TokenType.NEWLINE)
+				listString += t.getValue() + " ";
+			else 
+				listString += t.getValue();
 		}
-
+		
+		// return the string
 		return listString;
 	}
 	
