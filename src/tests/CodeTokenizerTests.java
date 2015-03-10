@@ -77,4 +77,17 @@ public class CodeTokenizerTests {
 		
 		assertEquals(retVal, "int a = 0;  /* start \n of a comment */  int b = 0; \n ");
 	}
+	
+	@Test
+	public void testOnlyMultiLineComment() {
+		String code = "int a = 4; /* comment dude /* nested comment dude // */";
+		CodeTokenizer ct = new CodeTokenizer();
+		String retVal = ct.tokenizeCode(code, "test");
+		
+		assertEquals(retVal, "int a = 4;  /* comment dude /* nested comment dude // */ \n ");
+		
+	}
 }
+
+
+
