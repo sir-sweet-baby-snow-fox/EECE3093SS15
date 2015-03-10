@@ -84,8 +84,6 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 
 				IJavaProject javaProject = JavaCore.create(project);
 				IPackageFragment[] packages = javaProject.getPackageFragments();
-				
-				CodeTokenizer ct = new CodeTokenizer();
 
 				// process each package
 				for (IPackageFragment aPackage : packages) {
@@ -107,6 +105,7 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 									methodCount++;
 									
 									// add method to indices list
+									CodeTokenizer ct = new CodeTokenizer();
 									String methodIndex = ct.tokenizeCode(method.getSource());
 									methodHash.put(method.getKey(), methodIndex);
 								}
@@ -216,8 +215,7 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 						{
 							IMethod selectedMethod = ((IMethod) element);
 
-							setIndicesText(selectedMethod.getKey());
-							//setIndicesText(methodHash.get(selectedMethod.getKey()));
+							setIndicesText(methodHash.get(selectedMethod.getKey()));
 						}
 					}
 				}
