@@ -109,8 +109,8 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 		}catch (Exception e2) { e2.printStackTrace(); }
 		
 		indexDurationTime = (System.nanoTime() - indexStartTime) / 1000000000.0;
-		String indicesText = "Indexing time of " + methodCount + " methods is: " + String.format("%.2f", indexDurationTime) + " seconds.";
-		setIndicesText(indicesText);
+		String defaultText = "Indexing time of " + methodCount + " methods is: " + String.format("%.2f", indexDurationTime) + " seconds.";
+		setIndicesText(defaultText);
 	}
 
 	@Override
@@ -188,6 +188,7 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 		// Add a new double click listener to the package explorer tree
 		IWorkbenchPage activePage = getSite().getWorkbenchWindow().getActivePage();
 		IPackagesViewPart packExpl = (IPackagesViewPart)activePage.findView(JavaUI.ID_PACKAGES);
+		
 		if (packExpl != null)
 		{
 			TreeViewer treeView = packExpl.getTreeViewer();
@@ -212,16 +213,16 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 							sb.append('.');
 							sb.append(selectedMethod.getElementName());
 							
-							updateText(sb.toString());
+							try {
+								sb.append(selectedMethod.getSignature());
+							} catch (JavaModelException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							setIndicesText(sb.toString());
 						}
 					}
-
-					// Right now, the selection is the path; that is, gives the path taken from the
-					// top of the tree to the bottom, so we'll need to do some sort of parsing to
-					// get just the method name to search the list storing all of the indexed methods
-					
-					// And no, we can't just cast to IMethod. Sorry.
-					//updateText(displayString);
 				}
 				
 			});
@@ -246,12 +247,5 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 		return view;
 	}
 	
-	public void updateText(String displayString)
-	{
-		if (indicesText != null)
-		{
-			indicesText.setText(displayString);
-		}
-	}
 
 }
