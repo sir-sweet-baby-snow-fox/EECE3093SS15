@@ -87,6 +87,16 @@ public class CodeTokenizerTests {
 		assertEquals(retVal, "int a = 4;  /* comment dude /* nested comment dude // */ \n ");
 		
 	}
+	
+	@Test
+	public void testCommentWithinStringFail() {
+		String code = "int a = 4; String brian = \"not a comment /* a comment */\"";
+		
+		CodeTokenizer ct = new CodeTokenizer();
+		String retVal = ct.tokenizeCode(code,  "test");
+		
+		assertEquals(retVal, "int a = 4; String brian = \"not a comment  /* a comment */ \" \n ");
+	}
 }
 
 
