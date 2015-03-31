@@ -1,11 +1,1 @@
-maintain a hospital listing
-
-precondition:
-
-the administrator has authenticated himself or herself in the itrust medical records system.
-
-main flow:
-
-an administrator chooses to maintain the hospital listing by storing (1) hospital id number for the hospital,
-(2) up to 30 alphanumeric characters giving the name of the hospital, and (3) an address for the hospital.
-
+maintain hospit list precondit administr authent himself herself itrust medic record system main flow administr choos maintain hospit list store 1 hospit id number hospit 2 up 30 alphanumer charact give name hospit 3 address hospit

@@ -1,10 +1,1 @@
-create, disable, and edit personnel
-
-precondition:
-
-the itrust admin has authenticated himself or herself in the itrust medical records system.
-
-main flow:
-
-an admin creates a lhcp, an er, a lt, or a pha.
-
+creat disabl edit personnel precondit itrust admin authent himself herself itrust medic record system main flow admin creat licensed health care profession emergency respond laboratory technician public health ag
