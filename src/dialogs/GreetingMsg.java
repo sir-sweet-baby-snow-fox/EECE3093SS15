@@ -84,9 +84,9 @@ public class GreetingMsg extends Dialog {
 		shell.layout();
 		display = getParent().getDisplay();
 		
-		try{
+		/*try{
 			reqInstance = getRequirementsView(RequirementsView.ID);
-		} catch (Exception e) { System.out.println(e.toString()); }
+		} catch (Exception e) { System.out.println(e.toString()); }*/
 		
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
@@ -97,23 +97,6 @@ public class GreetingMsg extends Dialog {
 		return result;
 	}
 	
-	public String[] getOptions() {
-		return optionList;
-	}
-	
-	public String[] openDisplay() {
-		this.open();
-		/*
-		 * [0] -> path
-		 * [1] -> file 1
-		 * [2] -> file 2
-		 */
-		String[] returnArr = new String[3];
-		while (true) {
-			
-		}
-	}
-
 	/**
 	 * Create contents of the dialog.
 	 */
@@ -404,4 +387,5 @@ public class GreetingMsg extends Dialog {
 		IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
 		return view;
 	}
+	
 }
