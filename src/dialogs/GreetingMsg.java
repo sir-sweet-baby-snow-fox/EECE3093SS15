@@ -84,9 +84,10 @@ public class GreetingMsg extends Dialog {
 		shell.layout();
 		display = getParent().getDisplay();
 		
-		/*try{
-			reqInstance = getRequirementsView(RequirementsView.ID);
-		} catch (Exception e) { System.out.println(e.toString()); }*/
+		try{
+			//reqInstance = getRequirementsView(RequirementsView.ID);
+			reqInstance = (RequirementsView) getView(RequirementsView.ID);
+		} catch (Exception e) { System.out.println(e.toString()); }
 		
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
