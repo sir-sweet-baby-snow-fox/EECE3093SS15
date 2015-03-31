@@ -25,28 +25,23 @@ public class Indexer {
 	private String requirementsIndiciesViewID = "tracing.views.RequirementsIndicesView";
 
 	/**
-	 * 
-	 * @param resourceDirectoryPath
-	 * @param tokenize
-	 * @param stem
-	 * @param acronymFilePath
-	 * @param stopWordsFilePath
+	 * @param info
 	 * @throws IOException 
 	 */
-	public Indexer(String resourceDirectoryPath, boolean doTokenize, boolean doStem, String acronymFilePath, String stopWordsFilePath, String storeIndicesDir)  {
+	public Indexer(IndexerInfo info)  {
 		double indexStartTime = System.nanoTime();
 		
 		indices = new ArrayList<Index>();
 		
 		//Set up acronymConvert (if requested)
-		if(!acronymFilePath.isEmpty()) {
-			File acronymFile = new File(acronymFilePath);
+		if(!info.acronymFilePath.isEmpty()) {
+			File acronymFile = new File(info.acronymFilePath);
 			acronymConverter = new AcronymConverter(acronymFile);
 		}
 		
 		//Set up stopWordRemover (if requested)
-		if(!stopWordsFilePath.isEmpty()) {
-			stopWordRemover = new StopWordRemover(stopWordsFilePath);
+		if(!info.stopWordsFilePath.isEmpty()) {
+			stopWordRemover = new StopWordRemover(info.stopWordsFilePath);
 		}
 		
 		//Set up stemmer and tokenizer
@@ -54,7 +49,7 @@ public class Indexer {
 		stemmer = new Stemmer();
 	
 		//Index each file
-		File resourceFolder = new File(resourceDirectoryPath);
+		File resourceFolder = new File(info.resourceDirectoryPath);
 		File[] resourceFiles = resourceFolder.listFiles();
 
 		for (int i = 0; i < resourceFiles.length; i++) {
@@ -81,7 +76,7 @@ public class Indexer {
 				String[] tokens = tokenizer.TokenizeString(s.toString());
 			
 				//Check if users want to process use case files
-				if(doTokenize || doStem || !acronymFilePath.isEmpty() || !stopWordsFilePath.isEmpty()) {
+				if(info.doTokenize || info.doStem || !info.acronymFilePath.isEmpty() || !info.stopWordsFilePath.isEmpty()) {
 
 					//Remove stop words (if requested)
 					if(stopWordRemover != null) { 
@@ -94,7 +89,7 @@ public class Indexer {
 					}
 
 					//Stem (if requetsed)
-					if(doStem) {
+					if(info.doStem) {
 						tokens = stemmer.stem(tokens);
 					}
 
@@ -106,11 +101,11 @@ public class Indexer {
 				indices.add(index);
 				
 				//If the user wants to store the indices, write to file
-				if (storeIndicesDir != "") {
+				if (info.storeIndicesDir != "") {
 					// remove the extension
 					filename = filename.replaceFirst("[.][^.]+$", "");
 					try {
-						PrintWriter w = new PrintWriter(Paths.get(storeIndicesDir, filename +"_indices.txt").toString(), "UTF-8");
+						PrintWriter w = new PrintWriter(Paths.get(info.storeIndicesDir, filename +"_indices.txt").toString(), "UTF-8");
 						w.println(index.getTokensAsString());
 						w.close();
 					} catch (FileNotFoundException e) {

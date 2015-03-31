@@ -1,6 +1,7 @@
 package dialogs;
 
 import indexer.Indexer;
+import indexer.IndexerInfo;
 
 import java.io.File;
 
@@ -48,16 +49,13 @@ public class GreetingMsg extends Dialog {
 	private String dependantStr;
 	private Text dirText;
 	private static Display display;
-	private String directory;
 	private Text acText;
 	private Text stopText;
 	private Text storeText;
-	private String acronymStr;
-	private String stopStr;
-	private String storeStr;
 	private String[] optionList = new String[5];
 	private RequirementsView reqInstance;
 	private String reqViewId = "tracing.views.RequirementsView";
+	private IndexerInfo info;
 	//private String dirFilterStr;
 	
 	/**
@@ -68,10 +66,7 @@ public class GreetingMsg extends Dialog {
 	public GreetingMsg(Shell parent, int style) {
 		super(parent, style);
 		setText("Welcome!");
-		directory = "";
-		acronymStr = "";
-		stopStr = "";
-		storeStr = "";
+		info = new IndexerInfo();
 	}
 	
 	/**
@@ -85,7 +80,7 @@ public class GreetingMsg extends Dialog {
 		display = getParent().getDisplay();
 		
 		try{
-			reqInstance = getRequirementsView(RequirementsView.ID);
+			reqInstance = (RequirementsView) getView(RequirementsView.ID);
 		} catch (Exception e) { System.out.println(e.toString()); }
 		
 		while (!shell.isDisposed()) {
@@ -127,7 +122,7 @@ public class GreetingMsg extends Dialog {
 		
 		dirText = new Text(shell, SWT.BORDER | SWT.SEARCH);
 		dirText.setBounds(20, 10, 288, 21);
-		dirText.setText("(Resource Directory)");
+		dirText.setMessage("Resource Directory");
 		
 		acText = new Text(shell, SWT.BORDER);
 		acText.setBounds(186, 65, 161, 21);
@@ -148,26 +143,23 @@ public class GreetingMsg extends Dialog {
 		btnGetAcFile.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				acronymStr = fileDialog.open();
-				if(acronymStr != null) {
-					acText.setText(acronymStr);
-					
-				}
-				
+				info.acronymFilePath = fileDialog.open();
+				if(info.acronymFilePath != null) {
+					acText.setText(info.acronymFilePath);					
+				}				
 			}
 		});
 		btnGetAcFile.setBounds(353, 65, 75, 21);
 		btnGetAcFile.setText("Browse...");
 		btnGetAcFile.setEnabled(false);
-		// listener corresponding to text_1
 		
 		final Button btnGetStopFile = new Button(shell, SWT.PUSH);
 		btnGetStopFile.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				stopStr = fileDialog.open();
-				if(stopStr != null) {
-					stopText.setText(stopStr);
+				info.stopWordsFilePath = fileDialog.open();
+				if(info.stopWordsFilePath != null) {
+					stopText.setText(info.stopWordsFilePath);
 				}
 			}
 			
@@ -175,15 +167,14 @@ public class GreetingMsg extends Dialog {
 		btnGetStopFile.setBounds(353, 109, 75, 21);
 		btnGetStopFile.setText("Browse...");
 		btnGetStopFile.setEnabled(false);
-		//listener corresponding to text_2
 		
 		final Button btnStoreIndicesDir = new Button(shell, SWT.PUSH);
 		btnStoreIndicesDir.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				storeStr = dirDialog.open();
-				if(storeStr != null) {
-					storeText.setText(storeStr);
+				info.storeIndicesDir = dirDialog.open();
+				if(info.storeIndicesDir != null) {
+					storeText.setText(info.storeIndicesDir);
 				}
 			}
 			
@@ -191,17 +182,15 @@ public class GreetingMsg extends Dialog {
 		btnStoreIndicesDir.setBounds(353, 153, 75, 21);
 		btnStoreIndicesDir.setText("Browse...");
 		btnStoreIndicesDir.setEnabled(false);
-		//listener corresponding to text_3
 		
 		Button btnGetDir = new Button(shell, SWT.PUSH);
 		btnGetDir.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				directory = dirDialog.open();
-				if (directory != null) {
-					//text.setText("");
-					dirText.setText(directory);
-					optionList[0] = directory;
+				info.resourceDirectoryPath = dirDialog.open();
+				if (info.resourceDirectoryPath != null) {
+					dirText.setText(info.resourceDirectoryPath);
+					optionList[0] = info.resourceDirectoryPath;
 				}
 			}
 		});
@@ -286,8 +275,9 @@ public class GreetingMsg extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				
 				//Check for valid resource directory path
-				directory = dirText.getText();
-				File directoryFile = new File(directory);
+				info.resourceDirectoryPath = dirText.getText();
+				File directoryFile = new File(info.resourceDirectoryPath);
+				
 				if(!directoryFile.exists() || !directoryFile.isDirectory() ) {
 					//If it doesnt exist, or it isnt a directory, display message,
 					JOptionPane.showMessageDialog(null,"Resource Directory is invalid.","Error",JOptionPane.WARNING_MESSAGE);
@@ -296,8 +286,8 @@ public class GreetingMsg extends Dialog {
 				
 				//Check for valid acronym text file, if it is used
 				if(btnCheckAc.getSelection()) {
-					acronymStr = acText.getText();
-					File acronymFile = new File(acronymStr);
+					info.acronymFilePath = acText.getText();
+					File acronymFile = new File(info.acronymFilePath);
 					
 					//Check for errors
 					if(!acronymFile.exists()) {
@@ -312,13 +302,13 @@ public class GreetingMsg extends Dialog {
 					}
 				} else {
 					//User doesn't want to use acronym converter. File path should be empty
-					acronymStr = "";
+					info.acronymFilePath = "";
 				}
 				
 				//Check for valid stop text files, if it is used
 				if(btnCheckStop.getSelection()) {
-					stopStr = stopText.getText();
-					File stopWordFile = new File(stopStr);
+					info.stopWordsFilePath = stopText.getText();
+					File stopWordFile = new File(info.stopWordsFilePath);
 					
 					//Check for errors
 					if(!stopWordFile.exists()) {
@@ -333,14 +323,14 @@ public class GreetingMsg extends Dialog {
 					}
 				} else {
 					//User doesn't want to use stop word remover. File path should be empty.
-					stopStr = "";
+					info.stopWordsFilePath = "";
 				}
 				
 				//Check for valid storing indices dir, if it is used
 				if (btnStoreIndices.getSelection()) {
-					storeStr = storeText.getText();
+					info.storeIndicesDir = storeText.getText();
+					File storeDirFile = new File(info.storeIndicesDir);
 					
-					File storeDirFile = new File(storeStr);
 					if(!storeDirFile.exists() || !storeDirFile.isDirectory() ) {
 						//If it doesnt exist, or it isnt a directory, display message,
 						JOptionPane.showMessageDialog(null,"Storing Indices directory is invalid.","Error",JOptionPane.WARNING_MESSAGE);
@@ -348,16 +338,17 @@ public class GreetingMsg extends Dialog {
 					}
 				} else {
 					// User doesn't want to store indices, file path should be empty.
-					storeStr = "";
+					info.storeIndicesDir = "";
 				}
 
 				//Update reqInstance variables
-				reqInstance.setResourcePath(directory);
+				reqInstance.setResourcePath(info.resourceDirectoryPath);
 				reqInstance.updateComboBox();
 				
 				//Perform the indexing
-				Indexer indexer = new Indexer(directory, btnCheckTok.getSelection() , btnCheckStem.getSelection()
-						, acronymStr, stopStr, storeStr);
+				info.doTokenize = btnCheckTok.getSelection();
+				info.doStem = btnCheckStem.getSelection();
+				Indexer indexer = new Indexer(info);
 				
 				//Let reqInstance have access to index objects
 				reqInstance.setIndexer(indexer);
