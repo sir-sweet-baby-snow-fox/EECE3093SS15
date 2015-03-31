@@ -187,10 +187,8 @@ public class GreetingMsg extends Dialog {
 		btnGetDir.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String dir = dirDialog.open();
-				if (dir != null) {
-					System.out.println(dir);
-					info.resourceDirectoryPath = dir;
+				info.resourceDirectoryPath = dirDialog.open();
+				if (info.resourceDirectoryPath != null) {
 					dirText.setText(info.resourceDirectoryPath);
 					optionList[0] = info.resourceDirectoryPath;
 				}
