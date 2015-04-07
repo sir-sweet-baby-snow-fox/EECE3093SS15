@@ -36,28 +36,19 @@ public class RequirementsTokenizer implements Tokenizer {
 		
 		return tokens;
 	}
-
-	/**
-	 * Displays the list of tokens in a friendly way
-	 * @return
-	 */
-	public String displayTokens() {
-		StringBuilder sb = new StringBuilder();
-		
-		for (Token t: tokens) {
-			// Add the value and a space to the string builder
-			sb.append(t.getValue());
-			sb.append(" ");
-		}
-		
-		return sb.toString();
-	}
 	
 	/**
 	 * Returns a list of the tokens
 	 */
 	public ArrayList<Token> getTokens() {
 		return this.tokens;
+	}
+	
+	/**
+	 * Updates the list of tokens 
+	 */
+	public void updateTokens(ArrayList<Token> t) {
+		this.tokens = t;
 	}
 		
 }

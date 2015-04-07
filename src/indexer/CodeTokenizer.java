@@ -45,18 +45,6 @@ public class CodeTokenizer implements Tokenizer {
 		return tokens;
 	}
 	
-	public String displayTokens() {
-		StringBuilder sb = new StringBuilder();
-		
-		for (Token t : tokens) {
-			if (t.getType() != TokenType.NEWLINE)
-				sb.append(t.getValue() + " ");
-			else 
-				sb.append(t.getValue());
-		}
-		return null;
-	}
-	
 	private Token indexCode(Token ct) {
 		String[] newVal = ct.getValue().split("(?=[A-Z][a-z])+|[^A-Za-z\\d]+");
 		

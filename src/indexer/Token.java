@@ -24,4 +24,8 @@ public class Token {
 	public String getValueAsLowercase() {
 		return this.value.toLowerCase();
 	}
+	
+	public void setValue(String v) {
+		this.value = v;
+	}
 }

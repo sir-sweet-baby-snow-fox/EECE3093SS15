@@ -35,25 +35,24 @@ public class StopWordRemover {
 	
 	/**
 	 * Remove the stop words that exist in the stop words list from the strings in s.
-	 * @param s
-	 * @return
+	 * @param s ArrayList of tokens from the tokenizer
+	 * @return ArrayList of tokens with stop words removed
 	 */
-	public String[] RemoveStopWords(String[] s){
+	public ArrayList<Token> RemoveStopWords(ArrayList<Token> s){
 		
 		// initialize empty array list
-		ArrayList<String> cleanedParts = new ArrayList<String>();
+		ArrayList<Token> cleanedParts = new ArrayList<Token>();
 		
 		// run a binary search for each token to see if it should be removed
-		for (String part : s){
-			int index = Arrays.binarySearch(stopWordList, part.toLowerCase());
+		for (Token part : s){
+			int index = Arrays.binarySearch(stopWordList, part.getValueAsLowercase());
 			index = index>=0 ? index : -1;
 			if (index == -1) {
 				cleanedParts.add(part);
 			}
 		}
 		
-		String[] retArray = new String[cleanedParts.size()];
-		return cleanedParts.toArray(retArray);
+		return cleanedParts;
 	}
 	
 }

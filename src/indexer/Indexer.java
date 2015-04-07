@@ -16,7 +16,7 @@ import tracing.views.RequirementsIndicesView;
 
 public class Indexer {
 	private AcronymConverter acronymConverter = null;
-	private Tokenizer tokenizer = null;
+	private RequirementsTokenizer tokenizer = null;
 	private StopWordRemover stopWordRemover = null;
 	private Stemmer stemmer = null;
 	private ArrayList<Index> indices = null;
@@ -50,7 +50,7 @@ public class Indexer {
 		}
 		
 		//Set up stemmer and tokenizer
-		tokenizer = new Tokenizer();
+		tokenizer = new RequirementsTokenizer();
 		stemmer = new Stemmer();
 	
 		//Index each file
@@ -78,7 +78,7 @@ public class Indexer {
 				}
 				
 				//Tokenize for other features
-				String[] tokens = tokenizer.TokenizeString(s.toString());
+				ArrayList<Token> tokens = tokenizer.tokenize(s.toString());
 			
 				//Check if users want to process use case files
 				if(doTokenize || doStem || !acronymFilePath.isEmpty() || !stopWordsFilePath.isEmpty()) {
@@ -93,12 +93,12 @@ public class Indexer {
 						tokens = acronymConverter.restoreAcronyms(tokens);
 					}
 
-					//Stem (if requetsed)
+					//Stem (if requested)
 					if(doStem) {
 						tokens = stemmer.stem(tokens);
 					}
 
-
+					tokenizer.updateTokens(tokens);
 				}
 
 				//Create an index. Add to list

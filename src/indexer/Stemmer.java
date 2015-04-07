@@ -389,16 +389,17 @@ public class Stemmer {
 		return toString();
 	}
 	
-	public String[] stem(String[] tokens) {
+	public ArrayList<Token> stem(ArrayList<Token> tokens) {
 		// initialize empty array list
-		ArrayList<String> cleanedParts = new ArrayList<String>();
+		ArrayList<Token> cleanedParts = new ArrayList<Token>();
 		
 		// run a binary search for each token to see if it should be removed
-		for (String token : tokens){
-			cleanedParts.add(stem(token));
+		for (Token token : tokens){
+			String stemmedValue = stem(token.getValue());
+			token.setValue(stemmedValue);
+			cleanedParts.add(token);
 		}
 		
-		String[] retArray = new String[cleanedParts.size()];
-		return cleanedParts.toArray(retArray);
+		return cleanedParts;
 	}
 }

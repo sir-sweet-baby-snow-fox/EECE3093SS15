@@ -17,9 +17,6 @@ public interface Tokenizer {
 	// method to tokenize a given string
 	public ArrayList<Token> tokenize(String s);
 	
-	// method to properly display the tokens
-	public String displayTokens();
-	
 	// method to get the tokens
 	public ArrayList<Token> getTokens();
 }
