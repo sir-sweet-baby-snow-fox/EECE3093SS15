@@ -63,7 +63,7 @@ public class AcronymConverter {
 		// initialize empty array list
 		ArrayList<String> cleanedParts = new ArrayList<String>();
 		
-		// run a binary search for each token to see if it should be removed
+		// run a binary search for each token to see if it should be exchanged
 		for (String token : tokens){
 			cleanedParts.add(fromAcronym(token));
 		}
@@ -93,7 +93,7 @@ public class AcronymConverter {
 				
 				//Insert acronym and its expanded form into hash table
 				if(splitLine.length == 2) {
-					//Correctly formattd line
+					//Correctly formatted line
 					String acronym = splitLine[0].trim();
 					String expandedAcronym = splitLine[1].trim();
 					acronymHashtable.put(acronym, expandedAcronym);
