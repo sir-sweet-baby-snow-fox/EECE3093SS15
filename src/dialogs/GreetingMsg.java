@@ -45,7 +45,6 @@ public class GreetingMsg extends Dialog {
 
 	protected Object result;
 	protected Shell shell;
-	private String dependantStr;
 	private Text dirText;
 	private static Display display;
 	private String directory;
