@@ -21,8 +21,6 @@ public class Indexer {
 	private Stemmer stemmer = null;
 	private ArrayList<Index> indices = null;
 	private double IndexDurationTime = 0;
-	
-	private String requirementsIndiciesViewID = "tracing.views.RequirementsIndicesView";
 
 	/**
 	 * 
