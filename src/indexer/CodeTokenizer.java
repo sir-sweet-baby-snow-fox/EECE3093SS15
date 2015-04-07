@@ -1,39 +1,20 @@
 package indexer;
 
+import interfaces.Tokenizer;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 
-enum TokenType {
-	CODE, COMMENT, NEWLINE
-}
 
-class CodeToken {
-	private TokenType type;
-	private String value;
-	
-	public CodeToken(TokenType t, String v) {
-		this.type = t;
-		this.value = v;
-	}
-	
-	public String getValue() {
-		return this.value;
-	}
-	
-	public TokenType getType() {
-		return this.type;
-	}
-}
-
-public class CodeTokenizer {
-	private ArrayList<CodeToken> tokens;
+public class CodeTokenizer implements Tokenizer {
+	private ArrayList<Token> tokens;
 	private boolean inComment = false;
 	
-	public CodeTokenizer() { tokens = new ArrayList<CodeToken>(); }
+	public CodeTokenizer() { tokens = new ArrayList<Token>(); }
 	
-	public String tokenizeCode(String code){
+	public ArrayList<Token> tokenize(String code){
 		// get code and method name for tokenizing
 		// index each line one at a time
 		BufferedReader br = new BufferedReader(new StringReader(code));
@@ -42,18 +23,17 @@ public class CodeTokenizer {
 			while ( (line=br.readLine()) != null) {
 				// tokenize the line
 				tokens.addAll(tokenizeLine(line));
-				tokens.add(new CodeToken(TokenType.NEWLINE, "\n"));
+				tokens.add(new Token(TokenType.NEWLINE, "\n"));
 				
 			}
 		} catch (IOException e) {
 			// TODO: Actually handle the error
 			e.printStackTrace();
-			return "";
 		}
 		
-		ArrayList <CodeToken> finalList = new ArrayList<CodeToken>();
+		ArrayList <Token> finalList = new ArrayList<Token>();
 		
-		for(CodeToken c : tokens) {
+		for(Token c : tokens) {
 			if(c.getType() == TokenType.CODE){
 				finalList.add(indexCode(c));
 			}
@@ -62,24 +42,25 @@ public class CodeTokenizer {
 			}
 		}
 		
-		String listString = "";
-
-		for (CodeToken t : finalList)
-		{
-			if (t.getType() != TokenType.NEWLINE)
-				listString += t.getValue() + " ";
-			else 
-				listString += t.getValue();
-		}
-		
-		// return the string
-		return listString;
+		return tokens;
 	}
 	
-	private CodeToken indexCode(CodeToken ct) {
+	public String displayTokens() {
+		StringBuilder sb = new StringBuilder();
+		
+		for (Token t : tokens) {
+			if (t.getType() != TokenType.NEWLINE)
+				sb.append(t.getValue() + " ");
+			else 
+				sb.append(t.getValue());
+		}
+		return null;
+	}
+	
+	private Token indexCode(Token ct) {
 		String[] newVal = ct.getValue().split("(?=[A-Z][a-z])+|[^A-Za-z\\d]+");
 		
-		CodeToken retCt = new CodeToken(ct.getType(), convertArrayToString(newVal));
+		Token retCt = new Token(ct.getType(), convertArrayToString(newVal));
 		return retCt;
 	}
 	
@@ -95,8 +76,8 @@ public class CodeTokenizer {
 		return sb.toString();
 	}
 	
-	private ArrayList<CodeToken> tokenizeLine(String line) {
-		ArrayList<CodeToken> newTokens = new ArrayList<CodeToken>();
+	private ArrayList<Token> tokenizeLine(String line) {
+		ArrayList<Token> newTokens = new ArrayList<Token>();
 		
 		// check to see if there are any end of line comments
 		int eolCommentIndex = line.indexOf("//");
@@ -113,33 +94,33 @@ public class CodeTokenizer {
 			commentEntity = line.substring(minIndex);
 			line = line.substring(0,  minIndex);
 			
-			newTokens.add(new CodeToken(TokenType.CODE, line));
-			newTokens.add(new CodeToken(TokenType.COMMENT, commentEntity));
+			newTokens.add(new Token(TokenType.CODE, line));
+			newTokens.add(new Token(TokenType.COMMENT, commentEntity));
 		} else if (eolCommentIndex > -1) {
 			commentEntity = line.substring(eolCommentIndex);
 			line = line.substring(0, eolCommentIndex);
 			
-			newTokens.add(new CodeToken(TokenType.CODE, line));
-			newTokens.add(new CodeToken(TokenType.COMMENT, commentEntity));
+			newTokens.add(new Token(TokenType.CODE, line));
+			newTokens.add(new Token(TokenType.COMMENT, commentEntity));
 		} else if (slashStarCommentIndex > -1) {
 			newTokens.addAll(handleMultiLineComment(line));
 		} else {
 			// no comments found
-			newTokens.add(new CodeToken(TokenType.CODE, line));
+			newTokens.add(new Token(TokenType.CODE, line));
 		}
 		
 		return newTokens;
 	}
 	
-	private ArrayList<CodeToken> handleMultiLineComment(String line) {
-		ArrayList<CodeToken> newTokens = new ArrayList<CodeToken>();
+	private ArrayList<Token> handleMultiLineComment(String line) {
+		ArrayList<Token> newTokens = new ArrayList<Token>();
 		
 		int slashStarCommentIndex = line.indexOf("/*");
 		
 		
 		if (slashStarCommentIndex == -1 &&  !inComment) {
 			if (line.trim().length() > 0)
-				newTokens.add(new CodeToken(TokenType.CODE, line));
+				newTokens.add(new Token(TokenType.CODE, line));
 			return newTokens;
 		}
 		
@@ -156,9 +137,9 @@ public class CodeTokenizer {
 		
 		if (line != "")
 			if (inComment)
-				newTokens.add(new CodeToken(TokenType.COMMENT, line));
+				newTokens.add(new Token(TokenType.COMMENT, line));
 			else
-				newTokens.add(new CodeToken(TokenType.CODE, line));
+				newTokens.add(new Token(TokenType.CODE, line));
 		
 		inComment = true;
 		
@@ -168,9 +149,9 @@ public class CodeTokenizer {
 			inComment = false;
 			String newComment = newLine.substring(0, starSlashEnd+2);
 			newLine = newLine.substring(starSlashEnd+2);
-			newTokens.add(new CodeToken(TokenType.COMMENT, newComment));
+			newTokens.add(new Token(TokenType.COMMENT, newComment));
 		} else {
-			newTokens.add(new CodeToken(TokenType.COMMENT, newLine));
+			newTokens.add(new Token(TokenType.COMMENT, newLine));
 			newLine = "";
 		}
 		
@@ -179,5 +160,9 @@ public class CodeTokenizer {
 		
 		return newTokens;
 		
+	}
+	
+	public ArrayList<Token> getTokens() {
+		return this.tokens;
 	}
 }
