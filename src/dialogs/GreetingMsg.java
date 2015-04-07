@@ -82,7 +82,6 @@ public class GreetingMsg extends Dialog {
 		display = getParent().getDisplay();
 		
 		try{
-			//reqInstance = getRequirementsView(RequirementsView.ID);
 			reqInstance = (RequirementsView) getView(RequirementsView.ID);
 		} catch (Exception e) { System.out.println(e.toString()); }
 		
@@ -373,11 +372,6 @@ public class GreetingMsg extends Dialog {
 		btnOK.setBounds(20, 225, 75, 25);
 		btnOK.setText("OK");
 		
-	}
-	
-	private RequirementsView getRequirementsView(String id) {
-		RequirementsView riv = (RequirementsView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
-		return riv;
 	}
 	
 	private IViewPart getView(String id) {
