@@ -45,6 +45,13 @@ import org.eclipse.jdt.ui.JavaUI;
 //import org.eclipse.jdt.*;
 
 
+/**
+ * @date April 7, 2015
+ * @author Ricky
+ * @description
+ * 	Eclipse Plug-in view used for displaying the indexed methods in the iTrust project. Will initially display
+ * processing time, but after a method is selected in the project browser, the indexed method will be displayed.
+ */
 public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 
 	private Text indicesText;
@@ -57,14 +64,25 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 	 */
 	public static final String ID = "tracing.views.MethodIndicesView";
 	
+	/**
+	 * Default constructor.
+	 */
 	public MethodIndicesView() {
 		methodHash = new HashMap<String, String>();
 	}
 	
+	/**
+	 * @return Number of methods indexed. Will return zero if no project was processed.
+	 */
 	public int getMethodCount() {
 		return methodCount;
 	}
 
+	/**
+	 * 	Attempts to open the iTrust project and process the methods. iTrust project is assumed to be a C:\iTrust\.project.
+	 * Indexes the methods and stores the method signature and indexed text into a hashmap for retrieval later. Also, times
+	 * the total indexing time for display purposes when no method is chosen. 
+	 */
 	public void indexMethods() {
 		
 		double indexStartTime = System.nanoTime();
@@ -231,12 +249,27 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 
 	}
 
+	/**
+	 * Set the textbox text.
+	 * 
+	 * @param text Text to display in the text box.
+	 */
 	public void setIndicesText(String text){
 		if(indicesText != null) {
 			indicesText.setText(text);
 		}
 	}
 	
+	/**
+	 * 	To use this, pass the id of the desired view. Each view should have a static string that is the id. For example,
+	 * RequirementsView has a public static ID field that can always be access like "RequirementsView.ID". Then, cast the
+	 * return to the class you want. For example:
+	 * 
+	 * RequirementsView rv = (RequirementsView) getViewId(RequirementsView.ID);
+	 * 
+	 * @param id Id of the Eclipse Plugin View that is desired.
+	 * @return An IViewPart superclass that the view inherits.
+	 */
 	private IViewPart getView(String id) {
 		IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
 		return view;
