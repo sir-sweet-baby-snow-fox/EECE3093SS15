@@ -73,14 +73,6 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	 */
 	public static final String ID = "tracing.views.RequirementsView";
 	
-	private void showMessage(){
-		//MessageDialog.openInformation(new Shell(), "Testhello", "Hello, Eclipse world");
-		
-		GreetingMsg msg = new GreetingMsg(new Shell(), SWT.BORDER | SWT.WRAP);
-		msg.open();
-		
-	}
-	
 	/**
 	 * The constructor.
 	 */
