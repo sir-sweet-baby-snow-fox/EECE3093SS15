@@ -61,10 +61,8 @@ import dialogs.GreetingMsg;
 
 public class RequirementsView extends ViewPart implements ISelectionProvider{
 	
-	private ISelection selection;
 	private ComboViewer comboViewer;
 	private Indexer indexer = null;
-	private String test = "this is a test string";
 	private String resourcePath;
 	File[] resourceFiles;
 	ArrayList<File> validFiles = new ArrayList<File>();
@@ -264,8 +262,6 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	
 	@Override
 	public void setSelection(ISelection selection) {
-		this.selection = selection;
-		SelectionChangedEvent event = new SelectionChangedEvent(comboViewer,selection);
 	}
 
 	/**
