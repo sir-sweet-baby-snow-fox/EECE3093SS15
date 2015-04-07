@@ -54,10 +54,8 @@ public class GreetingMsg extends Dialog {
 	private String acronymStr;
 	private String stopStr;
 	private String storeStr;
-	private String[] optionList = new String[5];
 	private RequirementsView reqInstance;
 	private String reqViewId = "tracing.views.RequirementsView";
-	//private String dirFilterStr;
 	
 	/**
 	 * Create the dialog.
@@ -184,7 +182,6 @@ public class GreetingMsg extends Dialog {
 				if (directory != null) {
 					//text.setText("");
 					dirText.setText(directory);
-					optionList[0] = directory;
 				}
 			}
 		});
