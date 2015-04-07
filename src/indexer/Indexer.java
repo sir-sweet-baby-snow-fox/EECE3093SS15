@@ -14,6 +14,15 @@ import org.eclipse.ui.PlatformUI;
 
 import tracing.views.RequirementsIndicesView;
 
+/**
+ * @date 4/7/2015
+ * @author Ricky
+ * @description
+ * 	This class is used to index each requirement. It is used as a sort of utility class; it holds all
+ * the classes necessary to properly process the requirements in the file that is passed. It will process
+ * the requirements, and keep the indexed form in a list of Index classes.
+ *
+ */
 public class Indexer {
 	private AcronymConverter acronymConverter = null;
 	private Tokenizer tokenizer = null;

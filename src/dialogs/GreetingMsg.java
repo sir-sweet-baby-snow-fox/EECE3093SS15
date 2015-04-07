@@ -400,6 +400,16 @@ public class GreetingMsg extends Dialog {
 		return riv;
 	}
 	
+	/**
+	 * 	To use this, pass the id of the desired view. Each view should have a static string that is the id. For example,
+	 * RequirementsView has a public static ID field that can always be access like "RequirementsView.ID". Then, cast the
+	 * return to the class you want. For example:
+	 * 
+	 * RequirementsView rv = (RequirementsView) getViewId(RequirementsView.ID);
+	 * 
+	 * @param id Id of the Eclipse Plugin View that is desired.
+	 * @return An IViewPart superclass that the view inherits.
+	 */
 	private IViewPart getView(String id) {
 		IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
 		return view;
