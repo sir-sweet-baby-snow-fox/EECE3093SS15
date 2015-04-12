@@ -64,7 +64,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	private ISelection selection;
 	private ComboViewer comboViewer;
 	private Indexer indexer = null;
-	private String test = "this is a test string";
+	//private String test = "this is a test string";
 	private String resourcePath;
 	File[] resourceFiles;
 	ArrayList<File> validFiles = new ArrayList<File>();
@@ -170,7 +170,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				RequirementsIndicesView riv = getRequirementsView("tracing.views.RequirementsIndicesView");
+				RequirementsIndicesView reqIndView = getRequirementsView("tracing.views.RequirementsIndicesView");
 				
 				final Combo combo = comboViewer.getCombo();
 				
@@ -182,7 +182,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 					// Force durationTime to display only to four decimal places
 					DecimalFormat df = new DecimalFormat("##.####");
 					text.setText("Indexing time of " + (combo.getItemCount()-1) + " requirement(s) is: " + df.format(durationTime) + " seconds.");
-					riv.setIndicesText("");
+					reqIndView.setIndicesText("");
 				}  else {
 					//User has selected a use case associated with a file name.
 					try {
@@ -198,7 +198,7 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 						
 						//Display process content
 						String indexContent = indexer.getIndexFile(fileIndex);
-						riv.setIndicesText(indexContent.toString());
+						reqIndView.setIndicesText(indexContent.toString());
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						text.setText(e1.getMessage());
@@ -208,8 +208,6 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 				
 			}
 			
-			
-
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
@@ -228,9 +226,9 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 			
 		});
 		
-		//Attempt to open other views, if they arent already displayed
-		RequirementsIndicesView riv = (RequirementsIndicesView) getView(RequirementsIndicesView.ID);
-		if(riv == null) {
+		//Attempt to open other views, if they aren't already displayed
+		RequirementsIndicesView reqIndView = (RequirementsIndicesView) getView(RequirementsIndicesView.ID);
+		if(reqIndView == null) {
 			try {
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(RequirementsIndicesView.ID);
 			} catch (PartInitException e) {
@@ -240,8 +238,8 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 		}
 		
 		
-		MethodIndicesView miv = (MethodIndicesView) getView(MethodIndicesView.ID);
-		if(miv == null) {
+		MethodIndicesView methodIndView = (MethodIndicesView) getView(MethodIndicesView.ID);
+		if(methodIndView == null) {
 			try {
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(MethodIndicesView.ID);
 			} catch (PartInitException e) {
@@ -253,8 +251,8 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 	}
 	
 	private RequirementsIndicesView getRequirementsView(String id) {
-		RequirementsIndicesView riv = (RequirementsIndicesView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
-		return riv;
+		RequirementsIndicesView reqIndView = (RequirementsIndicesView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
+		return reqIndView;
 	}
 	
 	private IViewPart getView(String id) {

@@ -195,11 +195,11 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 		
 		// Add a new double click listener to the package explorer tree
 		IWorkbenchPage activePage = getSite().getWorkbenchWindow().getActivePage();
-		IPackagesViewPart packExpl = (IPackagesViewPart)activePage.findView(JavaUI.ID_PACKAGES);
+		IPackagesViewPart packageExplorer = (IPackagesViewPart)activePage.findView(JavaUI.ID_PACKAGES);
 		
-		if (packExpl != null)
+		if (packageExplorer != null)
 		{
-			TreeViewer treeView = packExpl.getTreeViewer();
+			TreeViewer treeView = packageExplorer.getTreeViewer();
 		
 			// May want to change to selection listener?
 			treeView.addDoubleClickListener(new IDoubleClickListener(){

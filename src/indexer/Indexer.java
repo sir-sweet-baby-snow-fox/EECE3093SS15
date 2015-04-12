@@ -16,7 +16,7 @@ import tracing.views.RequirementsIndicesView;
 
 /**
  * @date 4/7/2015
- * @author Ricky
+ * @author Ricky Rossi
  * @description
  * 	This class is used to index each requirement. It is used as a sort of utility class; it holds all
  * the classes necessary to properly process the requirements in the file that is passed. It will process
@@ -29,9 +29,9 @@ public class Indexer {
 	private StopWordRemover stopWordRemover = null;
 	private Stemmer stemmer = null;
 	private ArrayList<Index> indices = null;
-	private double IndexDurationTime = 0;
+	private double indexDurationTime = 0;
 	
-	private String requirementsIndiciesViewID = "tracing.views.RequirementsIndicesView";
+	//private String requirementsIndiciesViewID = "tracing.views.RequirementsIndicesView";
 
 	/**
 	 * @param info
@@ -130,7 +130,7 @@ public class Indexer {
 	
 				
 		//End timing
-		IndexDurationTime = (System.nanoTime() - indexStartTime) / 1000000000.0;
+		indexDurationTime = (System.nanoTime() - indexStartTime) / 1000000000.0;
 	}
 	
 	/**
@@ -149,7 +149,7 @@ public class Indexer {
 	
 	public double GetIndexTime()
 	{
-		return IndexDurationTime;
+		return indexDurationTime;
 	}
 
 }
