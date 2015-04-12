@@ -79,7 +79,7 @@ public class AcronymConverter {
 				
 				//Insert acronym and its expanded form into hash table
 				if(splitLine.length == 2) {
-					//Correctly formattd line
+					//Correctly formatted line
 					String acronym = splitLine[0].trim();
 					String expandedAcronym = splitLine[1].trim();
 					acronymHashtable.put(acronym, expandedAcronym);
