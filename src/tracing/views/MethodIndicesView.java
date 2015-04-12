@@ -51,6 +51,8 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 	private int methodCount = 0;
 	private double indexDurationTime = 0;
 	private HashMap<String, String> methodHash;
+	
+	public static final double NANOSEC_SEC_CONVERT = 1000000000.0;
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -116,7 +118,7 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 			}
 		}catch (Exception e2) { e2.printStackTrace(); }
 		
-		indexDurationTime = (System.nanoTime() - indexStartTime) / 1000000000.0;
+		indexDurationTime = (System.nanoTime() - indexStartTime) / NANOSEC_SEC_CONVERT;
 		String defaultText = "Indexing time of " + methodCount + " methods is: " + String.format("%.2f", indexDurationTime) + " seconds.";
 		setIndicesText(defaultText);
 	}

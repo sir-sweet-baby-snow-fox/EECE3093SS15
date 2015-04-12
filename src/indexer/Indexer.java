@@ -31,6 +31,8 @@ public class Indexer {
 	private ArrayList<Index> indices = null;
 	private double indexDurationTime = 0;
 	
+	public static final double NANOSEC_SEC_CONVERT = 1000000000.0;
+	
 	//private String requirementsIndiciesViewID = "tracing.views.RequirementsIndicesView";
 
 	/**
@@ -130,7 +132,7 @@ public class Indexer {
 	
 				
 		//End timing
-		indexDurationTime = (System.nanoTime() - indexStartTime) / 1000000000.0;
+		indexDurationTime = (System.nanoTime() - indexStartTime) / NANOSEC_SEC_CONVERT;
 	}
 	
 	/**
