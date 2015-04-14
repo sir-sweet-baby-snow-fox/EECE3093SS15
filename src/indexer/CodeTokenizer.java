@@ -55,6 +55,9 @@ public class CodeTokenizer implements Tokenizer {
 			}
 		}
 		
+		// overwrite this.tokens with the final list of tokens
+		tokens = finalList;
+		
 		return tokens;
 	}
 	
@@ -78,10 +81,7 @@ public class CodeTokenizer implements Tokenizer {
 	private String convertArrayToString(String[] val) {
 		StringBuilder sb = new StringBuilder();
 		for (int i=0; i < val.length; i++) {
-			String postfix = " ";
-			if (i == val.length -1)
-				postfix = "";
-			sb.append(val[i] + postfix);
+			sb.append(val[i] + " ");
 		}
 		
 		return sb.toString();
@@ -186,7 +186,8 @@ public class CodeTokenizer implements Tokenizer {
 		StringBuilder sb = new StringBuilder();
 		for (int i=0; i < this.tokens.size(); i++) {
 			String postfix = " ";
-			if (i == this.tokens.size() -1)
+			Token t = this.tokens.get(i);
+			if (i == this.tokens.size() -1 || t.getValue() == "\n");
 				postfix = "";
 			sb.append(this.tokens.get(i).getValue() + postfix);
 		}

@@ -12,9 +12,10 @@ public class CodeTokenizerTests {
 		
 		CodeTokenizer ct = new CodeTokenizer();
 		
-		String retVal = ct.tokenize(code);
-		
-		assertEquals(retVal, "String test A string // This is a test comment \n");
+		ct.tokenize(code);
+		String retVal = ct.getTokensAsString(); 
+				
+		assertEquals(retVal, "String test A string // This is a test comment\n");
 	}
 	
 	@Test
@@ -23,9 +24,10 @@ public class CodeTokenizerTests {
 		
 		CodeTokenizer ct = new CodeTokenizer();
 		
-		String retVal = ct.tokenize(code);
+		ct.tokenize(code);
+		String retVal = ct.getTokensAsString();
 		
-		assertEquals(retVal, "String test A string \nString test2 A string 2 // This is a test comment \n");
+		assertEquals(retVal, "String test A string \nString test2 A string 2 // This is a test comment\n");
 	}
 	
 	@Test
@@ -33,9 +35,10 @@ public class CodeTokenizerTests {
 		String code = "int a = 0 // This is a test comment";
 		
 		CodeTokenizer ct = new CodeTokenizer();
-		String retVal = ct.tokenize(code);
+		ct.tokenize(code);
+		String retVal = ct.getTokensAsString();
 		
-		assertEquals(retVal, "int a 0 // This is a test comment \n");
+		assertEquals(retVal, "int a 0 // This is a test comment\n");
 	}
 	
 	@Test
@@ -43,9 +46,10 @@ public class CodeTokenizerTests {
 		String code = "int a = 0; /* Test Comment */";
 		
 		CodeTokenizer ct = new CodeTokenizer();
-		String retVal = ct.tokenize(code);
+		ct.tokenize(code);
+		String retVal = ct.getTokensAsString();
 		
-		assertEquals(retVal, "int a 0 /* Test Comment */ \n");
+		assertEquals(retVal, "int a 0 /* Test Comment */\n");
 	}
 	
 	@Test
@@ -53,9 +57,10 @@ public class CodeTokenizerTests {
 		String code = "int a = 0; /* Test Comment */ int b = 0;";
 		
 		CodeTokenizer ct = new CodeTokenizer();
-		String retVal = ct.tokenize(code);
+		ct.tokenize(code);
+		String retVal = ct.getTokensAsString();
 		
-		assertEquals(retVal, "int a 0 /* Test Comment */  int b 0 \n");
+		assertEquals(retVal, "int a 0 /* Test Comment */ int b 0 \n");
 	}
 	
 	@Test
@@ -63,9 +68,10 @@ public class CodeTokenizerTests {
 		String code = "int a = 0; /*\nThis is\na test\n*/";
 		
 		CodeTokenizer ct = new CodeTokenizer();
-		String retVal = ct.tokenize(code);
+		ct.tokenize(code);
+		String retVal = ct.getTokensAsString();
 		
-		assertEquals(retVal, "int a 0 /* \nThis is \na test \n*/ \n");
+		assertEquals(retVal, "int a 0 /*\nThis is\na test\n*/\n");
 	}
 	
 	@Test
@@ -73,19 +79,21 @@ public class CodeTokenizerTests {
 		String code = "int a = 0; /* start\nof a comment */ int b = 0;";
 		
 		CodeTokenizer ct = new CodeTokenizer();
-		String retVal = ct.tokenize(code);
+		ct.tokenize(code);
+		String retVal = ct.getTokensAsString();
 
 		
-		assertEquals(retVal, "int a 0 /* start \nof a comment */  int b 0 \n");
+		assertEquals(retVal, "int a 0 /* start\nof a comment */ int b 0 \n");
 	}
 	
 	@Test
 	public void testOnlyMultiLineComment() {
 		String code = "int a = 4; /* comment dude /* nested comment dude // */";
 		CodeTokenizer ct = new CodeTokenizer();
-		String retVal = ct.tokenize(code);
+		ct.tokenize(code);
+		String retVal = ct.getTokensAsString();
 		
-		assertEquals(retVal, "int a 4 /* comment dude /* nested comment dude // */ \n");
+		assertEquals(retVal, "int a 4 /* comment dude /* nested comment dude // */\n");
 		
 	}
 	
@@ -94,9 +102,10 @@ public class CodeTokenizerTests {
 		String code = "int a = 4; String brian = \"not a comment /* a comment */\"";
 		
 		CodeTokenizer ct = new CodeTokenizer();
-		String retVal = ct.tokenize(code);
+		ct.tokenize(code);
+		String retVal = ct.getTokensAsString();
 		
-		assertEquals(retVal, "int a 4  String brian not a comment /* a comment */  \n");
+		assertEquals(retVal, "int a 4  String brian not a comment /* a comment */\n");
 	}
 	
 	@Test
@@ -104,7 +113,8 @@ public class CodeTokenizerTests {
 		String code = "int testCase = 0;";
 		
 		CodeTokenizer ct = new CodeTokenizer();
-		String retVal = ct.tokenize(code);
+		ct.tokenize(code);
+		String retVal = ct.getTokensAsString();
 		
 		assertEquals(retVal, "int test Case 0 \n");
 	}
@@ -114,9 +124,10 @@ public class CodeTokenizerTests {
 		String code = "int testCase = 0; // This isA test ofCamelCaseString";
 		
 		CodeTokenizer ct = new CodeTokenizer();
-		String retVal = ct.tokenize(code);
+		ct.tokenize(code);
+		String retVal = ct.getTokensAsString();
 		
-		assertEquals(retVal, "int test Case 0 // This isA test ofCamelCaseString \n");
+		assertEquals(retVal, "int test Case 0 // This isA test ofCamelCaseString\n");
 	}
 	
 	@Test
@@ -124,7 +135,8 @@ public class CodeTokenizerTests {
 		String code = "IHTTPConnection testCase = 0;";
 		
 		CodeTokenizer ct = new CodeTokenizer();
-		String retVal = ct.tokenize(code);
+		ct.tokenize(code);
+		String retVal = ct.getTokensAsString();
 		
 		assertEquals(retVal, "IHTTP Connection test Case 0 \n");
 	}
@@ -134,9 +146,10 @@ public class CodeTokenizerTests {
 		String code = "ITest testCase = 0;";
 		
 		CodeTokenizer ct = new CodeTokenizer();
-		String retVal = ct.tokenize(code);
+		ct.tokenize(code);
+		String retVal = ct.getTokensAsString();
 		
-		assertEquals(retVal, "I Test test Case 0 \n");
+		assertEquals(retVal, "I Test test Case 0");
 	}
 	
 	@Test
@@ -144,9 +157,10 @@ public class CodeTokenizerTests {
 		String code = "int testCase = 0; /* thisIs\naNew commentLine */";
 		
 		CodeTokenizer ct = new CodeTokenizer();
-		String retVal = ct.tokenize(code);
+		ct.tokenize(code);
+		String retVal = ct.getTokensAsString();
 		
-		assertEquals(retVal, "int test Case 0 /* thisIs \naNew commentLine */ \n");
+		assertEquals(retVal, "int test Case 0 /* thisIs\naNew commentLine */\n");
 	}
 }
 
