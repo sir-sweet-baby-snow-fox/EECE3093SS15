@@ -106,7 +106,8 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 									
 									// add method to indices list
 									CodeTokenizer ct = new CodeTokenizer();
-									String methodIndex = ct.tokenizeCode(method.getSource());
+									ct.tokenize(method.getSource());
+									String methodIndex = ct.getTokensAsString();
 									methodHash.put(method.getKey(), methodIndex);
 								}
 							}

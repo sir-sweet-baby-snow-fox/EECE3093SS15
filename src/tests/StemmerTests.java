@@ -2,7 +2,7 @@ package tests;
 
 import static org.junit.Assert.*;
 import indexer.Stemmer;
-import indexer.Tokenizer;
+import indexer.RequirementsTokenizer;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

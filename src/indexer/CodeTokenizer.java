@@ -1,39 +1,33 @@
 package indexer;
 
+import interfaces.Tokenizer;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 
-enum TokenType {
-	CODE, COMMENT, NEWLINE
-}
-
-class CodeToken {
-	private TokenType type;
-	private String value;
-	
-	public CodeToken(TokenType t, String v) {
-		this.type = t;
-		this.value = v;
-	}
-	
-	public String getValue() {
-		return this.value;
-	}
-	
-	public TokenType getType() {
-		return this.type;
-	}
-}
-
-public class CodeTokenizer {
-	private ArrayList<CodeToken> tokens;
+/**
+ * CodeTokenizer.java
+ * 
+ * Code tokenizer, implements the Tokenizer interface and tokenizes the various IMethods passed into it
+ * @author Brian Adams
+ *
+ */
+public class CodeTokenizer implements Tokenizer {
+	private ArrayList<Token> tokens;
 	private boolean inComment = false;
 	
-	public CodeTokenizer() { tokens = new ArrayList<CodeToken>(); }
+	/**
+	 * Default constructor
+	 */
+	public CodeTokenizer() { tokens = new ArrayList<Token>(); }
 	
-	public String tokenizeCode(String code){
+	/**
+	 * Tokenizes the string of code that is passed into the method
+	 * @param code String of source code to tokenize
+	 */
+	public ArrayList<Token> tokenize(String code){
 		// get code and method name for tokenizing
 		// index each line one at a time
 		BufferedReader br = new BufferedReader(new StringReader(code));
@@ -42,18 +36,17 @@ public class CodeTokenizer {
 			while ( (line=br.readLine()) != null) {
 				// tokenize the line
 				tokens.addAll(tokenizeLine(line));
-				tokens.add(new CodeToken(TokenType.NEWLINE, "\n"));
+				tokens.add(new Token(TokenType.NEWLINE, "\n"));
 				
 			}
 		} catch (IOException e) {
 			// TODO: Actually handle the error
 			e.printStackTrace();
-			return "";
 		}
 		
-		ArrayList <CodeToken> finalList = new ArrayList<CodeToken>();
+		ArrayList <Token> finalList = new ArrayList<Token>();
 		
-		for(CodeToken c : tokens) {
+		for(Token c : tokens) {
 			if(c.getType() == TokenType.CODE){
 				finalList.add(indexCode(c));
 			}
@@ -62,41 +55,45 @@ public class CodeTokenizer {
 			}
 		}
 		
-		String listString = "";
-
-		for (CodeToken t : finalList)
-		{
-			if (t.getType() != TokenType.NEWLINE)
-				listString += t.getValue() + " ";
-			else 
-				listString += t.getValue();
-		}
+		// overwrite this.tokens with the final list of tokens
+		tokens = finalList;
 		
-		// return the string
-		return listString;
+		return tokens;
 	}
 	
-	private CodeToken indexCode(CodeToken ct) {
+	/**
+	 * Splits the code based on the desired functionality as specified in the lab document.
+	 * @param ct Token of a piece of code
+	 * @return new Token with the code split on the proper patterns.
+	 */
+	private Token indexCode(Token ct) {
 		String[] newVal = ct.getValue().split("(?=[A-Z][a-z])+|[^A-Za-z\\d]+");
 		
-		CodeToken retCt = new CodeToken(ct.getType(), convertArrayToString(newVal));
+		Token retCt = new Token(ct.getType(), convertArrayToString(newVal));
 		return retCt;
 	}
 	
+	/**
+	 * Converts an array of strings to a single string
+	 * @param val String array of code
+	 * @return String, composed of each string in the array
+	 */
 	private String convertArrayToString(String[] val) {
 		StringBuilder sb = new StringBuilder();
 		for (int i=0; i < val.length; i++) {
-			String postfix = " ";
-			if (i == val.length -1)
-				postfix = "";
-			sb.append(val[i] + postfix);
+			sb.append(val[i] + " ");
 		}
 		
 		return sb.toString();
 	}
 	
-	private ArrayList<CodeToken> tokenizeLine(String line) {
-		ArrayList<CodeToken> newTokens = new ArrayList<CodeToken>();
+	/**
+	 * Procedure to tokenize a given line of the source code
+	 * @param line String line of the source code
+	 * @return
+	 */
+	private ArrayList<Token> tokenizeLine(String line) {
+		ArrayList<Token> newTokens = new ArrayList<Token>();
 		
 		// check to see if there are any end of line comments
 		int eolCommentIndex = line.indexOf("//");
@@ -113,33 +110,38 @@ public class CodeTokenizer {
 			commentEntity = line.substring(minIndex);
 			line = line.substring(0,  minIndex);
 			
-			newTokens.add(new CodeToken(TokenType.CODE, line));
-			newTokens.add(new CodeToken(TokenType.COMMENT, commentEntity));
+			newTokens.add(new Token(TokenType.CODE, line));
+			newTokens.add(new Token(TokenType.COMMENT, commentEntity));
 		} else if (eolCommentIndex > -1) {
 			commentEntity = line.substring(eolCommentIndex);
 			line = line.substring(0, eolCommentIndex);
 			
-			newTokens.add(new CodeToken(TokenType.CODE, line));
-			newTokens.add(new CodeToken(TokenType.COMMENT, commentEntity));
+			newTokens.add(new Token(TokenType.CODE, line));
+			newTokens.add(new Token(TokenType.COMMENT, commentEntity));
 		} else if (slashStarCommentIndex > -1) {
 			newTokens.addAll(handleMultiLineComment(line));
 		} else {
 			// no comments found
-			newTokens.add(new CodeToken(TokenType.CODE, line));
+			newTokens.add(new Token(TokenType.CODE, line));
 		}
 		
 		return newTokens;
 	}
 	
-	private ArrayList<CodeToken> handleMultiLineComment(String line) {
-		ArrayList<CodeToken> newTokens = new ArrayList<CodeToken>();
+	/**
+	 * Function to properly index the multiple line comments
+	 * @param line line of code
+	 * @return ArrayList<Token> of the tokens in the line
+	 */
+	private ArrayList<Token> handleMultiLineComment(String line) {
+		ArrayList<Token> newTokens = new ArrayList<Token>();
 		
 		int slashStarCommentIndex = line.indexOf("/*");
 		
 		
 		if (slashStarCommentIndex == -1 &&  !inComment) {
 			if (line.trim().length() > 0)
-				newTokens.add(new CodeToken(TokenType.CODE, line));
+				newTokens.add(new Token(TokenType.CODE, line));
 			return newTokens;
 		}
 		
@@ -156,9 +158,9 @@ public class CodeTokenizer {
 		
 		if (line != "")
 			if (inComment)
-				newTokens.add(new CodeToken(TokenType.COMMENT, line));
+				newTokens.add(new Token(TokenType.COMMENT, line));
 			else
-				newTokens.add(new CodeToken(TokenType.CODE, line));
+				newTokens.add(new Token(TokenType.CODE, line));
 		
 		inComment = true;
 		
@@ -168,9 +170,9 @@ public class CodeTokenizer {
 			inComment = false;
 			String newComment = newLine.substring(0, starSlashEnd+2);
 			newLine = newLine.substring(starSlashEnd+2);
-			newTokens.add(new CodeToken(TokenType.COMMENT, newComment));
+			newTokens.add(new Token(TokenType.COMMENT, newComment));
 		} else {
-			newTokens.add(new CodeToken(TokenType.COMMENT, newLine));
+			newTokens.add(new Token(TokenType.COMMENT, newLine));
 			newLine = "";
 		}
 		
@@ -179,5 +181,29 @@ public class CodeTokenizer {
 		
 		return newTokens;
 		
+	}
+	
+	/**
+	 * Returns the tokens
+	 * @return list of tokens for the current CodeTokenizer
+	 */
+	public ArrayList<Token> getTokens() {
+		return this.tokens;
+	}
+	
+	/**
+	 * Parses the tokens on the class and returns them as a properly formatted string.
+	 * @return String of the concatentated token values
+	 */
+	public String getTokensAsString() {
+		StringBuilder sb = new StringBuilder();
+		for (int i=0; i < this.tokens.size(); i++) {
+			String postfix = " ";
+			Token t = this.tokens.get(i);
+			if (i == this.tokens.size() -1 || t.getValue() == "\n");
+				postfix = "";
+			sb.append(this.tokens.get(i).getValue() + postfix);
+		}
+		return sb.toString();
 	}
 }
