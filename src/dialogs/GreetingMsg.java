@@ -51,7 +51,6 @@ public class GreetingMsg extends Dialog {
 	private Text acronymText;
 	private Text stopWordText;
 	private Text storeText;
-	private String[] optionList = new String[5];
 	private RequirementsView reqInstance;
 	private IndexerInfo indexerInfo;
 	
@@ -87,23 +86,6 @@ public class GreetingMsg extends Dialog {
 		}
 		//display.close();
 		return result;
-	}
-	
-	public String[] getOptions() {
-		return optionList;
-	}
-	
-	public String[] openDisplay() {
-		this.open();
-		/*
-		 * [0] -> path
-		 * [1] -> file 1
-		 * [2] -> file 2
-		 */
-		//String[] returnArr = new String[3];
-		while (true) {
-			
-		}
 	}
 
 	/**
@@ -187,7 +169,6 @@ public class GreetingMsg extends Dialog {
 				indexerInfo.resourceDirectoryPath = dirDialog.open();
 				if (indexerInfo.resourceDirectoryPath != null) {
 					dirText.setText(indexerInfo.resourceDirectoryPath);
-					optionList[0] = indexerInfo.resourceDirectoryPath;
 				}
 			}
 		});
@@ -396,4 +377,5 @@ public class GreetingMsg extends Dialog {
 		IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
 		return view;
 	}
+	
 }
