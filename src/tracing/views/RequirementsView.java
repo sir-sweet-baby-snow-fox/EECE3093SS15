@@ -198,7 +198,6 @@ public class RequirementsView extends ViewPart implements ISelectionProvider{
 						
 						//Display process content
 						String indexContent = indexer.getIndexFile(fileIndex);
-						System.out.println(indexContent);
 						reqIndView.setIndicesText(indexContent);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
