@@ -51,6 +51,8 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 	private int methodCount = 0;
 	private double indexDurationTime = 0;
 	private HashMap<String, String> methodHash;
+	
+	public static final double NANOSEC_SEC_CONVERT = 1000000000.0;
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -117,7 +119,7 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 			}
 		}catch (Exception e2) { e2.printStackTrace(); }
 		
-		indexDurationTime = (System.nanoTime() - indexStartTime) / 1000000000.0;
+		indexDurationTime = (System.nanoTime() - indexStartTime) / NANOSEC_SEC_CONVERT;
 		String defaultText = "Indexing time of " + methodCount + " methods is: " + String.format("%.2f", indexDurationTime) + " seconds.";
 		setIndicesText(defaultText);
 	}
@@ -196,11 +198,11 @@ public class MethodIndicesView extends ViewPart implements ISelectionProvider{
 		
 		// Add a new double click listener to the package explorer tree
 		IWorkbenchPage activePage = getSite().getWorkbenchWindow().getActivePage();
-		IPackagesViewPart packExpl = (IPackagesViewPart)activePage.findView(JavaUI.ID_PACKAGES);
+		IPackagesViewPart packageExplorer = (IPackagesViewPart)activePage.findView(JavaUI.ID_PACKAGES);
 		
-		if (packExpl != null)
+		if (packageExplorer != null)
 		{
-			TreeViewer treeView = packExpl.getTreeViewer();
+			TreeViewer treeView = packageExplorer.getTreeViewer();
 		
 			// May want to change to selection listener?
 			treeView.addDoubleClickListener(new IDoubleClickListener(){
