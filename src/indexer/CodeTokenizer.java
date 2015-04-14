@@ -128,6 +128,11 @@ public class CodeTokenizer implements Tokenizer {
 		return newTokens;
 	}
 	
+	/**
+	 * Function to properly index the multiple line comments
+	 * @param line line of code
+	 * @return ArrayList<Token> of the tokens in the line
+	 */
 	private ArrayList<Token> handleMultiLineComment(String line) {
 		ArrayList<Token> newTokens = new ArrayList<Token>();
 		
@@ -178,10 +183,18 @@ public class CodeTokenizer implements Tokenizer {
 		
 	}
 	
+	/**
+	 * Returns the tokens
+	 * @return list of tokens for the current CodeTokenizer
+	 */
 	public ArrayList<Token> getTokens() {
 		return this.tokens;
 	}
 	
+	/**
+	 * Parses the tokens on the class and returns them as a properly formatted string.
+	 * @return String of the concatentated token values
+	 */
 	public String getTokensAsString() {
 		StringBuilder sb = new StringBuilder();
 		for (int i=0; i < this.tokens.size(); i++) {
