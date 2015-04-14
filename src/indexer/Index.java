@@ -1,13 +1,15 @@
 package indexer;
 
+import java.util.ArrayList;
+
 public class Index {
-	private String[] tokens;
+	private ArrayList<Token> tokens;
 
 	/**
 	 * Create an index given an array of strings (tokens)
 	 * @param processedTokens
 	 */
-	Index(String[] processedTokens) {
+	Index(ArrayList<Token> processedTokens) {
 		this.tokens = processedTokens;
 	}
 	
@@ -18,9 +20,9 @@ public class Index {
 	 */
 	public String getTokensAsString() {
 		StringBuilder s = new StringBuilder();
-		for(int i = 0; i < tokens.length; i++) {
-			s.append(tokens[i]);
-			if(i < tokens.length - 1) {
+		for(int i = 0; i < tokens.size(); i++) {
+			s.append(tokens.get(i));
+			if(i < tokens.size() - 1) {
 				s.append(" ");
 			}
 		}

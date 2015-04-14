@@ -16,7 +16,7 @@ public class Tokenizer {
 	 * @return
 	 */
 	public String[] TokenizeString(String s) {
-		String[] parts = s.split("  ");
+		String[] parts = s.split("[^a-zA-Z\\d]+");
 		return parts;
 	}
 		

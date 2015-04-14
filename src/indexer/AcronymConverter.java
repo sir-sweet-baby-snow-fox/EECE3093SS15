@@ -45,17 +45,18 @@ public class AcronymConverter {
 		}
 	}
 	
-	public String[] restoreAcronyms(String[] tokens) {
+	public ArrayList<Token> restoreAcronyms(ArrayList<Token> tokens) {
 		// initialize empty array list
-		ArrayList<String> cleanedParts = new ArrayList<String>();
+		ArrayList<Token> cleanedParts = new ArrayList<Token>();
 		
 		// run a binary search for each token to see if it should be removed
-		for (String token : tokens){
-			cleanedParts.add(fromAcronym(token));
+		for (Token token : tokens){
+			String newAcronym = fromAcronym(token.getValue());
+			token.setValue(newAcronym);
+			cleanedParts.add(token);
 		}
 		
-		String[] retArray = new String[cleanedParts.size()];
-		return cleanedParts.toArray(retArray);
+		return cleanedParts;
 		
 	}
 	
@@ -79,7 +80,7 @@ public class AcronymConverter {
 				
 				//Insert acronym and its expanded form into hash table
 				if(splitLine.length == 2) {
-					//Correctly formattd line
+					//Correctly formatted line
 					String acronym = splitLine[0].trim();
 					String expandedAcronym = splitLine[1].trim();
 					acronymHashtable.put(acronym, expandedAcronym);

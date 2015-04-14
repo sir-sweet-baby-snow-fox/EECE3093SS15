@@ -115,8 +115,8 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 		});
 		
 		//Display views if they aren't displayed.
-		RequirementsView rv = (RequirementsView) getView(RequirementsView.ID);
-		if(rv == null) {
+		RequirementsView reqView = (RequirementsView) getView(RequirementsView.ID);
+		if(reqView == null) {
 			try {
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(RequirementsView.ID);
 				System.out.println("RV opened");
@@ -127,8 +127,8 @@ public class RequirementsIndicesView extends ViewPart implements ISelectionProvi
 		}
 		
 		
-		MethodIndicesView miv = (MethodIndicesView) getView(MethodIndicesView.ID);
-		if(miv == null) {
+		MethodIndicesView methodIndView = (MethodIndicesView) getView(MethodIndicesView.ID);
+		if(methodIndView == null) {
 			try {
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(MethodIndicesView.ID);
 			} catch (PartInitException e) {

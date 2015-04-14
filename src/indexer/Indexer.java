@@ -14,45 +14,51 @@ import org.eclipse.ui.PlatformUI;
 
 import tracing.views.RequirementsIndicesView;
 
+/**
+ * @date 4/7/2015
+ * @author Ricky Rossi
+ * @description
+ * 	This class is used to index each requirement. It is used as a sort of utility class; it holds all
+ * the classes necessary to properly process the requirements in the file that is passed. It will process
+ * the requirements, and keep the indexed form in a list of Index classes.
+ *
+ */
 public class Indexer {
 	private AcronymConverter acronymConverter = null;
-	private Tokenizer tokenizer = null;
+	private RequirementsTokenizer tokenizer = null;
 	private StopWordRemover stopWordRemover = null;
 	private Stemmer stemmer = null;
 	private ArrayList<Index> indices = null;
-	private double IndexDurationTime = 0;
+	private double indexDurationTime = 0;
+	
+	public static final double NANOSEC_SEC_CONVERT = 1000000000.0;
 
 	/**
-	 * 
-	 * @param resourceDirectoryPath
-	 * @param tokenize
-	 * @param stem
-	 * @param acronymFilePath
-	 * @param stopWordsFilePath
+	 * @param info
 	 * @throws IOException 
 	 */
-	public Indexer(String resourceDirectoryPath, boolean doTokenize, boolean doStem, String acronymFilePath, String stopWordsFilePath, String storeIndicesDir)  {
+	public Indexer(IndexerInfo info)  {
 		double indexStartTime = System.nanoTime();
 		
 		indices = new ArrayList<Index>();
 		
 		//Set up acronymConvert (if requested)
-		if(!acronymFilePath.isEmpty()) {
-			File acronymFile = new File(acronymFilePath);
+		if(!info.acronymFilePath.isEmpty()) {
+			File acronymFile = new File(info.acronymFilePath);
 			acronymConverter = new AcronymConverter(acronymFile);
 		}
 		
 		//Set up stopWordRemover (if requested)
-		if(!stopWordsFilePath.isEmpty()) {
-			stopWordRemover = new StopWordRemover(stopWordsFilePath);
+		if(!info.stopWordsFilePath.isEmpty()) {
+			stopWordRemover = new StopWordRemover(info.stopWordsFilePath);
 		}
 		
 		//Set up stemmer and tokenizer
-		tokenizer = new Tokenizer();
+		tokenizer = new RequirementsTokenizer();
 		stemmer = new Stemmer();
 	
 		//Index each file
-		File resourceFolder = new File(resourceDirectoryPath);
+		File resourceFolder = new File(info.resourceDirectoryPath);
 		File[] resourceFiles = resourceFolder.listFiles();
 
 		for (int i = 0; i < resourceFiles.length; i++) {
@@ -76,10 +82,10 @@ public class Indexer {
 				}
 				
 				//Tokenize for other features
-				String[] tokens = tokenizer.TokenizeString(s.toString());
+				ArrayList<Token> tokens = tokenizer.tokenize(s.toString());
 			
 				//Check if users want to process use case files
-				if(doTokenize || doStem || !acronymFilePath.isEmpty() || !stopWordsFilePath.isEmpty()) {
+				if(info.doTokenize || info.doStem || !info.acronymFilePath.isEmpty() || !info.stopWordsFilePath.isEmpty()) {
 
 					//Remove stop words (if requested)
 					if(stopWordRemover != null) { 
@@ -92,11 +98,11 @@ public class Indexer {
 					}
 
 					//Stem (if requetsed)
-					if(doStem) {
+					if(info.doStem) {
 						tokens = stemmer.stem(tokens);
 					}
 
-
+					tokenizer.updateTokens(tokens);
 				}
 
 				//Create an index. Add to list
@@ -104,11 +110,11 @@ public class Indexer {
 				indices.add(index);
 				
 				//If the user wants to store the indices, write to file
-				if (storeIndicesDir != "") {
+				if (info.storeIndicesDir != "") {
 					// remove the extension
 					filename = filename.replaceFirst("[.][^.]+$", "");
 					try {
-						PrintWriter w = new PrintWriter(Paths.get(storeIndicesDir, filename +"_indices.txt").toString(), "UTF-8");
+						PrintWriter w = new PrintWriter(Paths.get(info.storeIndicesDir, filename +"_indices.txt").toString(), "UTF-8");
 						w.println(index.getTokensAsString());
 						w.close();
 					} catch (FileNotFoundException e) {
@@ -124,7 +130,7 @@ public class Indexer {
 	
 				
 		//End timing
-		IndexDurationTime = (System.nanoTime() - indexStartTime) / 1000000000.0;
+		indexDurationTime = (System.nanoTime() - indexStartTime) / NANOSEC_SEC_CONVERT;
 	}
 	
 	/**
@@ -143,7 +149,7 @@ public class Indexer {
 	
 	public double GetIndexTime()
 	{
-		return IndexDurationTime;
+		return indexDurationTime;
 	}
 
 }
