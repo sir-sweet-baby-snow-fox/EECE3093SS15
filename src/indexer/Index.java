@@ -21,7 +21,7 @@ public class Index {
 	public String getTokensAsString() {
 		StringBuilder s = new StringBuilder();
 		for(int i = 0; i < tokens.size(); i++) {
-			s.append(tokens.get(i));
+			s.append(tokens.get(i).getValue());
 			if(i < tokens.size() - 1) {
 				s.append(" ");
 			}
