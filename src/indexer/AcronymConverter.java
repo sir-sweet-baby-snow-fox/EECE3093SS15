@@ -9,6 +9,15 @@ import java.util.Hashtable;
 
 import javax.swing.JOptionPane;
 
+/**
+ * @date April 7, 2015
+ * @author Ricky
+ * @description
+ * 	
+ * 	This class is used to convert acronym to the fully spelled out version. User must pass a properly formatted
+ * file that identifies what an acronym means. An ArrayList of strings is passed to the converter, and another
+ * ArrayList is returned. If any acronym occurs in one of the strings, it is replaced with the proper expanded form.
+ */
 public class AcronymConverter {
 	
 	private Hashtable<String, String> acronymHashtable;
@@ -44,12 +53,16 @@ public class AcronymConverter {
 			return inputAcronym;
 		}
 	}
-	
+		/**
+	 * 
+	 * @param tokens Tokens to restore
+	 * @return The arraylist of stings with shorthand acronyms replaced with expanded form.
+	 */
 	public ArrayList<Token> restoreAcronyms(ArrayList<Token> tokens) {
 		// initialize empty array list
 		ArrayList<Token> cleanedParts = new ArrayList<Token>();
 		
-		// run a binary search for each token to see if it should be removed
+		// run a binary search for each token to see if it should be exchanged
 		for (Token token : tokens){
 			String newAcronym = fromAcronym(token.getValue());
 			token.setValue(newAcronym);
