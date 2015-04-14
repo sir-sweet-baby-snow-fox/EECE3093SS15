@@ -53,23 +53,23 @@ public class AcronymConverter {
 			return inputAcronym;
 		}
 	}
-	
-	/**
+		/**
 	 * 
 	 * @param tokens Tokens to restore
 	 * @return The arraylist of stings with shorthand acronyms replaced with expanded form.
 	 */
 	public String[] restoreAcronyms(String[] tokens) {
 		// initialize empty array list
-		ArrayList<String> cleanedParts = new ArrayList<String>();
+		ArrayList<Token> cleanedParts = new ArrayList<Token>();
 		
 		// run a binary search for each token to see if it should be exchanged
-		for (String token : tokens){
-			cleanedParts.add(fromAcronym(token));
+		for (Token token : tokens){
+			String newAcronym = fromAcronym(token.getValue());
+			token.setValue(newAcronym);
+			cleanedParts.add(token);
 		}
 		
-		String[] retArray = new String[cleanedParts.size()];
-		return cleanedParts.toArray(retArray);
+		return cleanedParts;
 		
 	}
 	
