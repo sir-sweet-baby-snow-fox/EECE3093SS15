@@ -25,15 +25,6 @@ public class Activator extends AbstractUIPlugin {
 	public Activator() {
 		
 	}
-	
-	private void showMessage(){
-		//MessageDialog.openInformation(new Shell(), "Testhello", "Hello, Eclipse world");
-		
-		GreetingMsg msg = new GreetingMsg(new Shell(), SWT.BORDER | SWT.WRAP);
-		msg.open();
-		
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)

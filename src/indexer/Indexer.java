@@ -31,8 +31,6 @@ public class Indexer {
 	private double indexDurationTime = 0;
 	
 	public static final double NANOSEC_SEC_CONVERT = 1000000000.0;
-	
-	//private String requirementsIndiciesViewID = "tracing.views.RequirementsIndicesView";
 
 	/**
 	 * @param info
