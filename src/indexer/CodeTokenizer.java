@@ -7,13 +7,26 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 
-
+/**
+ * CodeTokenizer.java
+ * 
+ * Code tokenizer, implements the Tokenizer interface and tokenizes the various IMethods passed into it
+ * @author Brian Adams
+ *
+ */
 public class CodeTokenizer implements Tokenizer {
 	private ArrayList<Token> tokens;
 	private boolean inComment = false;
 	
+	/**
+	 * Default constructor
+	 */
 	public CodeTokenizer() { tokens = new ArrayList<Token>(); }
 	
+	/**
+	 * Tokenizes the string of code that is passed into the method
+	 * @param code String of source code to tokenize
+	 */
 	public ArrayList<Token> tokenize(String code){
 		// get code and method name for tokenizing
 		// index each line one at a time
@@ -45,6 +58,11 @@ public class CodeTokenizer implements Tokenizer {
 		return tokens;
 	}
 	
+	/**
+	 * Splits the code based on the desired functionality as specified in the lab document.
+	 * @param ct Token of a piece of code
+	 * @return new Token with the code split on the proper patterns.
+	 */
 	private Token indexCode(Token ct) {
 		String[] newVal = ct.getValue().split("(?=[A-Z][a-z])+|[^A-Za-z\\d]+");
 		
@@ -52,6 +70,11 @@ public class CodeTokenizer implements Tokenizer {
 		return retCt;
 	}
 	
+	/**
+	 * Converts an array of strings to a single string
+	 * @param val String array of code
+	 * @return String, composed of each string in the array
+	 */
 	private String convertArrayToString(String[] val) {
 		StringBuilder sb = new StringBuilder();
 		for (int i=0; i < val.length; i++) {
@@ -64,6 +87,11 @@ public class CodeTokenizer implements Tokenizer {
 		return sb.toString();
 	}
 	
+	/**
+	 * Procedure to tokenize a given line of the source code
+	 * @param line String line of the source code
+	 * @return
+	 */
 	private ArrayList<Token> tokenizeLine(String line) {
 		ArrayList<Token> newTokens = new ArrayList<Token>();
 		
@@ -152,5 +180,16 @@ public class CodeTokenizer implements Tokenizer {
 	
 	public ArrayList<Token> getTokens() {
 		return this.tokens;
+	}
+	
+	public String getTokensAsString() {
+		StringBuilder sb = new StringBuilder();
+		for (int i=0; i < this.tokens.size(); i++) {
+			String postfix = " ";
+			if (i == this.tokens.size() -1)
+				postfix = "";
+			sb.append(this.tokens.get(i).getValue() + postfix);
+		}
+		return sb.toString();
 	}
 }

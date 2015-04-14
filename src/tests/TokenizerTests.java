@@ -1,7 +1,7 @@
 package tests;
 
 import static org.junit.Assert.*;
-import indexer.Tokenizer;
+import indexer.RequirementsTokenizer;
 
 import org.junit.Test;
 
@@ -9,9 +9,9 @@ public class TokenizerTests {
 
 	@Test
 	public void testTokenizeAllSpaces() {
-		Tokenizer t = new Tokenizer();
+		RequirementsTokenizer t = new RequirementsTokenizer();
 		String stringToTokenize = "The quick brown fox jumped over the lazy dog";
-		String[] tokens = t.TokenizeString(stringToTokenize);
+		String[] tokens = t.tokenize(stringToTokenize);
 		
 		assertEquals(tokens.length, 9);
 		assertEquals(tokens[0], "The");
@@ -27,9 +27,9 @@ public class TokenizerTests {
 	
 	@Test
 	public void testTokenizeAllPeriods() {
-		Tokenizer t = new Tokenizer();
+		RequirementsTokenizer t = new RequirementsTokenizer();
 		String stringToTokenize = "The.quick.brown.fox.jumped.over.the.lazy.dog.";
-		String[] tokens = t.TokenizeString(stringToTokenize);
+		String[] tokens = t.tokenize(stringToTokenize);
 		
 		assertEquals(tokens.length, 9);
 		assertEquals(tokens[0], "The");
@@ -45,9 +45,9 @@ public class TokenizerTests {
 	
 	@Test
 	public void testTokenizeAllColons() {
-		Tokenizer t = new Tokenizer();
+		RequirementsTokenizer t = new RequirementsTokenizer();
 		String stringToTokenize = "The:quick:brown:fox:jumped:over:the:lazy:dog:";
-		String[] tokens = t.TokenizeString(stringToTokenize);
+		String[] tokens = t.tokenize(stringToTokenize);
 		
 		assertEquals(tokens.length, 9);
 		assertEquals(tokens[0], "The");
@@ -63,9 +63,9 @@ public class TokenizerTests {
 	
 	@Test
 	public void testTokenizeAllQuestionMarks() {
-		Tokenizer t = new Tokenizer();
+		RequirementsTokenizer t = new RequirementsTokenizer();
 		String stringToTokenize = "The?quick?brown?fox?jumped?over?the?lazy?dog?";
-		String[] tokens = t.TokenizeString(stringToTokenize);
+		String[] tokens = t.tokenize(stringToTokenize);
 		
 		assertEquals(tokens.length, 9);
 		assertEquals(tokens[0], "The");
@@ -81,9 +81,9 @@ public class TokenizerTests {
 	
 	@Test
 	public void testTokenizeAllCommas() {
-		Tokenizer t = new Tokenizer();
+		RequirementsTokenizer t = new RequirementsTokenizer();
 		String stringToTokenize = "The,quick,brown,fox,jumped,over,the,lazy,dog,";
-		String[] tokens = t.TokenizeString(stringToTokenize);
+		String[] tokens = t.tokenize(stringToTokenize);
 		
 		assertEquals(tokens.length, 9);
 		assertEquals(tokens[0], "The");
@@ -99,9 +99,9 @@ public class TokenizerTests {
 	
 	@Test
 	public void testTokenizeAllNewLines() {
-		Tokenizer t = new Tokenizer();
+		RequirementsTokenizer t = new RequirementsTokenizer();
 		String stringToTokenize = "The\nquick\nbrown\nfox\njumped\nover\nthe\nlazy\ndog\n";
-		String[] tokens = t.TokenizeString(stringToTokenize);
+		String[] tokens = t.tokenize(stringToTokenize);
 		
 		assertEquals(tokens.length, 9);
 		assertEquals(tokens[0], "The");
@@ -117,9 +117,9 @@ public class TokenizerTests {
 	
 	@Test
 	public void testTokenizeMultipleNewLines() {
-		Tokenizer t = new Tokenizer();
+		RequirementsTokenizer t = new RequirementsTokenizer();
 		String stringToTokenize = "The\n\n\n\n\n\n quick\n\n brown\n\n fox\n\n jumped\n\n over\n\n the\n\n lazy\n\n dog\n\n";
-		String[] tokens = t.TokenizeString(stringToTokenize);
+		String[] tokens = t.tokenize(stringToTokenize);
 		
 		assertEquals(tokens.length, 9);
 		assertEquals(tokens[0], "The");
@@ -135,9 +135,9 @@ public class TokenizerTests {
 	
 	@Test
 	public void testTokenizeMultipleSpaces() {
-		Tokenizer t = new Tokenizer();
+		RequirementsTokenizer t = new RequirementsTokenizer();
 		String stringToTokenize = "The      quick   brown fox   jumped  over                    the lazy    dog   ";
-		String[] tokens = t.TokenizeString(stringToTokenize);
+		String[] tokens = t.tokenize(stringToTokenize);
 		
 		assertEquals(tokens.length, 9);
 		assertEquals(tokens[0], "The");
@@ -153,9 +153,9 @@ public class TokenizerTests {
 	
 	@Test
 	public void testTokenizeMultipleSpacesAndNewLines() {
-		Tokenizer t = new Tokenizer();
+		RequirementsTokenizer t = new RequirementsTokenizer();
 		String stringToTokenize = "The  \n\n\n    quick \n  brown \nfox \n\n  jumped  \nover \n\n               \n    the \n\nlazy  \n  dog   ";
-		String[] tokens = t.TokenizeString(stringToTokenize);
+		String[] tokens = t.tokenize(stringToTokenize);
 		
 		assertEquals(tokens.length, 9);
 		assertEquals(tokens[0], "The");

@@ -2,7 +2,7 @@ package tracing.views;
 
 
 import indexer.Indexer;
-import indexer.Tokenizer;
+import indexer.RequirementsTokenizer;
 
 import java.io.IOException;
 import java.nio.file.Files;
