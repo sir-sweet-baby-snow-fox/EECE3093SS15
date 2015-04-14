@@ -87,23 +87,6 @@ public class GreetingMsg extends Dialog {
 		//display.close();
 		return result;
 	}
-	
-	public String[] getOptions() {
-		return optionList;
-	}
-	
-	public String[] openDisplay() {
-		this.open();
-		/*
-		 * [0] -> path
-		 * [1] -> file 1
-		 * [2] -> file 2
-		 */
-		//String[] returnArr = new String[3];
-		while (true) {
-			
-		}
-	}
 
 	/**
 	 * Create contents of the dialog.
@@ -186,7 +169,6 @@ public class GreetingMsg extends Dialog {
 				indexerInfo.resourceDirectoryPath = dirDialog.open();
 				if (indexerInfo.resourceDirectoryPath != null) {
 					dirText.setText(indexerInfo.resourceDirectoryPath);
-					optionList[0] = indexerInfo.resourceDirectoryPath;
 				}
 			}
 		});
