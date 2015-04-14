@@ -46,7 +46,6 @@ public class GreetingMsg extends Dialog {
 
 	protected Object result;
 	protected Shell greetingMsgShell;
-	//private String dependentStr;
 	private Text dirText;
 	private static Display display;
 	private Text acronymText;
@@ -54,9 +53,7 @@ public class GreetingMsg extends Dialog {
 	private Text storeText;
 	private String[] optionList = new String[5];
 	private RequirementsView reqInstance;
-	//private String reqViewId = "tracing.views.RequirementsView";
 	private IndexerInfo indexerInfo;
-	//private String dirFilterStr;
 	
 	/**
 	 * Create the dialog.
@@ -258,7 +255,6 @@ public class GreetingMsg extends Dialog {
 			btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				//shell.dispose();
 				System.exit(0);
 			}
 		});
@@ -385,11 +381,6 @@ public class GreetingMsg extends Dialog {
 		btnOK.setText("OK");
 		
 	}
-	
-//	private RequirementsView getRequirementsView(String id) {
-//		RequirementsView riv = (RequirementsView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(id);
-//		return riv;
-//	}
 	
 	/**
 	 * 	To use this, pass the id of the desired view. Each view should have a static string that is the id. For example,
