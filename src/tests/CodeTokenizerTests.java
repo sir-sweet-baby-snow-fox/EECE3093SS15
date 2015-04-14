@@ -149,7 +149,7 @@ public class CodeTokenizerTests {
 		ct.tokenize(code);
 		String retVal = ct.getTokensAsString();
 		
-		assertEquals(retVal, "I Test test Case 0");
+		assertEquals(retVal, "I Test test Case 0 \n");
 	}
 	
 	@Test
