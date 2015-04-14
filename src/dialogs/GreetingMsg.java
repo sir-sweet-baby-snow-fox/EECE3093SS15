@@ -7,7 +7,6 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.SWT;
@@ -21,11 +20,6 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-/*import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;*/
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.IOverwriteQuery;
 import org.eclipse.ui.wizards.datatransfer.FileSystemStructureProvider;
@@ -33,12 +27,6 @@ import org.eclipse.ui.wizards.datatransfer.ImportOperation;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.jdt.ui.IPackagesViewPart;
-import org.eclipse.jdt.ui.JavaUI;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.TreeViewer;
-
 import tracing.views.RequirementsView;
 import tracing.views.MethodIndicesView;
 
@@ -84,7 +72,6 @@ public class GreetingMsg extends Dialog {
 				display.sleep();
 			}
 		}
-		//display.close();
 		return result;
 	}
 

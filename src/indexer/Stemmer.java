@@ -1,6 +1,5 @@
 package indexer;
 
-import java.io.*;
 import java.util.ArrayList;
 
 
