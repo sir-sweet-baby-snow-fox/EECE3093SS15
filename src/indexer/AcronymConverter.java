@@ -65,8 +65,8 @@ public class AcronymConverter {
 		// run a binary search for each token to see if it should be exchanged
 		for (Token token : tokens){
 			String newAcronym = fromAcronym(token.getValue());
-			token.setValue(newAcronym);
-			cleanedParts.add(token);
+			Token newToken = new Token(TokenType.REQUIREMENT, newAcronym);
+			cleanedParts.add(newToken);
 		}
 		
 		return cleanedParts;
