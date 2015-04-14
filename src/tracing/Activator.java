@@ -1,12 +1,8 @@
 package tracing;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-
-import dialogs.GreetingMsg;
 
 /**
  * The activator class controls the plug-in life cycle
