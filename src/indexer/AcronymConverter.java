@@ -58,7 +58,7 @@ public class AcronymConverter {
 	 * @param tokens Tokens to restore
 	 * @return The arraylist of stings with shorthand acronyms replaced with expanded form.
 	 */
-	public String[] restoreAcronyms(String[] tokens) {
+	public ArrayList<Token> restoreAcronyms(ArrayList<Token> tokens) {
 		// initialize empty array list
 		ArrayList<Token> cleanedParts = new ArrayList<Token>();
 		
